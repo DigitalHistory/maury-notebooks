@@ -323,7 +323,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/example/maury-notebooks"> <i class="bi bi-github" role="img" aria-label="GitHub">
+    <a class="nav-link" href="https://github.com/DigitalHistory/maury-notebooks"> <i class="bi bi-github" role="img" aria-label="GitHub">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -491,7 +491,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="the-ghost-ship-aesthetic">The Ghost Ship Aesthetic</h2>
 <p>The “ghost ship” visualization is deceptively simple: we draw thousands of voyage tracks with very low opacity (alpha ≈ 0.02-0.05). Where many ships traveled the same route, the overlapping lines accumulate and create darker regions. The result reveals maritime highways that would be invisible if we plotted voyages one at a time.</p>
 <p>This technique transforms a dataset that’s too large to comprehend into a single image that communicates the overall pattern immediately. The name “ghost ships” comes from the ethereal, semi-transparent quality of the overlapping tracks.</p>
-<div id="87473117" class="cell">
+<div id="96b081f3" class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -521,7 +521,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="solution-1-use-groupby-instead-of-repeated-filtering" class="level2">
 <h2 class="anchored" data-anchor-id="solution-1-use-groupby-instead-of-repeated-filtering">Solution 1: Use <code>groupby()</code> Instead of Repeated Filtering</h2>
 <p>The first optimization is to sort the data once, then use <code>groupby()</code> to iterate through voyages. This avoids the repeated full-DataFrame scans:</p>
-<div id="cdb00bde" class="cell">
+<div id="4691c059" class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> demonstrate_groupby_speedup():</span>
 <span id="cb3-2"><a href="#cb3-2"></a>    <span class="co">"""Show the performance difference between filtering and groupby."""</span></span>
 <span id="cb3-3"><a href="#cb3-3"></a>    <span class="cf">if</span> df <span class="kw">is</span> <span class="va">None</span>:</span>
@@ -557,7 +557,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="solution-2-use-linecollection-for-batch-rendering" class="level2">
 <h2 class="anchored" data-anchor-id="solution-2-use-linecollection-for-batch-rendering">Solution 2: Use <code>LineCollection</code> for Batch Rendering</h2>
 <p>The second optimization addresses the rendering overhead. Instead of calling <code>ax.plot()</code> thousands of times, we collect all line segments into a list and render them in a single call using matplotlib’s <code>LineCollection</code>. This batches all the rendering work:</p>
-<div id="d1a8d0e7" class="cell">
+<div id="7dcce42b" class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="im">from</span> matplotlib.collections <span class="im">import</span> LineCollection</span>
 <span id="cb4-2"><a href="#cb4-2"></a></span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="kw">def</span> create_line_segments(voyage_df):</span>
@@ -599,7 +599,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="creating-a-ghost-ship-map" class="level2">
 <h2 class="anchored" data-anchor-id="creating-a-ghost-ship-map">Creating a Ghost Ship Map</h2>
 <p>Now let’s put both optimizations together. The function below sorts once, iterates with <code>groupby()</code>, collects all segments, and renders them with a single <code>LineCollection</code>:</p>
-<div id="b3e3d6c8" class="cell">
+<div id="1230f2bb" class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> create_ghost_ship_map(df, ax, color<span class="op">=</span><span class="st">'black'</span>, alpha<span class="op">=</span><span class="fl">0.03</span>, linewidth<span class="op">=</span><span class="fl">0.4</span>):</span>
 <span id="cb5-2"><a href="#cb5-2"></a>    <span class="co">"""</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="co">    Plot all voyage tracks efficiently using LineCollection.</span></span>
@@ -646,7 +646,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="comparing-whaling-vs.-merchant-routes" class="level2">
 <h2 class="anchored" data-anchor-id="comparing-whaling-vs.-merchant-routes">Comparing Whaling vs.&nbsp;Merchant Routes</h2>
 <p>With classified voyages, we can render whaling and merchant tracks separately to see how their spatial patterns differ. Whaling ships should concentrate in the Pacific and other whaling grounds, while merchant ships should follow Atlantic trade routes:</p>
-<div id="b2316904" class="cell">
+<div id="3d9759cb" class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="cf">if</span> df <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="kw">and</span> <span class="st">'classification'</span> <span class="kw">in</span> df.columns:</span>
 <span id="cb6-2"><a href="#cb6-2"></a>    fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">5</span>))</span>
 <span id="cb6-3"><a href="#cb6-3"></a></span>
@@ -671,7 +671,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="creating-animations">Creating Animations</h2>
 <p>Static maps show accumulated patterns, but animations reveal the temporal dimension: ships moving across the ocean, routes shifting with seasons, whaling grounds being discovered and exploited over decades.</p>
 <p>For animations, we need to show ships at each point in time. The key insight is to <strong>pre-compute voyage data</strong> once, then render frames efficiently. Without this pre-computation, we’d repeat expensive data processing for every frame.</p>
-<div id="abc0a1ed" class="cell">
+<div id="cdd10322" class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">def</span> precompute_voyage_data(df):</span>
 <span id="cb7-2"><a href="#cb7-2"></a>    <span class="co">"""</span></span>
 <span id="cb7-3"><a href="#cb7-3"></a><span class="co">    Pre-compute voyage segments with date information for animation.</span></span>
@@ -744,7 +744,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Ship position</strong>: A bright marker at each ship’s current location.</li>
 </ul>
 <p>This layered approach gives the animation a sense of motion and history simultaneously:</p>
-<div id="33128531" class="cell">
+<div id="3691000c" class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">def</span> render_frame_example(voyage_data, current_date, ax):</span>
 <span id="cb8-2"><a href="#cb8-2"></a>    <span class="co">"""Render a single animation frame."""</span></span>
 <span id="cb8-3"><a href="#cb8-3"></a>    current_np <span class="op">=</span> np.datetime64(current_date)</span>
@@ -840,7 +840,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="video-output-with-ffmpeg" class="level2">
 <h2 class="anchored" data-anchor-id="video-output-with-ffmpeg">Video Output with ffmpeg</h2>
 <p>GIFs have a significant limitation: they can’t be paused or scrubbed. For longer animations, MP4 video is a better format. The script can use ffmpeg to convert rendered frames into a compressed video file:</p>
-<div id="ec2f78f4" class="cell">
+<div id="9dfdfecb" class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="im">import</span> subprocess</span>
 <span id="cb10-2"><a href="#cb10-2"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb10-3"><a href="#cb10-3"></a><span class="im">import</span> tempfile</span>

@@ -323,7 +323,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/example/maury-notebooks"> <i class="bi bi-github" role="img" aria-label="GitHub">
+    <a class="nav-link" href="https://github.com/DigitalHistory/maury-notebooks"> <i class="bi bi-github" role="img" aria-label="GitHub">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -500,7 +500,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="feature-engineering-spatial-profiles" class="level2">
 <h2 class="anchored" data-anchor-id="feature-engineering-spatial-profiles">Feature Engineering: Spatial Profiles</h2>
 <p>The key to Schmidt’s method is representing each voyage as a <strong>spatial profile</strong>: a vector showing what proportion of time was spent in each ocean grid cell.</p>
-<div id="b54d2460" class="cell">
+<div id="a0e1bbfb" class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -521,7 +521,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-18"><a href="#cb1-18"></a><span class="bu">print</span>(<span class="st">"Each voyage becomes a vector of 225 proportions,"</span>)</span>
 <span id="cb1-19"><a href="#cb1-19"></a><span class="bu">print</span>(<span class="st">"one for each grid cell, summing to 1.0"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="1fa1c4e2" class="cell">
+<div id="3b9d0f01" class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> create_spatial_profile(lats, lons, lat_edges, lon_edges):</span>
 <span id="cb2-2"><a href="#cb2-2"></a>    <span class="co">"""</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="co">    Create a spatial profile from voyage positions.</span></span>
@@ -556,7 +556,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-32"><a href="#cb2-32"></a><span class="bu">print</span>(<span class="ss">f"Whaling voyage:  </span><span class="sc">{</span><span class="bu">len</span>(profile_whaling)<span class="sc">}</span><span class="ss"> features, max cell: </span><span class="sc">{</span>profile_whaling<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
 <span id="cb2-33"><a href="#cb2-33"></a><span class="bu">print</span>(<span class="ss">f"Merchant voyage: </span><span class="sc">{</span><span class="bu">len</span>(profile_merchant)<span class="sc">}</span><span class="ss"> features, max cell: </span><span class="sc">{</span>profile_merchant<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="af3f17b2" class="cell">
+<div id="107f4410" class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Visualize the profiles</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">5</span>))</span>
 <span id="cb3-3"><a href="#cb3-3"></a></span>
@@ -591,7 +591,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Why not K=1?</strong> With only one neighbor, the classifier is too sensitive to noise. A single mislabeled example in the training set can dominate the classification of nearby voyages.</p>
 <p><strong>Why not K=10 or more?</strong> With many neighbors, the classification becomes over-smoothed. Small but genuine clusters get swamped by the majority class. Whaling voyages to unusual grounds—which are historically interesting—get misclassified as merchants simply because there are more merchants overall.</p>
 <p><strong>K=3</strong> strikes a balance: it requires 2-out-of-3 agreement for classification, which provides robustness to noise while still preserving small clusters. As Schmidt noted, this choice “preserves some very small clusters of whaling that are nonetheless real.”</p>
-<div id="b231dc13" class="cell">
+<div id="19c97f74" class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KNeighborsClassifier</span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score</span>
 <span id="cb4-3"><a href="#cb4-3"></a></span>
@@ -623,7 +623,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-29"><a href="#cb4-29"></a><span class="bu">print</span>(<span class="ss">f"Merchant: </span><span class="sc">{</span><span class="bu">sum</span>(<span class="dv">1</span> <span class="cf">for</span> label <span class="kw">in</span> y <span class="cf">if</span> label <span class="op">==</span> <span class="st">'merchant'</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb4-30"><a href="#cb4-30"></a><span class="bu">print</span>(<span class="ss">f"Features per voyage: </span><span class="sc">{</span>X<span class="sc">.</span>shape[<span class="dv">1</span>]<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="45187f6f" class="cell">
+<div id="41266dd0" class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Train KNN classifier</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a>knn <span class="op">=</span> KNeighborsClassifier(n_neighbors<span class="op">=</span><span class="dv">3</span>, weights<span class="op">=</span><span class="st">'distance'</span>, metric<span class="op">=</span><span class="st">'euclidean'</span>)</span>
 <span id="cb5-3"><a href="#cb5-3"></a>knn.fit(X, y)</span>
@@ -653,7 +653,7 @@ Why Two Passes Help
 <p>The original labels are sparse—perhaps only 5% of voyages have reliable metadata. Pass 1 finds unlabeled voyages that are spatially similar to these known examples. Pass 2 uses these newly-confident predictions to improve classification further. This approach can discover whaling voyages from ports that lack whaling metadata, simply because they visited the same waters as known whalers.</p>
 </div>
 </div>
-<div id="e67449fc" class="cell">
+<div id="e4a12286" class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">def</span> two_pass_classification(X, initial_labels, k<span class="op">=</span><span class="dv">3</span>, confidence_threshold<span class="op">=</span><span class="fl">0.7</span>):</span>
 <span id="cb6-2"><a href="#cb6-2"></a>    <span class="co">"""</span></span>
 <span id="cb6-3"><a href="#cb6-3"></a><span class="co">    Implement Schmidt's two-pass classification.</span></span>
@@ -741,7 +741,7 @@ Why Two Passes Help
 <p><strong>Agreement Quadrants.</strong> We can cross-tabulate metadata labels with ML predictions. When both agree on “whaling,” we should see voyages in whaling grounds. When both agree on “merchant,” we should see trade routes. The interesting cases are disagreements: if the metadata says whaling but ML says merchant, we should investigate why. And if ML says whaling when metadata says merchant, perhaps the algorithm discovered something the metadata missed.</p>
 <p><strong>Geographic Sense-Check.</strong> Do the voyages classified as “whaling” concentrate in the Pacific and other known whaling grounds? Do “merchant” voyages follow Atlantic shipping lanes? Are there any obviously wrong classifications that suggest a problem?</p>
 <p><strong>Edge Cases.</strong> Some voyages may be genuinely ambiguous: a merchant ship that turned whaler mid-voyage, or an expedition exploring new whaling grounds. Data quality issues like transcription errors can also create unusual patterns.</p>
-<div id="6cb1c2d7" class="cell">
+<div id="c7108eec" class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Create a visualization comparing classified voyage types</span></span>
 <span id="cb7-2"><a href="#cb7-2"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">5</span>))</span>
 <span id="cb7-3"><a href="#cb7-3"></a></span>
@@ -808,7 +808,7 @@ Why Two Passes Help
 <p><strong>Spatial Patterns.</strong> Voyages concentrated in known whaling grounds suggest whaling. However, we must be careful not to circular-reason here: we can’t use spatial patterns both to generate labels and to train a spatial classifier.</p>
 <p><strong>Voyage Characteristics.</strong> Very long voyages (more than a year) were more likely whaling expeditions. Short Atlantic crossings were likely merchant runs.</p>
 <p>The classification script combines these heuristics conservatively, labeling only high-confidence cases for training. It’s better to have fewer but more reliable labels than to pollute the training set with guesses.</p>
-<div id="d0f27f57" class="cell">
+<div id="39a350e2" class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Example label generation logic</span></span>
 <span id="cb8-2"><a href="#cb8-2"></a>WHALING_PORTS <span class="op">=</span> {<span class="st">'NEW BEDFORD'</span>, <span class="st">'NANTUCKET'</span>, <span class="st">'NEW LONDON'</span>, <span class="st">'SAG HARBOR'</span>}</span>
 <span id="cb8-3"><a href="#cb8-3"></a>WHALING_NAME_PATTERNS <span class="op">=</span> [<span class="st">'WHALE'</span>, <span class="st">'WHAL'</span>]</span>
@@ -852,7 +852,7 @@ Why Two Passes Help
 <p>Now let’s apply classification to the complete voyage dataset. We’ll load the voyage summaries we created in the previous notebook and classify each voyage as whaling or merchant.</p>
 <section id="step-1-load-the-data" class="level3">
 <h3 class="anchored" data-anchor-id="step-1-load-the-data">Step 1: Load the Data</h3>
-<div id="3e5679e2" class="cell">
+<div id="a0ce8e0c" class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb9-2"><a href="#cb9-2"></a></span>
 <span id="cb9-3"><a href="#cb9-3"></a><span class="co"># Load voyage summaries (includes spatial profiles)</span></span>
@@ -866,7 +866,7 @@ Why Two Passes Help
 <section id="step-2-generate-initial-labels" class="level3">
 <h3 class="anchored" data-anchor-id="step-2-generate-initial-labels">Step 2: Generate Initial Labels</h3>
 <p>We use metadata heuristics to label a subset of voyages with high confidence:</p>
-<div id="80063078" class="cell">
+<div id="4b8ee297" class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># Generate labels from ship names and port associations</span></span>
 <span id="cb10-2"><a href="#cb10-2"></a>initial_labels <span class="op">=</span> generate_labels(voyages[<span class="st">'ship_id'</span>], verbose<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb10-3"><a href="#cb10-3"></a></span>
@@ -876,7 +876,7 @@ Why Two Passes Help
 <section id="step-3-extract-spatial-profile-features" class="level3">
 <h3 class="anchored" data-anchor-id="step-3-extract-spatial-profile-features">Step 3: Extract Spatial Profile Features</h3>
 <p>The spatial profile columns (grid_0, grid_1, …) become our feature matrix:</p>
-<div id="285395de" class="cell">
+<div id="55e572b1" class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># Get all grid columns</span></span>
 <span id="cb11-2"><a href="#cb11-2"></a>grid_cols <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> voyages.columns <span class="cf">if</span> c.startswith(<span class="st">'grid_'</span>)]</span>
 <span id="cb11-3"><a href="#cb11-3"></a>X <span class="op">=</span> voyages[grid_cols].values</span>
@@ -887,7 +887,7 @@ Why Two Passes Help
 </section>
 <section id="step-4-run-two-pass-classification" class="level3">
 <h3 class="anchored" data-anchor-id="step-4-run-two-pass-classification">Step 4: Run Two-Pass Classification</h3>
-<div id="e6cedd20" class="cell">
+<div id="2588c70d" class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="co"># Convert labels to index-based format</span></span>
 <span id="cb12-2"><a href="#cb12-2"></a>label_dict <span class="op">=</span> {i: initial_labels[voyages.iloc[i][<span class="st">'voyage_id'</span>]]</span>
 <span id="cb12-3"><a href="#cb12-3"></a>              <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(voyages))</span>
@@ -906,7 +906,7 @@ Why Two Passes Help
 </section>
 <section id="step-5-save-results" class="level3">
 <h3 class="anchored" data-anchor-id="step-5-save-results">Step 5: Save Results</h3>
-<div id="3805d675" class="cell">
+<div id="61fa7a4d" class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># Save classified voyages</span></span>
 <span id="cb13-2"><a href="#cb13-2"></a>output_path <span class="op">=</span> Path(<span class="st">'data/voyage_summaries_classified.parquet'</span>)</span>
 <span id="cb13-3"><a href="#cb13-3"></a>voyages.to_parquet(output_path, index<span class="op">=</span><span class="va">False</span>)</span>

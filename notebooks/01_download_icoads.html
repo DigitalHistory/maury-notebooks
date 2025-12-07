@@ -323,7 +323,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/example/maury-notebooks"> <i class="bi bi-github" role="img" aria-label="GitHub">
+    <a class="nav-link" href="https://github.com/DigitalHistory/maury-notebooks"> <i class="bi bi-github" role="img" aria-label="GitHub">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -525,7 +525,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="step-1-understanding-the-archive-structure" class="level3">
 <h3 class="anchored" data-anchor-id="step-1-understanding-the-archive-structure">Step 1: Understanding the Archive Structure</h3>
 <p>ICOADS data is organized by year and month. Each file is gzip-compressed and made available at a URL of the form <code>https://www.ncei.noaa.gov/data/international-comprehensive-ocean-atmosphere/v3/archive/final-untrim/IMMA1_R3.1.-_{TEAR}-{MONTH}.jz</code></p>
-<div id="547b901b" class="cell">
+<div id="0fa0c549" class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># The archive URL structure</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a>BASE_URL <span class="op">=</span> <span class="st">"https://www.ncei.noaa.gov/data/international-comprehensive-ocean-atmosphere/v3/archive/final-untrim/"</span></span>
 <span id="cb1-3"><a href="#cb1-3"></a></span>
@@ -545,7 +545,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Here’s a sample observation:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>1840 1 1     3702 28605 13 4    10LOUISVIL   1 685                                                           165 20673701 69 5 0 1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The following code block explains what each character grouping means:</p>
-<div id="0570c20a" class="cell">
+<div id="a2260fc3" class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># A sample IMMA1 record</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a>sample_record <span class="op">=</span> <span class="st">"1840 1 1     3702 28605 13 4    10LOUISVIL   1 685                                                           165 20673701 69 5 0 1"</span></span>
 <span id="cb3-3"><a href="#cb3-3"></a></span>
@@ -638,7 +638,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="step-3-finding-the-deck-number" class="level3">
 <h3 class="anchored" data-anchor-id="step-3-finding-the-deck-number">Step 3: Finding the Deck Number</h3>
 <p>The deck number is in the <strong>C1 attachment</strong>, which follows the core section. For ICOADS R3.1, the deck number is at positions 118-120:</p>
-<div id="c71763ff" class="cell">
+<div id="1dd0cf43" class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">def</span> get_deck_number(line):</span>
 <span id="cb4-2"><a href="#cb4-2"></a>    <span class="co">"""</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="co">    Extract the deck number (DCK) from an IMMA1 record.</span></span>
@@ -670,7 +670,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="step-4-the-filter-logic" class="level3">
 <h3 class="anchored" data-anchor-id="step-4-the-filter-logic">Step 4: The Filter Logic</h3>
 <p>For each monthly file, we download, decompress, and filter:</p>
-<div id="9d8b211f" class="cell">
+<div id="9726cbb0" class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="im">import</span> gzip</span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="im">import</span> io</span>
 <span id="cb5-3"><a href="#cb5-3"></a></span>
@@ -713,7 +713,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="step-5-the-main-download-loop" class="level3">
 <h3 class="anchored" data-anchor-id="step-5-the-main-download-loop">Step 5: The Main Download Loop</h3>
 <p>Here’s the core logic from <code>scripts/download_icoads_deck701.py</code>:</p>
-<div id="316bf52d" class="cell">
+<div id="8fb41309" class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Simplified version of the download function (don't run - just for illustration)</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a>DOWNLOAD_CODE <span class="op">=</span> <span class="st">'''</span></span>
 <span id="cb6-3"><a href="#cb6-3"></a><span class="st">import gzip</span></span>

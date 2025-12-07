@@ -323,7 +323,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/example/maury-notebooks"> <i class="bi bi-github" role="img" aria-label="GitHub">
+    <a class="nav-link" href="https://github.com/DigitalHistory/maury-notebooks"> <i class="bi bi-github" role="img" aria-label="GitHub">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -504,7 +504,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="imma1-a-fixed-width-text-format" class="level3">
 <h3 class="anchored" data-anchor-id="imma1-a-fixed-width-text-format">IMMA1: A Fixed-Width Text Format</h3>
 <p>In fixed-width formats, each field occupies specific character positions in every line:</p>
-<div id="ae99b66f" class="cell">
+<div id="1adedad2" class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># A sample IMMA1 record</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a>sample <span class="op">=</span> <span class="st">"1840 1 1     3702 28605 13 4    10LOUISVIL   1"</span></span>
 <span id="cb1-3"><a href="#cb1-3"></a></span>
@@ -691,7 +691,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="coordinate-encoding" class="level3">
 <h3 class="anchored" data-anchor-id="coordinate-encoding">Coordinate Encoding</h3>
 <p>Latitude and longitude use a special encoding that requires careful parsing. We’ll write a python conversion to convert to familiar units:</p>
-<div id="3b7d4acc" class="cell">
+<div id="66cce3ec" class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> parse_lat(raw_value):</span>
 <span id="cb5-2"><a href="#cb5-2"></a>    <span class="co">"""</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="co">    Parse IMMA1 latitude field.</span></span>
@@ -752,7 +752,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="temperature-and-pressure-fields" class="level3">
 <h3 class="anchored" data-anchor-id="temperature-and-pressure-fields">Temperature and Pressure Fields</h3>
 <p>Meteorological fields also need a conversion function:</p>
-<div id="32f7287b" class="cell">
+<div id="1eec437e" class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">def</span> parse_scaled_field(value, scale<span class="op">=</span><span class="dv">10</span>):</span>
 <span id="cb6-2"><a href="#cb6-2"></a>    <span class="co">"""</span></span>
 <span id="cb6-3"><a href="#cb6-3"></a><span class="co">    Parse a scaled numeric field.</span></span>
@@ -807,7 +807,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="the-complete-parser" class="level3">
 <h3 class="anchored" data-anchor-id="the-complete-parser">The Complete Parser</h3>
 <p>Here’s the full record parsing function. It’s long because each field needs to be handled explicitly:</p>
-<div id="2729c7c4" class="cell">
+<div id="f31ecfa5" class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">def</span> parse_imma1_line(line):</span>
 <span id="cb7-2"><a href="#cb7-2"></a>    <span class="co">"""</span></span>
 <span id="cb7-3"><a href="#cb7-3"></a><span class="co">    Parse a single IMMA1 record into a dictionary.</span></span>
@@ -876,7 +876,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="step-1-read-and-parse-all-records" class="level3">
 <h3 class="anchored" data-anchor-id="step-1-read-and-parse-all-records">Step 1: Read and Parse All Records</h3>
 <p>If you’re completely new to Python, you may never have seen <code>pandas</code> before. It’s the most important library for doing data science in Python. A <strong>DataFrame</strong> is essentially a table—rows and columns, like a spreadsheet or SQL table—but with powerful built-in methods for filtering, grouping, and transforming data. The pattern <code>df = pd.DataFrame(some_data)</code> converts a list of dictionaries (or other data structures) into a DataFrame you can manipulate. By convention, we use <code>df</code> as a variable name for DataFrames.</p>
-<div id="4ccd7ec4" class="cell">
+<div id="dcb5e14f" class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb8-2"><a href="#cb8-2"></a></span>
 <span id="cb8-3"><a href="#cb8-3"></a><span class="co"># Simulate reading multiple records</span></span>
@@ -899,7 +899,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="step-2-write-to-parquet" class="level3">
 <h3 class="anchored" data-anchor-id="step-2-write-to-parquet">Step 2: Write to Parquet</h3>
 <p>Writing a DataFrame to Parquet is a single line. Let’s write our sample data to a real file:</p>
-<div id="2f75baef" class="cell">
+<div id="393522ec" class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb9-2"><a href="#cb9-2"></a></span>
 <span id="cb9-3"><a href="#cb9-3"></a><span class="co"># Ensure output directory exists</span></span>
@@ -914,7 +914,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="step-3-verify-the-roundtrip" class="level3">
 <h3 class="anchored" data-anchor-id="step-3-verify-the-roundtrip">Step 3: Verify the Roundtrip</h3>
 <p>Let’s read it back and compare file sizes:</p>
-<div id="bb274617" class="cell">
+<div id="5a4df52c" class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="im">import</span> os</span>
 <span id="cb10-2"><a href="#cb10-2"></a></span>
 <span id="cb10-3"><a href="#cb10-3"></a><span class="co"># Read the Parquet file back</span></span>
@@ -1035,7 +1035,7 @@ Memory Management with Chunks
 <section id="step-1-set-up-the-conversion" class="level3">
 <h3 class="anchored" data-anchor-id="step-1-set-up-the-conversion">Step 1: Set Up the Conversion</h3>
 <p>First, let’s define our input/output paths and verify the input file exists:</p>
-<div id="30dbfdd4" class="cell">
+<div id="1406f715" class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb12-2"><a href="#cb12-2"></a><span class="im">import</span> pyarrow <span class="im">as</span> pa</span>
 <span id="cb12-3"><a href="#cb12-3"></a><span class="im">import</span> pyarrow.parquet <span class="im">as</span> pq</span>
@@ -1057,7 +1057,7 @@ Memory Management with Chunks
 <section id="step-2-count-records-optional" class="level3">
 <h3 class="anchored" data-anchor-id="step-2-count-records-optional">Step 2: Count Records (Optional)</h3>
 <p>Counting records first lets us show progress. This takes a few seconds on a large file:</p>
-<div id="6a6eac0e" class="cell">
+<div id="ff5c4bdc" class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># Count lines for progress reporting</span></span>
 <span id="cb13-2"><a href="#cb13-2"></a>total_records <span class="op">=</span> <span class="bu">sum</span>(<span class="dv">1</span> <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">open</span>(input_file))</span>
 <span id="cb13-3"><a href="#cb13-3"></a><span class="bu">print</span>(<span class="ss">f"Total records: </span><span class="sc">{</span>total_records<span class="sc">:,}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1066,7 +1066,7 @@ Memory Management with Chunks
 <section id="step-3-process-in-chunks" class="level3">
 <h3 class="anchored" data-anchor-id="step-3-process-in-chunks">Step 3: Process in Chunks</h3>
 <p>Here’s the core conversion loop. We read the file line by line, parse each record, and write to Parquet in batches:</p>
-<div id="d7cecf70" class="cell">
+<div id="0ebe33e6" class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>chunk_size <span class="op">=</span> <span class="dv">100_000</span>  <span class="co"># Records per chunk</span></span>
 <span id="cb14-2"><a href="#cb14-2"></a>records <span class="op">=</span> []</span>
 <span id="cb14-3"><a href="#cb14-3"></a>records_processed <span class="op">=</span> <span class="dv">0</span></span>
@@ -1127,7 +1127,7 @@ Don’t Forget the Final Chunk!
 </section>
 <section id="step-4-verify-the-output" class="level3">
 <h3 class="anchored" data-anchor-id="step-4-verify-the-output">Step 4: Verify the Output</h3>
-<div id="9d1f1f0d" class="cell">
+<div id="0b74074f" class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># Check output file</span></span>
 <span id="cb15-2"><a href="#cb15-2"></a>output_size_mb <span class="op">=</span> output_file.stat().st_size <span class="op">/</span> <span class="dv">1024</span> <span class="op">/</span> <span class="dv">1024</span></span>
 <span id="cb15-3"><a href="#cb15-3"></a>compression_ratio <span class="op">=</span> input_size_mb <span class="op">/</span> output_size_mb</span>
