@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.29">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Mapping the Maury Collection</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bcbce66894bfa8e7e94e40e0186b9bb8.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-4e7a6ecc11b04d2331dcee725084a9de.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bcbce66894bfa8e7e94e40e0186b9bb8.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-3a2f3671387184ead6911a8887545cfe.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-a3474c4e671de74f2cc29ca289497754.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-3a2f3671387184ead6911a8887545cfe.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Mapping the Maury Collection</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="./index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-notebooks" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Notebooks</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-notebooks">    
+        <li>
+    <a class="dropdown-item" href="./notebooks/01_download_icoads.html">
+ <span class="dropdown-text">1. Download ICOADS Data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./notebooks/02_imma_to_parquet.html">
+ <span class="dropdown-text">2. Parse IMMA Format</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./notebooks/03_reconstruct_voyages.html">
+ <span class="dropdown-text">3. Reconstruct Voyages</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./notebooks/04_classify_voyages.html">
+ <span class="dropdown-text">4. Classify Voyages</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./notebooks/05_visualize_voyages.html">
+ <span class="dropdown-text">5. Visualize Results</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/example/maury-notebooks"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Introduction</a></li><li class="breadcrumb-item"><a href="./index.html">Mapping the Maury Collection</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Introduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Mapping the Maury Collection</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Data Pipeline</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./notebooks/01_download_icoads.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Step 1: Downloading Historical Ship Logbook Data from ICOADS</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./notebooks/02_imma_to_parquet.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Step 2: Converting IMMA1 to Parquet Format</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./notebooks/03_reconstruct_voyages.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Step 3: Reconstructing Voyages from Observations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./notebooks/04_classify_voyages.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Step 4: Classifying Voyage Types with Machine Learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./notebooks/05_visualize_voyages.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Step 5: Visualizing Voyages and Creating Animations</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#about-this-project" id="toc-about-this-project" class="nav-link active" data-scroll-target="#about-this-project">About This Project</a></li>
+  <li><a href="#the-data-maury-collection-icoads-deck-701" id="toc-the-data-maury-collection-icoads-deck-701" class="nav-link" data-scroll-target="#the-data-maury-collection-icoads-deck-701">The Data: Maury Collection (ICOADS Deck 701)</a></li>
+  <li><a href="#the-challenge-identifying-whaling-ships" id="toc-the-challenge-identifying-whaling-ships" class="nav-link" data-scroll-target="#the-challenge-identifying-whaling-ships">The Challenge: Identifying Whaling Ships</a></li>
+  <li><a href="#results-animated-voyage-maps" id="toc-results-animated-voyage-maps" class="nav-link" data-scroll-target="#results-animated-voyage-maps">Results: Animated Voyage Maps</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Introduction</a></li><li class="breadcrumb-item"><a href="./index.html">Mapping the Maury Collection</a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Mapping the Maury Collection</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<p class="subtitle lead">Reconstructing Ben Schmidt’s Historical Whaling Voyage Analysis</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="output/ghost_ships_all.png" class="hero-image img-fluid figure-img" alt="Map showing thousands of ship voyage tracks across the world's oceans, creating a ghostly web of maritime routes from the 1800s"></p>
+<figcaption>Ghost ships: 13,000+ voyages from the Maury Collection rendered as semi-transparent tracks</figcaption>
+</figure>
+</div>
+<section id="about-this-project" class="level2">
+<h2 class="anchored" data-anchor-id="about-this-project">About This Project</h2>
+<p>I’ve been teaching with Ben Schmidt’s <a href="http://sappingattention.blogspot.com/2012/11/reading-digital-sources-case-study-in.html">classic digital history blog series on mapping whaling voyages</a> for well over a decade. They provide arresting visuals of the history of American whaling voyages alongside a series of interesting methodological reflections on how to use quantitative data effectively in historical practice. However, they were written in a moment when sharing code and data was harder than it is today, and the lack of those artifacts has limited how students can engage with the material.</p>
+<p>As we move into the second quarter of the twenty-first century, data has generally become easier to find, code has become easier to share, and new data formats have made it easier to perform calculations that were prohibitively difficult 14 years ago.</p>
+<p>The project you are reading attempts attempts to reconstruct Schmidt’s full pipeline, using modern Python libraries that can run on a well-provisioned laptop. In a series of discrete steps, we: - locate the dataset in its current location - extract the relevant records using the method that Schmidt describes - take advantage of major advances in data storage &amp; rewrite the dataset to Parquet format - explore Schmidt’s method for classifying voyages, as well as some alternative methods - mimic his static visualizations, and - use modern open source mapping tools to imitate the complex voyage animations which made the blog so popular a decade and a half ago - <strong>TODO:</strong> I also hope to discuss and implement some enhancements to Schmidt’s work, when I get the time.</p>
+<p>The project can be read here, on the web, but it’s also possible to run all of the code locally as a set of Jupyter notebooks. I hope the multiple formats help you engage with the project in different ways: passively reading for those with less time or technical skill, active tinkering for those with more.</p>
+<p>Either way, by following along you’ll learn to:</p>
+<ol type="1">
+<li><strong>Download</strong> raw logbook data from NOAA’s ICOADS archive</li>
+<li><strong>Parse</strong> the cryptic IMMA1 fixed-width format into modern data structures</li>
+<li><strong>Reconstruct</strong> individual ship voyages from scattered observations</li>
+<li><strong>Classify</strong> voyages as whaling or merchant ships using machine learning</li>
+<li><strong>Visualize</strong> the results with animated “ghost ship” maps</li>
+</ol>
+<p><strong>Before you begin, you should read through Schmidt’s whole series of posts.</strong> A suggested order is: - <a href="http://sappingattention.blogspot.com/2012/11/reading-digital-sources-case-study-in.html">Reading digital sources: a case study in ship’s logs</a>, an overview of the whole project. - <a href="https://sappingattention.blogspot.com/2012/10/data-narratives-and-structural.html">Data Narratives and Structural History</a>, an introduction to the main arguments about <strong>how</strong> to do history with data - You can probably skip <a href="https://sappingattention.blogspot.com/2012/10/melville-plots.html">Melville Plots</a>, though if you’re interested in Melville for other reasons this post has a few good tidbits, - <a href="https://sappingattention.blogspot.com/2012/11/machine-learning-on-high-seas.html">Machine learning at sea</a>, the most direct discussion of his classification technique, - <a href="https://sappingattention.blogspot.com/2012/11/when-you-have-mallet-everything-looks.html">When you have a MALLET</a>, a critique of topic modelling, - <a href="https://sappingattention.blogspot.com/2012/11/where-are-individuals-in-data-driven.html">Where are the individuals</a>, a metahistorical reflection, and finally - <a href="https://sappingattention.blogspot.com/2012/11/reading-digital-sources-case-study-in.html">Reading Digital Sources</a>, a synopsis of the series.</p>
+<p>We won’t address all the questions he raises in the series, but his reflections will help make sense of the steps we’re taking.</p>
+</section>
+<section id="the-data-maury-collection-icoads-deck-701" class="level2">
+<h2 class="anchored" data-anchor-id="the-data-maury-collection-icoads-deck-701">The Data: Maury Collection (ICOADS Deck 701)</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Who Was Matthew Maury?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Matthew Fontaine Maury</strong> (1806-1873) was something of a data pioneer, and generally thought of as a founder of oceanography. For almost twenty years, he systematically collecting ship logbooks from captains worldwide. His synthesis of thousands of voyages created the first wind and current charts, with numerous practical benefits for sailors, and scientific benefits for future generations of oceanographers and climate scientists.</p>
+<p><a href="https://en.wikipedia.org/wiki/Matthew_Fontaine_Maury">Maury’s Wikipedia page</a></p>
+</div>
+</div>
+<p>The <strong>Maury Collection</strong> contains approximately <strong>1.3 million observations</strong> from over <strong>13,700 voyages</strong> between 1795 and 1861. Each observation records:</p>
+<ul>
+<li><strong>Position</strong>: Latitude and longitude</li>
+<li><strong>Date/Time</strong>: Year, month, day, hour</li>
+<li><strong>Weather</strong>: Wind direction/speed, barometric pressure, air/sea temperature</li>
+<li><strong>Ship identity</strong>: Partial ship names, voyage identifiers</li>
+</ul>
+<p>As Schmidt notes, the original hand-written logs were much more complex than the records that survive today. We’ll talk more about that in <a href="./notebooks/01_download_icoads.html">the next section</a>.</p>
+<p>The <a href="./notebooks/02_imma_to_parquet.html">next notebook in our series</a> deviates from Schidt’s discussion in order to make further work go much faster.</p>
+</section>
+<section id="the-challenge-identifying-whaling-ships" class="level2">
+<h2 class="anchored" data-anchor-id="the-challenge-identifying-whaling-ships">The Challenge: Identifying Whaling Ships</h2>
+<p>The logbooks don’t explicitly label ship types. However, different ships have distinctive <strong>spatial signatures</strong>:</p>
+<div class="image-grid">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="output/ghost_ships_whaling.png" class="img-fluid figure-img" alt="Map showing whaling voyage tracks concentrated in the Pacific and around Cape Horn"></p>
+<figcaption>Whaling voyages concentrate in known whaling grounds</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="output/whaling_vs_merchant.png" class="img-fluid figure-img" alt="Side-by-side comparison showing distinct patterns of whaling ships vs merchant vessels"></p>
+<figcaption>Classification comparison: Whaling vs.&nbsp;Merchant routes</figcaption>
+</figure>
+</div>
+</div>
+<p><strong>Whaling ships</strong> spent months hunting in remote Pacific waters, while <strong>merchant ships</strong> followed direct trade routes between ports. By training a classifier on known whaling grounds, we can automatically identify the ~900 whaling voyages hidden in the data.</p>
+<p>Schmidt used a k-nearest neighbour algorithm for his classficiation; we proproduce that <a href="./notebooks/03_reconstruct_voyages.html">in the following notebook</a>.</p>
+</section>
+<section id="results-animated-voyage-maps" class="level2">
+<h2 class="anchored" data-anchor-id="results-animated-voyage-maps">Results: Animated Voyage Maps</h2>
+<p>The ultimate goal is to create visualizations like Ben Schmidt’s famous animated maps showing ships moving across the oceans over decades:</p>
+<div class="animation-container">
+<video controls="" loop="" muted="" playsinline="">
+<source src="output/whaling_voyages.mp4" type="video/mp4">
+<p><img src="output/whaling_voyages.gif" alt="Animation of whaling voyages from 1797-1860">  <em>Classified whaling voyages, 1797-1860. Yellow dots show current ship positions; red trails show recent movement.</em></p>
+<p>:::</p>
+<section id="the-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="the-pipeline">The Pipeline</h2>
+<div class="cell" data-layout-align="default">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource default number-lines code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1"></a>flowchart LR</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    A[ICOADS Archive] --&gt; B[Download\nDeck 701]</span>
+<span id="cb1-3"><a href="#cb1-3"></a>    B --&gt; C[Parse IMMA1\nFormat]</span>
+<span id="cb1-4"><a href="#cb1-4"></a>    C --&gt; D[Reconstruct\nVoyages]</span>
+<span id="cb1-5"><a href="#cb1-5"></a>    D --&gt; E[Classify\nWhaling/Merchant]</span>
+<span id="cb1-6"><a href="#cb1-6"></a>    E --&gt; F[Visualize\nAnimations]</span>
+<span id="cb1-7"><a href="#cb1-7"></a></span>
+<span id="cb1-8"><a href="#cb1-8"></a>    style A fill:#e1f5fe</span>
+<span id="cb1-9"><a href="#cb1-9"></a>    style F fill:#c8e6c9</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    A[ICOADS Archive] --&gt; B[Download\nDeck 701]
+    B --&gt; C[Parse IMMA1\nFormat]
+    C --&gt; D[Reconstruct\nVoyages]
+    D --&gt; E[Classify\nWhaling/Merchant]
+    E --&gt; F[Visualize\nAnimations]
+
+    style A fill:#e1f5fe
+    style F fill:#c8e6c9
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>As mentioned, each step is available in a separate notebook:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Notebook</th>
+<th>Description</th>
+<th>Key Technique</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="./notebooks/01_download_icoads.html">01_download_icoads</a></td>
+<td>Fetch raw data from NOAA</td>
+<td>HTTP requests, gzip</td>
+</tr>
+<tr class="even">
+<td><a href="./notebooks/02_imma_to_parquet.html">02_imma_to_parquet</a></td>
+<td>Parse fixed-width format</td>
+<td>Columnar storage</td>
+</tr>
+<tr class="odd">
+<td><a href="./notebooks/03_reconstruct_voyages.html">03_reconstruct_voyages</a></td>
+<td>Identify voyage boundaries</td>
+<td>Heuristic segmentation</td>
+</tr>
+<tr class="even">
+<td><a href="./notebooks/04_classify_voyages.html">04_classify_voyages</a></td>
+<td>ML classification</td>
+<td>K-Nearest Neighbours</td>
+</tr>
+<tr class="odd">
+<td><a href="./notebooks/05_visualize_voyages.html">05_visualize_voyages</a></td>
+<td>Create maps &amp; animations</td>
+<td>Matplotlib, ffmpeg</td>
+</tr>
+</tbody>
+</table>
+<p>Running this code will likely take considerable time and ocmputation resources on an ordinary laptop; before you run code, be sure you understand what it’s doing and how long it will likely take.</p>
+</section>
+<section id="traffic-patterns-through-history" class="level2">
+<h2 class="anchored" data-anchor-id="traffic-patterns-through-history">Traffic Patterns Through History</h2>
+<p>The data reveals how maritime traffic evolved over the early 19th century:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="output/traffic_by_decade.png" class="img-fluid figure-img" alt="Four-panel map showing maritime traffic patterns from 1800s through 1860s, with dramatic increase in Pacific coverage during the 1840s-1850s whaling boom"></p>
+<figcaption>Maritime traffic by decade showing the explosion of Pacific voyages in the 1840s-1850s</figcaption>
+</figure>
+</div>
+<p>The 1840s-1850s show a dramatic increase in Pacific coverage, corresponding to the peak of American whaling.</p>
+</section>
+<section id="getting-started" class="level2">
+<h2 class="anchored" data-anchor-id="getting-started">Getting Started</h2>
+<p>You can read all of the code and see a lthe results in the website version of this code.</p>
+<p>If you want to run these notebooks yourself:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Clone the repository</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="fu">git</span> clone https://github.com/example/maury-notebooks.git</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="bu">cd</span> maury-notebooks</span>
+<span id="cb2-4"><a href="#cb2-4"></a></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co"># Install dependencies with uv</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="ex">uv</span> sync</span>
+<span id="cb2-7"><a href="#cb2-7"></a></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co"># Download the data (takes several hours)</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="ex">uv</span> run python scripts/download_icoads_deck701.py</span>
+<span id="cb2-10"><a href="#cb2-10"></a></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="co"># Or run the full pipeline</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="ex">uv</span> run python scripts/imma_to_parquet.py</span>
+<span id="cb2-13"><a href="#cb2-13"></a><span class="ex">uv</span> run python scripts/reconstruct_voyages.py</span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="ex">uv</span> run python scripts/classify_voyages.py</span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="ex">uv</span> run python scripts/visualize_voyages.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Or jump straight to <a href="./notebooks/01_download_icoads.html">Notebook 1</a> to learn about the data.</p>
+</section>
+<section id="acknowledgements" class="level2">
+<h2 class="anchored" data-anchor-id="acknowledgements">Acknowledgements</h2>
+<p>This project builds on the work of:</p>
+<ul>
+<li><strong><a href="https://benschmidt.org/">Ben Schmidt</a></strong> - Original analysis and visualizations at <a href="https://sappingattention.blogspot.com/">Sapping Attention</a></li>
+<li><strong><a href="https://icoads.noaa.gov/">ICOADS</a></strong> - Maintaining the world’s largest marine climate archive</li>
+<li><strong><a href="https://www.ncei.noaa.gov/">NOAA NCEI</a></strong> - Hosting the data publicly</li>
+</ul>
+</section>
+<section id="license" class="level2">
+<h2 class="anchored" data-anchor-id="license">License</h2>
+<p>The code in this repository is released under a GPL3 License. The underlying ICOADS data is in the public domain.</p>
+<!-- Local Variables: -->
+<!-- jinx-local-words: "Fontaine Matplotlib Maury Maury's" -->
+<!-- End: -->
+
+
+<!-- -->
+
+</section>
+</video></div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb3" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">---</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="an">title:</span><span class="co"> "Mapping the Maury Collection"</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="an">subtitle:</span><span class="co"> "Reconstructing Ben Schmidt's Historical Whaling Voyage Analysis"</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">---</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="al">![Ghost ships: 13,000+ voyages from the Maury Collection rendered as semi-transparent tracks](output/ghost_ships_all.png)</span>{.hero-image fig-alt="Map showing thousands of ship voyage tracks across the world's oceans, creating a ghostly web of maritime routes from the 1800s"}</span>
+<span id="cb3-7"><a href="#cb3-7"></a></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="fu">## About This Project</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a></span>
+<span id="cb3-10"><a href="#cb3-10"></a></span>
+<span id="cb3-11"><a href="#cb3-11"></a>I've been teaching with Ben Schmidt's <span class="co">[</span><span class="ot">classic  digital history blog series on mapping whaling voyages</span><span class="co">](http://sappingattention.blogspot.com/2012/11/reading-digital-sources-case-study-in.html)</span> for well over a decade. They provide arresting visuals of the history of American whaling voyages alongside a series of interesting methodological reflections on how to use quantitative data effectively in historical practice.  However, they were written in a moment when sharing code and data was harder than it is today, and the lack of those artifacts has limited how students can engage with the material.   </span>
+<span id="cb3-12"><a href="#cb3-12"></a></span>
+<span id="cb3-13"><a href="#cb3-13"></a>As we move into the second quarter of the twenty-first century, data has generally become easier to find, code has become easier to share, and new data formats have made it easier to perform calculations that were prohibitively difficult 14 years ago.  </span>
+<span id="cb3-14"><a href="#cb3-14"></a></span>
+<span id="cb3-15"><a href="#cb3-15"></a>The project you are reading attempts attempts to reconstruct Schmidt's full pipeline, using modern Python libraries that can run on a well-provisioned laptop. In a series of discrete steps, we:</span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="ss">- </span>locate the dataset in its current location</span>
+<span id="cb3-17"><a href="#cb3-17"></a><span class="ss">- </span>extract the relevant records using the method that Schmidt describes </span>
+<span id="cb3-18"><a href="#cb3-18"></a><span class="ss">- </span>take advantage of major advances in data storage &amp; rewrite the dataset to Parquet format </span>
+<span id="cb3-19"><a href="#cb3-19"></a><span class="ss">- </span>explore Schmidt's method for classifying voyages, as well as some alternative methods</span>
+<span id="cb3-20"><a href="#cb3-20"></a><span class="ss">- </span>mimic his static visualizations, and</span>
+<span id="cb3-21"><a href="#cb3-21"></a><span class="ss">- </span>use modern open source mapping tools to imitate the complex voyage animations which made the blog so popular a decade and a half ago</span>
+<span id="cb3-22"><a href="#cb3-22"></a><span class="ss">- </span>**TODO:** I also hope to discuss and implement some enhancements to Schmidt's work, when I get the time.  </span>
+<span id="cb3-23"><a href="#cb3-23"></a></span>
+<span id="cb3-24"><a href="#cb3-24"></a>The project can be read here, on the web, but it's also possible to run all of the code locally as a set of Jupyter notebooks. I hope the multiple formats help you engage with the project in different ways: passively reading for those with less time or technical skill, active tinkering for those with more.  </span>
+<span id="cb3-25"><a href="#cb3-25"></a></span>
+<span id="cb3-26"><a href="#cb3-26"></a>Either way, by following along you'll learn to:</span>
+<span id="cb3-27"><a href="#cb3-27"></a></span>
+<span id="cb3-28"><a href="#cb3-28"></a><span class="ss">1. </span>**Download** raw logbook data from NOAA's ICOADS archive</span>
+<span id="cb3-29"><a href="#cb3-29"></a><span class="ss">2. </span>**Parse** the cryptic IMMA1 fixed-width format into modern data structures</span>
+<span id="cb3-30"><a href="#cb3-30"></a><span class="ss">3. </span>**Reconstruct** individual ship voyages from scattered observations</span>
+<span id="cb3-31"><a href="#cb3-31"></a><span class="ss">4. </span>**Classify** voyages as whaling or merchant ships using machine learning</span>
+<span id="cb3-32"><a href="#cb3-32"></a><span class="ss">5. </span>**Visualize** the results with animated "ghost ship" maps</span>
+<span id="cb3-33"><a href="#cb3-33"></a></span>
+<span id="cb3-34"><a href="#cb3-34"></a>**Before you begin, you should read through Schmidt's whole series of posts.** A suggested order is:</span>
+<span id="cb3-35"><a href="#cb3-35"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Reading digital sources: a case study in ship's logs</span><span class="co">](http://sappingattention.blogspot.com/2012/11/reading-digital-sources-case-study-in.html)</span>, an overview of the whole project.</span>
+<span id="cb3-36"><a href="#cb3-36"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Data Narratives and Structural History</span><span class="co">](https://sappingattention.blogspot.com/2012/10/data-narratives-and-structural.html)</span>, an introduction to the main arguments about **how** to do history  with data</span>
+<span id="cb3-37"><a href="#cb3-37"></a><span class="ss">- </span>You can probably skip <span class="co">[</span><span class="ot">Melville Plots</span><span class="co">](https://sappingattention.blogspot.com/2012/10/melville-plots.html)</span>, though if you're interested in Melville for other reasons this post has a few good tidbits,</span>
+<span id="cb3-38"><a href="#cb3-38"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Machine learning at sea</span><span class="co">](https://sappingattention.blogspot.com/2012/11/machine-learning-on-high-seas.html)</span>, the   most direct discussion of his classification technique,</span>
+<span id="cb3-39"><a href="#cb3-39"></a><span class="ss">- </span><span class="co">[</span><span class="ot">When you have a MALLET</span><span class="co">](https://sappingattention.blogspot.com/2012/11/when-you-have-mallet-everything-looks.html)</span>, a critique of topic modelling,</span>
+<span id="cb3-40"><a href="#cb3-40"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Where are the individuals</span><span class="co">](https://sappingattention.blogspot.com/2012/11/where-are-individuals-in-data-driven.html)</span>, a metahistorical reflection, and finally</span>
+<span id="cb3-41"><a href="#cb3-41"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Reading Digital Sources</span><span class="co">](https://sappingattention.blogspot.com/2012/11/reading-digital-sources-case-study-in.html)</span>, a synopsis of the series. </span>
+<span id="cb3-42"><a href="#cb3-42"></a></span>
+<span id="cb3-43"><a href="#cb3-43"></a>We won't address all the questions he raises in the series, but his reflections will help make sense of the steps we're taking.  </span>
+<span id="cb3-44"><a href="#cb3-44"></a></span>
+<span id="cb3-45"><a href="#cb3-45"></a><span class="fu">## The Data: Maury Collection (ICOADS Deck 701)</span></span>
+<span id="cb3-46"><a href="#cb3-46"></a></span>
+<span id="cb3-47"><a href="#cb3-47"></a>:::{.callout-note}</span>
+<span id="cb3-48"><a href="#cb3-48"></a><span class="fu">## Who Was Matthew Maury?</span></span>
+<span id="cb3-49"><a href="#cb3-49"></a>**Matthew Fontaine Maury** (1806-1873) was something of a data pioneer, and generally thought of as a founder of oceanography. For almost twenty years, he systematically collecting ship logbooks from captains worldwide. His synthesis of thousands of voyages created the first wind and current charts, with numerous practical benefits for sailors, and scientific benefits for future generations of oceanographers and climate scientists.</span>
+<span id="cb3-50"><a href="#cb3-50"></a></span>
+<span id="cb3-51"><a href="#cb3-51"></a><span class="co">[</span><span class="ot">Maury's Wikipedia page</span><span class="co">](https://en.wikipedia.org/wiki/Matthew_Fontaine_Maury)</span></span>
+<span id="cb3-52"><a href="#cb3-52"></a>:::</span>
+<span id="cb3-53"><a href="#cb3-53"></a></span>
+<span id="cb3-54"><a href="#cb3-54"></a>The **Maury Collection** contains approximately **1.3 million observations** from over **13,700 voyages** between 1795 and 1861. Each observation records:</span>
+<span id="cb3-55"><a href="#cb3-55"></a></span>
+<span id="cb3-56"><a href="#cb3-56"></a><span class="ss">- </span>**Position**: Latitude and longitude</span>
+<span id="cb3-57"><a href="#cb3-57"></a><span class="ss">- </span>**Date/Time**: Year, month, day, hour</span>
+<span id="cb3-58"><a href="#cb3-58"></a><span class="ss">- </span>**Weather**: Wind direction/speed, barometric pressure, air/sea temperature</span>
+<span id="cb3-59"><a href="#cb3-59"></a><span class="ss">- </span>**Ship identity**: Partial ship names, voyage identifiers</span>
+<span id="cb3-60"><a href="#cb3-60"></a></span>
+<span id="cb3-61"><a href="#cb3-61"></a>As Schmidt notes, the original hand-written logs were much more complex than the records that survive today.  We'll talk more about that in <span class="co">[</span><span class="ot">the next section</span><span class="co">](./notebooks/01_download_icoads.qmd)</span>. </span>
+<span id="cb3-62"><a href="#cb3-62"></a></span>
+<span id="cb3-63"><a href="#cb3-63"></a>The <span class="co">[</span><span class="ot">next notebook in our series</span><span class="co">](./notebooks/02_imma_to_parquet.qmd)</span> deviates from Schidt's discussion in order to make further work go much faster.  </span>
+<span id="cb3-64"><a href="#cb3-64"></a></span>
+<span id="cb3-65"><a href="#cb3-65"></a><span class="fu">## The Challenge: Identifying Whaling Ships</span></span>
+<span id="cb3-66"><a href="#cb3-66"></a></span>
+<span id="cb3-67"><a href="#cb3-67"></a>The logbooks don't explicitly label ship types. However, different ships have distinctive **spatial signatures**:</span>
+<span id="cb3-68"><a href="#cb3-68"></a></span>
+<span id="cb3-69"><a href="#cb3-69"></a>::: {.image-grid}</span>
+<span id="cb3-70"><a href="#cb3-70"></a><span class="al">![Whaling voyages concentrate in known whaling grounds](output/ghost_ships_whaling.png)</span>{fig-alt="Map showing whaling voyage tracks concentrated in the Pacific and around Cape Horn"}</span>
+<span id="cb3-71"><a href="#cb3-71"></a></span>
+<span id="cb3-72"><a href="#cb3-72"></a><span class="al">![Classification comparison: Whaling vs. Merchant routes](output/whaling_vs_merchant.png)</span>{fig-alt="Side-by-side comparison showing distinct patterns of whaling ships vs merchant vessels"}</span>
+<span id="cb3-73"><a href="#cb3-73"></a>:::</span>
+<span id="cb3-74"><a href="#cb3-74"></a></span>
+<span id="cb3-75"><a href="#cb3-75"></a>**Whaling ships** spent months hunting in remote Pacific waters, while **merchant ships** followed direct trade routes between ports. By training a classifier on known whaling grounds, we can automatically identify the ~900 whaling voyages hidden in the data.</span>
+<span id="cb3-76"><a href="#cb3-76"></a></span>
+<span id="cb3-77"><a href="#cb3-77"></a>Schmidt used a k-nearest neighbour algorithm for his classficiation; we proproduce that <span class="co">[</span><span class="ot">in the following notebook</span><span class="co">](./notebooks/03_reconstruct_voyages.qmd)</span>. </span>
+<span id="cb3-78"><a href="#cb3-78"></a></span>
+<span id="cb3-79"><a href="#cb3-79"></a><span class="fu">## Results: Animated Voyage Maps</span></span>
+<span id="cb3-80"><a href="#cb3-80"></a></span>
+<span id="cb3-81"><a href="#cb3-81"></a>The ultimate goal is to create visualizations like Ben Schmidt's famous animated maps showing ships moving across the oceans over decades:</span>
+<span id="cb3-82"><a href="#cb3-82"></a></span>
+<span id="cb3-83"><a href="#cb3-83"></a>::: {.animation-container}</span>
+<span id="cb3-84"><a href="#cb3-84"></a><span class="dt">&lt;</span><span class="kw">video</span><span class="ot"> controls loop muted playsinline</span><span class="dt">&gt;</span></span>
+<span id="cb3-85"><a href="#cb3-85"></a>  <span class="dt">&lt;</span><span class="kw">source</span><span class="ot"> src</span><span class="op">=</span><span class="st">"output/whaling_voyages.mp4"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"video/mp4"</span><span class="dt">&gt;</span></span>
+<span id="cb3-86"><a href="#cb3-86"></a>  <span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">"output/whaling_voyages.gif"</span><span class="ot"> alt</span><span class="op">=</span><span class="st">"Animation of whaling voyages from 1797-1860"</span><span class="dt">&gt;</span></span>
+<span id="cb3-87"><a href="#cb3-87"></a><span class="dt">&lt;/</span><span class="kw">video</span><span class="dt">&gt;</span></span>
+<span id="cb3-88"><a href="#cb3-88"></a>*Classified whaling voyages, 1797-1860. Yellow dots show current ship positions; red trails show recent movement.*</span>
+<span id="cb3-89"><a href="#cb3-89"></a>:::</span>
+<span id="cb3-90"><a href="#cb3-90"></a></span>
+<span id="cb3-91"><a href="#cb3-91"></a><span class="fu">## The Pipeline</span></span>
+<span id="cb3-92"><a href="#cb3-92"></a></span>
+<span id="cb3-95"><a href="#cb3-95"></a><span class="in">```{mermaid}</span></span>
+<span id="cb3-96"><a href="#cb3-96"></a>flowchart LR</span>
+<span id="cb3-97"><a href="#cb3-97"></a>    A[ICOADS Archive] --&gt; B[Download\nDeck <span class="dv">701</span>]</span>
+<span id="cb3-98"><a href="#cb3-98"></a>    B --&gt; C[Parse IMMA1\nFormat]</span>
+<span id="cb3-99"><a href="#cb3-99"></a>    C --&gt; D[Reconstruct\nVoyages]</span>
+<span id="cb3-100"><a href="#cb3-100"></a>    D --&gt; E[Classify\nWhaling/Merchant]</span>
+<span id="cb3-101"><a href="#cb3-101"></a>    E --&gt; F[Visualize\nAnimations]</span>
+<span id="cb3-102"><a href="#cb3-102"></a></span>
+<span id="cb3-103"><a href="#cb3-103"></a>    style A fill:<span class="co">#e1f5fe</span></span>
+<span id="cb3-104"><a href="#cb3-104"></a>    style F fill:<span class="co">#c8e6c9</span></span>
+<span id="cb3-105"><a href="#cb3-105"></a><span class="in">```</span></span>
+<span id="cb3-106"><a href="#cb3-106"></a></span>
+<span id="cb3-107"><a href="#cb3-107"></a>As mentioned, each step is available in a separate notebook:</span>
+<span id="cb3-108"><a href="#cb3-108"></a></span>
+<span id="cb3-109"><a href="#cb3-109"></a><span class="pp">|</span> Notebook <span class="pp">|</span> Description <span class="pp">|</span> Key Technique <span class="pp">|</span></span>
+<span id="cb3-110"><a href="#cb3-110"></a><span class="pp">|----------|-------------|---------------|</span></span>
+<span id="cb3-111"><a href="#cb3-111"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">01_download_icoads</span><span class="co">](notebooks/01_download_icoads.qmd)</span> <span class="pp">|</span> Fetch raw data from NOAA <span class="pp">|</span> HTTP requests, gzip <span class="pp">|</span></span>
+<span id="cb3-112"><a href="#cb3-112"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">02_imma_to_parquet</span><span class="co">](notebooks/02_imma_to_parquet.qmd)</span> <span class="pp">|</span> Parse fixed-width format <span class="pp">|</span> Columnar storage <span class="pp">|</span></span>
+<span id="cb3-113"><a href="#cb3-113"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">03_reconstruct_voyages</span><span class="co">](notebooks/03_reconstruct_voyages.qmd)</span> <span class="pp">|</span> Identify voyage boundaries <span class="pp">|</span> Heuristic segmentation <span class="pp">|</span></span>
+<span id="cb3-114"><a href="#cb3-114"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">04_classify_voyages</span><span class="co">](notebooks/04_classify_voyages.qmd)</span> <span class="pp">|</span> ML classification <span class="pp">|</span> K-Nearest Neighbours <span class="pp">|</span></span>
+<span id="cb3-115"><a href="#cb3-115"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">05_visualize_voyages</span><span class="co">](notebooks/05_visualize_voyages.qmd)</span> <span class="pp">|</span> Create maps &amp; animations <span class="pp">|</span> Matplotlib, ffmpeg <span class="pp">|</span></span>
+<span id="cb3-116"><a href="#cb3-116"></a></span>
+<span id="cb3-117"><a href="#cb3-117"></a>Running this code will likely take considerable time and ocmputation resources on an ordinary laptop; before you run code, be sure you understand what it's doing and how long it will likely take. </span>
+<span id="cb3-118"><a href="#cb3-118"></a></span>
+<span id="cb3-119"><a href="#cb3-119"></a><span class="fu">## Traffic Patterns Through History</span></span>
+<span id="cb3-120"><a href="#cb3-120"></a></span>
+<span id="cb3-121"><a href="#cb3-121"></a>The data reveals how maritime traffic evolved over the early 19th century:</span>
+<span id="cb3-122"><a href="#cb3-122"></a></span>
+<span id="cb3-123"><a href="#cb3-123"></a><span class="al">![Maritime traffic by decade showing the explosion of Pacific voyages in the 1840s-1850s](output/traffic_by_decade.png)</span>{fig-alt="Four-panel map showing maritime traffic patterns from 1800s through 1860s, with dramatic increase in Pacific coverage during the 1840s-1850s whaling boom"}</span>
+<span id="cb3-124"><a href="#cb3-124"></a></span>
+<span id="cb3-125"><a href="#cb3-125"></a>The 1840s-1850s show a dramatic increase in Pacific coverage, corresponding to the peak of American whaling.</span>
+<span id="cb3-126"><a href="#cb3-126"></a></span>
+<span id="cb3-127"><a href="#cb3-127"></a><span class="fu">## Getting Started</span></span>
+<span id="cb3-128"><a href="#cb3-128"></a></span>
+<span id="cb3-129"><a href="#cb3-129"></a>You can read all of the code and see a lthe results in the website version of this code. </span>
+<span id="cb3-130"><a href="#cb3-130"></a></span>
+<span id="cb3-131"><a href="#cb3-131"></a>If you want to  run these notebooks yourself:</span>
+<span id="cb3-132"><a href="#cb3-132"></a></span>
+<span id="cb3-133"><a href="#cb3-133"></a><span class="in">```bash</span></span>
+<span id="cb3-134"><a href="#cb3-134"></a><span class="co"># Clone the repository</span></span>
+<span id="cb3-135"><a href="#cb3-135"></a><span class="fu">git</span> clone https://github.com/example/maury-notebooks.git</span>
+<span id="cb3-136"><a href="#cb3-136"></a><span class="bu">cd</span> maury-notebooks</span>
+<span id="cb3-137"><a href="#cb3-137"></a></span>
+<span id="cb3-138"><a href="#cb3-138"></a><span class="co"># Install dependencies with uv</span></span>
+<span id="cb3-139"><a href="#cb3-139"></a><span class="ex">uv</span> sync</span>
+<span id="cb3-140"><a href="#cb3-140"></a></span>
+<span id="cb3-141"><a href="#cb3-141"></a><span class="co"># Download the data (takes several hours)</span></span>
+<span id="cb3-142"><a href="#cb3-142"></a><span class="ex">uv</span> run python scripts/download_icoads_deck701.py</span>
+<span id="cb3-143"><a href="#cb3-143"></a></span>
+<span id="cb3-144"><a href="#cb3-144"></a><span class="co"># Or run the full pipeline</span></span>
+<span id="cb3-145"><a href="#cb3-145"></a><span class="ex">uv</span> run python scripts/imma_to_parquet.py</span>
+<span id="cb3-146"><a href="#cb3-146"></a><span class="ex">uv</span> run python scripts/reconstruct_voyages.py</span>
+<span id="cb3-147"><a href="#cb3-147"></a><span class="ex">uv</span> run python scripts/classify_voyages.py</span>
+<span id="cb3-148"><a href="#cb3-148"></a><span class="ex">uv</span> run python scripts/visualize_voyages.py</span>
+<span id="cb3-149"><a href="#cb3-149"></a><span class="in">```</span></span>
+<span id="cb3-150"><a href="#cb3-150"></a></span>
+<span id="cb3-151"><a href="#cb3-151"></a>Or jump straight to <span class="co">[</span><span class="ot">Notebook 1</span><span class="co">](notebooks/01_download_icoads.qmd)</span> to learn about the data.</span>
+<span id="cb3-152"><a href="#cb3-152"></a></span>
+<span id="cb3-153"><a href="#cb3-153"></a><span class="fu">## Acknowledgements</span></span>
+<span id="cb3-154"><a href="#cb3-154"></a></span>
+<span id="cb3-155"><a href="#cb3-155"></a>This project builds on the work of:</span>
+<span id="cb3-156"><a href="#cb3-156"></a></span>
+<span id="cb3-157"><a href="#cb3-157"></a><span class="ss">- </span>**[Ben Schmidt](https://benschmidt.org/)** - Original analysis and visualizations at <span class="co">[</span><span class="ot">Sapping Attention</span><span class="co">](https://sappingattention.blogspot.com/)</span></span>
+<span id="cb3-158"><a href="#cb3-158"></a><span class="ss">- </span>**[ICOADS](https://icoads.noaa.gov/)** - Maintaining the world's largest marine climate archive</span>
+<span id="cb3-159"><a href="#cb3-159"></a><span class="ss">- </span>**[NOAA NCEI](https://www.ncei.noaa.gov/)** - Hosting the data publicly</span>
+<span id="cb3-160"><a href="#cb3-160"></a></span>
+<span id="cb3-161"><a href="#cb3-161"></a><span class="fu">## License</span></span>
+<span id="cb3-162"><a href="#cb3-162"></a></span>
+<span id="cb3-163"><a href="#cb3-163"></a>The code in this repository is released under a GPL3 License. The underlying ICOADS data is in the public domain.</span>
+<span id="cb3-164"><a href="#cb3-164"></a></span>
+<span id="cb3-165"><a href="#cb3-165"></a><span class="co">&lt;!-- Local Variables: --&gt;</span></span>
+<span id="cb3-166"><a href="#cb3-166"></a><span class="co">&lt;!-- jinx-local-words: "Fontaine Matplotlib Maury Maury's" --&gt;</span></span>
+<span id="cb3-167"><a href="#cb3-167"></a><span class="co">&lt;!-- End: --&gt;</span></span>
+</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Based on work by <a href="https://sappingattention.blogspot.com/">Ben Schmidt</a></p>
+</div>   
+    <div class="nav-footer-center">
+<p>Data from <a href="https://icoads.noaa.gov/">ICOADS</a></p>
+</div>
+    <div class="nav-footer-right">
+<p>Built with <a href="https://quarto.org/">Quarto</a></p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

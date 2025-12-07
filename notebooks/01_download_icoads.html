@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.29">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Step 1: Downloading Historical Ship Logbook Data from ICOADS – Mapping the Maury Collection</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bcbce66894bfa8e7e94e40e0186b9bb8.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-4e7a6ecc11b04d2331dcee725084a9de.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bcbce66894bfa8e7e94e40e0186b9bb8.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-3a2f3671387184ead6911a8887545cfe.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-a3474c4e671de74f2cc29ca289497754.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-3a2f3671387184ead6911a8887545cfe.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Mapping the Maury Collection</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-notebooks" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Notebooks</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-notebooks">    
+        <li>
+    <a class="dropdown-item" href="../notebooks/01_download_icoads.html">
+ <span class="dropdown-text">1. Download ICOADS Data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../notebooks/02_imma_to_parquet.html">
+ <span class="dropdown-text">2. Parse IMMA Format</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../notebooks/03_reconstruct_voyages.html">
+ <span class="dropdown-text">3. Reconstruct Voyages</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../notebooks/04_classify_voyages.html">
+ <span class="dropdown-text">4. Classify Voyages</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../notebooks/05_visualize_voyages.html">
+ <span class="dropdown-text">5. Visualize Results</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/example/maury-notebooks"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notebooks/01_download_icoads.html">Data Pipeline</a></li><li class="breadcrumb-item"><a href="../notebooks/01_download_icoads.html">Step 1: Downloading Historical Ship Logbook Data from ICOADS</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Introduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Mapping the Maury Collection</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Data Pipeline</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/01_download_icoads.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Step 1: Downloading Historical Ship Logbook Data from ICOADS</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/02_imma_to_parquet.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Step 2: Converting IMMA1 to Parquet Format</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/03_reconstruct_voyages.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Step 3: Reconstructing Voyages from Observations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/04_classify_voyages.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Step 4: Classifying Voyage Types with Machine Learning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/05_visualize_voyages.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Step 5: Visualizing Voyages and Creating Animations</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#downloading-historical-ship-logbook-data-from-icoads" id="toc-downloading-historical-ship-logbook-data-from-icoads" class="nav-link active" data-scroll-target="#downloading-historical-ship-logbook-data-from-icoads">Downloading Historical Ship Logbook Data from ICOADS</a>
+  <ul class="collapse">
+  <li><a href="#who-was-matthew-maury" id="toc-who-was-matthew-maury" class="nav-link" data-scroll-target="#who-was-matthew-maury">Who Was Matthew Maury?</a></li>
+  <li><a href="#what-is-icoads" id="toc-what-is-icoads" class="nav-link" data-scroll-target="#what-is-icoads">What is ICOADS?</a></li>
+  <li><a href="#the-download-process" id="toc-the-download-process" class="nav-link" data-scroll-target="#the-download-process">The Download Process</a>
+  <ul class="collapse">
+  <li><a href="#step-1-understanding-the-archive-structure" id="toc-step-1-understanding-the-archive-structure" class="nav-link" data-scroll-target="#step-1-understanding-the-archive-structure">Step 1: Understanding the Archive Structure</a></li>
+  <li><a href="#step-2-understanding-imma1-format" id="toc-step-2-understanding-imma1-format" class="nav-link" data-scroll-target="#step-2-understanding-imma1-format">Step 2: Understanding IMMA1 Format</a></li>
+  <li><a href="#step-3-finding-the-deck-number" id="toc-step-3-finding-the-deck-number" class="nav-link" data-scroll-target="#step-3-finding-the-deck-number">Step 3: Finding the Deck Number</a></li>
+  <li><a href="#step-4-the-filter-logic" id="toc-step-4-the-filter-logic" class="nav-link" data-scroll-target="#step-4-the-filter-logic">Step 4: The Filter Logic</a></li>
+  <li><a href="#step-5-the-main-download-loop" id="toc-step-5-the-main-download-loop" class="nav-link" data-scroll-target="#step-5-the-main-download-loop">Step 5: The Main Download Loop</a></li>
+  </ul></li>
+  <li><a href="#running-the-download" id="toc-running-the-download" class="nav-link" data-scroll-target="#running-the-download">Running the Download</a></li>
+  <li><a href="#whats-next" id="toc-whats-next" class="nav-link" data-scroll-target="#whats-next">What’s Next?</a></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways">Key Takeaways</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notebooks/01_download_icoads.html">Data Pipeline</a></li><li class="breadcrumb-item"><a href="../notebooks/01_download_icoads.html">Step 1: Downloading Historical Ship Logbook Data from ICOADS</a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Step 1: Downloading Historical Ship Logbook Data from ICOADS</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="downloading-historical-ship-logbook-data-from-icoads" class="level1">
+<h1>Downloading Historical Ship Logbook Data from ICOADS</h1>
+<p>This notebook explains how to download Matthew Maury’s historic ship logbook collection from the ICOADS (International Comprehensive Ocean-Atmosphere Data Set) archive. By the end, you’ll understand:</p>
+<ol type="1">
+<li><strong>What ICOADS is</strong> and why it matters for historical research</li>
+<li><strong>What a “deck” is</strong> and why we want deck 701</li>
+<li><strong>How the download script works</strong> step by step</li>
+<li><strong>The IMMA1 fixed-width format</strong> used to store the data</li>
+</ol>
+<p><strong>Note:</strong> The full download takes several hours and downloads ~500MB. This notebook explains the process; you can run the script separately or use pre-built data files.</p>
+<hr>
+<section id="who-was-matthew-maury" class="level2">
+<h2 class="anchored" data-anchor-id="who-was-matthew-maury">Who Was Matthew Maury?</h2>
+<p>Matthew Fontaine Maury (1806-1873) was a US Navy officer who revolutionized maritime navigation and founded modern oceanography. After an injury ended his sea career, he became Superintendent of the US Naval Observatory where he had a brilliant insight: <strong>systematically collect and analyze ship logbooks</strong>.</p>
+<p>Maury convinced ship captains worldwide to record standardized observations of wind, weather, currents, and sea conditions. By synthesizing thousands of logbooks, he created the first <strong>wind and current charts</strong> that dramatically reduced sailing times—sometimes by weeks!</p>
+<p>His 1855 book <em>“<a href="*https://library.si.edu/digital-library/book/physicalgeograp00maura">The Physical Geography of the Sea</a>”</em> is widely considered the first textbook of modern oceanography.</p>
+</section>
+<section id="what-is-icoads" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-icoads">What is ICOADS?</h2>
+<p><strong>ICOADS</strong> (International Comprehensive Ocean-Atmosphere Data Set) is the world’s largest collection of historical ocean-atmosphere observations. Maintained by NOAA’s National Centers for Environmental Information (NCEI), it contains hundreds of millions of marine observations dating back to the 1600s.</p>
+<p>The data is organized by <strong>deck number</strong>—a historical term from the punch card era. Each deck represents a distinct data collection:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Deck</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>701</strong></td>
+<td>US Maury Collection (our focus!)</td>
+</tr>
+<tr class="even">
+<td>702</td>
+<td>US Marine Meteorological Journals</td>
+</tr>
+<tr class="odd">
+<td>704</td>
+<td>US Merchant Marine Collection</td>
+</tr>
+<tr class="even">
+<td>720</td>
+<td>UK Met Office Main Marine Data Bank</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Deck 701</strong> contains Maury’s original digitized logbook collection from 1795-1861.</p>
+</section>
+<section id="the-download-process" class="level2">
+<h2 class="anchored" data-anchor-id="the-download-process">The Download Process</h2>
+<p>Let’s walk through the download script (<code>scripts/download_icoads_deck701.py</code>) to understand how it works.</p>
+<section id="step-1-understanding-the-archive-structure" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-understanding-the-archive-structure">Step 1: Understanding the Archive Structure</h3>
+<p>ICOADS data is organized by year and month. Each file is gzip-compressed and made available at a URL of the form <code>https://www.ncei.noaa.gov/data/international-comprehensive-ocean-atmosphere/v3/archive/final-untrim/IMMA1_R3.1.-_{TEAR}-{MONTH}.jz</code></p>
+<div id="2608e0bd" class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># The archive URL structure</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>BASE_URL <span class="op">=</span> <span class="st">"https://www.ncei.noaa.gov/data/international-comprehensive-ocean-atmosphere/v3/archive/final-untrim/"</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co"># Example file for January 1840</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>example_file <span class="op">=</span> <span class="st">"IMMA1_R3.1.0_1840-01.gz"</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="bu">print</span>(<span class="ss">f"Full URL: </span><span class="sc">{</span>BASE_URL<span class="sc">}{</span>example_file<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-7"><a href="#cb1-7"></a></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co"># For Maury's collection period (1795-1861), we need:</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a>n_years <span class="op">=</span> <span class="dv">1861</span> <span class="op">-</span> <span class="dv">1795</span> <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a>n_files <span class="op">=</span> n_years <span class="op">*</span> <span class="dv">12</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Total files to download: </span><span class="sc">{</span>n_files<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>n_years<span class="sc">}</span><span class="ss"> years × 12 months)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="step-2-understanding-imma1-format" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-understanding-imma1-format">Step 2: Understanding IMMA1 Format</h3>
+<p>ICOADS uses the IMMA1 (International Maritime Meteorological Archive) format—a <strong>fixed-width text format</strong> where each field occupies specific character positions.</p>
+<p>Here’s a sample observation:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>1840 1 1     3702 28605 13 4    10LOUISVIL   1 685                                                           165 20673701 69 5 0 1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The following code block explains what each character grouping means:</p>
+<div id="b76b701d" class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># A sample IMMA1 record</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>sample_record <span class="op">=</span> <span class="st">"1840 1 1     3702 28605 13 4    10LOUISVIL   1 685                                                           165 20673701 69 5 0 1"</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="bu">print</span>(<span class="st">"IMMA1 Core Section Fields (with values from sample record):"</span>)</span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
+<span id="cb3-6"><a href="#cb3-6"></a></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co"># All IMMA1 Core fields in order (108 characters total)</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="co"># Based on ICOADS R3.1 IMMA1 format specification</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a>fields <span class="op">=</span> [</span>
+<span id="cb3-10"><a href="#cb3-10"></a>    <span class="co"># Date/Time fields</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a>    (<span class="dv">0</span>, <span class="dv">4</span>, <span class="st">'YR'</span>, <span class="st">'Year'</span>),</span>
+<span id="cb3-12"><a href="#cb3-12"></a>    (<span class="dv">4</span>, <span class="dv">6</span>, <span class="st">'MO'</span>, <span class="st">'Month'</span>),</span>
+<span id="cb3-13"><a href="#cb3-13"></a>    (<span class="dv">6</span>, <span class="dv">8</span>, <span class="st">'DY'</span>, <span class="st">'Day'</span>),</span>
+<span id="cb3-14"><a href="#cb3-14"></a>    (<span class="dv">8</span>, <span class="dv">12</span>, <span class="st">'HR'</span>, <span class="st">'Hour (HHMM format, ÷100 for decimal)'</span>),</span>
+<span id="cb3-15"><a href="#cb3-15"></a>    <span class="co"># Position fields</span></span>
+<span id="cb3-16"><a href="#cb3-16"></a>    (<span class="dv">12</span>, <span class="dv">17</span>, <span class="st">'LAT'</span>, <span class="st">'Latitude (×100, signed)'</span>),</span>
+<span id="cb3-17"><a href="#cb3-17"></a>    (<span class="dv">17</span>, <span class="dv">23</span>, <span class="st">'LON'</span>, <span class="st">'Longitude (×100, subtract 360 if &gt;180)'</span>),</span>
+<span id="cb3-18"><a href="#cb3-18"></a>    <span class="co"># Record metadata</span></span>
+<span id="cb3-19"><a href="#cb3-19"></a>    (<span class="dv">23</span>, <span class="dv">25</span>, <span class="st">'IM'</span>, <span class="st">'IMMA version'</span>),</span>
+<span id="cb3-20"><a href="#cb3-20"></a>    (<span class="dv">25</span>, <span class="dv">27</span>, <span class="st">'ATTC'</span>, <span class="st">'Attachment count'</span>),</span>
+<span id="cb3-21"><a href="#cb3-21"></a>    <span class="co"># Time/position indicators</span></span>
+<span id="cb3-22"><a href="#cb3-22"></a>    (<span class="dv">27</span>, <span class="dv">28</span>, <span class="st">'TI'</span>, <span class="st">'Time indicator'</span>),</span>
+<span id="cb3-23"><a href="#cb3-23"></a>    (<span class="dv">28</span>, <span class="dv">29</span>, <span class="st">'LI'</span>, <span class="st">'Latitude/longitude indicator'</span>),</span>
+<span id="cb3-24"><a href="#cb3-24"></a>    (<span class="dv">29</span>, <span class="dv">30</span>, <span class="st">'DS'</span>, <span class="st">'Direction of ship'</span>),</span>
+<span id="cb3-25"><a href="#cb3-25"></a>    (<span class="dv">30</span>, <span class="dv">31</span>, <span class="st">'VS'</span>, <span class="st">'Speed of ship'</span>),</span>
+<span id="cb3-26"><a href="#cb3-26"></a>    <span class="co"># Ship identification</span></span>
+<span id="cb3-27"><a href="#cb3-27"></a>    (<span class="dv">31</span>, <span class="dv">33</span>, <span class="st">'NID'</span>, <span class="st">'Night/day indicator'</span>),</span>
+<span id="cb3-28"><a href="#cb3-28"></a>    (<span class="dv">33</span>, <span class="dv">35</span>, <span class="st">'II'</span>, <span class="st">'ID indicator'</span>),</span>
+<span id="cb3-29"><a href="#cb3-29"></a>    (<span class="dv">35</span>, <span class="dv">44</span>, <span class="st">'ID'</span>, <span class="st">'Ship ID (9-char truncated name)'</span>),</span>
+<span id="cb3-30"><a href="#cb3-30"></a>    (<span class="dv">44</span>, <span class="dv">46</span>, <span class="st">'C1'</span>, <span class="st">'Country code'</span>),</span>
+<span id="cb3-31"><a href="#cb3-31"></a>    <span class="co"># Ship course and speed</span></span>
+<span id="cb3-32"><a href="#cb3-32"></a>    (<span class="dv">46</span>, <span class="dv">49</span>, <span class="st">'DI'</span>, <span class="st">'Direction indicator'</span>),</span>
+<span id="cb3-33"><a href="#cb3-33"></a>    (<span class="dv">49</span>, <span class="dv">51</span>, <span class="st">'D'</span>, <span class="st">'Direction (tens of degrees)'</span>),</span>
+<span id="cb3-34"><a href="#cb3-34"></a>    (<span class="dv">51</span>, <span class="dv">53</span>, <span class="st">'WI'</span>, <span class="st">'Wind direction indicator'</span>),</span>
+<span id="cb3-35"><a href="#cb3-35"></a>    (<span class="dv">53</span>, <span class="dv">56</span>, <span class="st">'W'</span>, <span class="st">'Wind direction (degrees)'</span>),</span>
+<span id="cb3-36"><a href="#cb3-36"></a>    <span class="co"># Visibility and weather</span></span>
+<span id="cb3-37"><a href="#cb3-37"></a>    (<span class="dv">56</span>, <span class="dv">57</span>, <span class="st">'VI'</span>, <span class="st">'Visibility indicator'</span>),</span>
+<span id="cb3-38"><a href="#cb3-38"></a>    (<span class="dv">57</span>, <span class="dv">59</span>, <span class="st">'VV'</span>, <span class="st">'Visibility'</span>),</span>
+<span id="cb3-39"><a href="#cb3-39"></a>    (<span class="dv">59</span>, <span class="dv">61</span>, <span class="st">'WW'</span>, <span class="st">'Present weather'</span>),</span>
+<span id="cb3-40"><a href="#cb3-40"></a>    (<span class="dv">61</span>, <span class="dv">62</span>, <span class="st">'W1'</span>, <span class="st">'Past weather'</span>),</span>
+<span id="cb3-41"><a href="#cb3-41"></a>    <span class="co"># Pressure</span></span>
+<span id="cb3-42"><a href="#cb3-42"></a>    (<span class="dv">62</span>, <span class="dv">67</span>, <span class="st">'SLP'</span>, <span class="st">'Sea level pressure (×10 hPa)'</span>),</span>
+<span id="cb3-43"><a href="#cb3-43"></a>    (<span class="dv">67</span>, <span class="dv">68</span>, <span class="st">'A'</span>, <span class="st">'Pressure tendency characteristic'</span>),</span>
+<span id="cb3-44"><a href="#cb3-44"></a>    (<span class="dv">68</span>, <span class="dv">71</span>, <span class="st">'PPP'</span>, <span class="st">'Pressure tendency (×10 hPa)'</span>),</span>
+<span id="cb3-45"><a href="#cb3-45"></a>    <span class="co"># Temperature</span></span>
+<span id="cb3-46"><a href="#cb3-46"></a>    (<span class="dv">71</span>, <span class="dv">72</span>, <span class="st">'IT'</span>, <span class="st">'Temperature indicator'</span>),</span>
+<span id="cb3-47"><a href="#cb3-47"></a>    (<span class="dv">72</span>, <span class="dv">76</span>, <span class="st">'AT'</span>, <span class="st">'Air temperature (×10 °C)'</span>),</span>
+<span id="cb3-48"><a href="#cb3-48"></a>    (<span class="dv">76</span>, <span class="dv">77</span>, <span class="st">'WBTI'</span>, <span class="st">'Wet bulb temp indicator'</span>),</span>
+<span id="cb3-49"><a href="#cb3-49"></a>    (<span class="dv">77</span>, <span class="dv">81</span>, <span class="st">'WBT'</span>, <span class="st">'Wet bulb temperature'</span>),</span>
+<span id="cb3-50"><a href="#cb3-50"></a>    (<span class="dv">81</span>, <span class="dv">82</span>, <span class="st">'DPTI'</span>, <span class="st">'Dew point temp indicator'</span>),</span>
+<span id="cb3-51"><a href="#cb3-51"></a>    (<span class="dv">82</span>, <span class="dv">86</span>, <span class="st">'DPT'</span>, <span class="st">'Dew point temperature'</span>),</span>
+<span id="cb3-52"><a href="#cb3-52"></a>    <span class="co"># Sea surface temperature</span></span>
+<span id="cb3-53"><a href="#cb3-53"></a>    (<span class="dv">86</span>, <span class="dv">87</span>, <span class="st">'SI'</span>, <span class="st">'SST measurement indicator'</span>),</span>
+<span id="cb3-54"><a href="#cb3-54"></a>    (<span class="dv">87</span>, <span class="dv">91</span>, <span class="st">'SST'</span>, <span class="st">'Sea surface temperature (×10 °C)'</span>),</span>
+<span id="cb3-55"><a href="#cb3-55"></a>    <span class="co"># Cloud data</span></span>
+<span id="cb3-56"><a href="#cb3-56"></a>    (<span class="dv">91</span>, <span class="dv">92</span>, <span class="st">'N'</span>, <span class="st">'Total cloud amount'</span>),</span>
+<span id="cb3-57"><a href="#cb3-57"></a>    (<span class="dv">92</span>, <span class="dv">93</span>, <span class="st">'NH'</span>, <span class="st">'Low cloud amount'</span>),</span>
+<span id="cb3-58"><a href="#cb3-58"></a>    (<span class="dv">93</span>, <span class="dv">94</span>, <span class="st">'CL'</span>, <span class="st">'Low cloud type'</span>),</span>
+<span id="cb3-59"><a href="#cb3-59"></a>    (<span class="dv">94</span>, <span class="dv">95</span>, <span class="st">'HI'</span>, <span class="st">'Cloud height indicator'</span>),</span>
+<span id="cb3-60"><a href="#cb3-60"></a>    (<span class="dv">95</span>, <span class="dv">96</span>, <span class="st">'H'</span>, <span class="st">'Cloud base height'</span>),</span>
+<span id="cb3-61"><a href="#cb3-61"></a>    (<span class="dv">96</span>, <span class="dv">97</span>, <span class="st">'CM'</span>, <span class="st">'Middle cloud type'</span>),</span>
+<span id="cb3-62"><a href="#cb3-62"></a>    (<span class="dv">97</span>, <span class="dv">98</span>, <span class="st">'CH'</span>, <span class="st">'High cloud type'</span>),</span>
+<span id="cb3-63"><a href="#cb3-63"></a>    <span class="co"># Wave data</span></span>
+<span id="cb3-64"><a href="#cb3-64"></a>    (<span class="dv">98</span>, <span class="dv">100</span>, <span class="st">'WD'</span>, <span class="st">'Wave direction'</span>),</span>
+<span id="cb3-65"><a href="#cb3-65"></a>    (<span class="dv">100</span>, <span class="dv">102</span>, <span class="st">'WP'</span>, <span class="st">'Wave period'</span>),</span>
+<span id="cb3-66"><a href="#cb3-66"></a>    (<span class="dv">102</span>, <span class="dv">104</span>, <span class="st">'WH'</span>, <span class="st">'Wave height'</span>),</span>
+<span id="cb3-67"><a href="#cb3-67"></a>    <span class="co"># (Core ends at position 108; C1 attachment follows)</span></span>
+<span id="cb3-68"><a href="#cb3-68"></a>]</span>
+<span id="cb3-69"><a href="#cb3-69"></a></span>
+<span id="cb3-70"><a href="#cb3-70"></a><span class="cf">for</span> start, end, abbr, description <span class="kw">in</span> fields:</span>
+<span id="cb3-71"><a href="#cb3-71"></a>    value <span class="op">=</span> sample_record[start:end] <span class="cf">if</span> end <span class="op">&lt;=</span> <span class="bu">len</span>(sample_record) <span class="cf">else</span> <span class="st">''</span></span>
+<span id="cb3-72"><a href="#cb3-72"></a>    <span class="co"># Only print fields that have non-blank values</span></span>
+<span id="cb3-73"><a href="#cb3-73"></a>    <span class="cf">if</span> value.strip():</span>
+<span id="cb3-74"><a href="#cb3-74"></a>        <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>start<span class="sc">:3}</span><span class="ss">-</span><span class="sc">{</span>end<span class="sc">:3}</span><span class="ss">  </span><span class="sc">{</span>abbr<span class="sc">:5}</span><span class="ss">  '</span><span class="sc">{</span>value<span class="sc">}</span><span class="ss">'  </span><span class="sc">{</span>description<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb3-75"><a href="#cb3-75"></a></span>
+<span id="cb3-76"><a href="#cb3-76"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">"</span> <span class="op">+</span> <span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
+<span id="cb3-77"><a href="#cb3-77"></a><span class="bu">print</span>(<span class="st">"C1 Attachment (follows Core at position 108+):"</span>)</span>
+<span id="cb3-78"><a href="#cb3-78"></a>c1_fields <span class="op">=</span> [</span>
+<span id="cb3-79"><a href="#cb3-79"></a>    (<span class="dv">113</span>, <span class="dv">118</span>, <span class="st">'UID'</span>, <span class="st">'Unique record identifier'</span>),</span>
+<span id="cb3-80"><a href="#cb3-80"></a>    (<span class="dv">118</span>, <span class="dv">121</span>, <span class="st">'DCK'</span>, <span class="st">'Deck number (701 = Maury Collection)'</span>),</span>
+<span id="cb3-81"><a href="#cb3-81"></a>    (<span class="dv">121</span>, <span class="dv">124</span>, <span class="st">'SID'</span>, <span class="st">'Source ID'</span>),</span>
+<span id="cb3-82"><a href="#cb3-82"></a>    (<span class="dv">124</span>, <span class="dv">126</span>, <span class="st">'PT'</span>, <span class="st">'Platform type'</span>),</span>
+<span id="cb3-83"><a href="#cb3-83"></a>]</span>
+<span id="cb3-84"><a href="#cb3-84"></a><span class="cf">for</span> start, end, abbr, description <span class="kw">in</span> c1_fields:</span>
+<span id="cb3-85"><a href="#cb3-85"></a>    value <span class="op">=</span> sample_record[start:end] <span class="cf">if</span> end <span class="op">&lt;=</span> <span class="bu">len</span>(sample_record) <span class="cf">else</span> <span class="st">''</span></span>
+<span id="cb3-86"><a href="#cb3-86"></a>    <span class="cf">if</span> value.strip():</span>
+<span id="cb3-87"><a href="#cb3-87"></a>        <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>start<span class="sc">:3}</span><span class="ss">-</span><span class="sc">{</span>end<span class="sc">:3}</span><span class="ss">  </span><span class="sc">{</span>abbr<span class="sc">:5}</span><span class="ss">  '</span><span class="sc">{</span>value<span class="sc">}</span><span class="ss">'  </span><span class="sc">{</span>description<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="step-3-finding-the-deck-number" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-finding-the-deck-number">Step 3: Finding the Deck Number</h3>
+<p>The deck number is in the <strong>C1 attachment</strong>, which follows the core section. For ICOADS R3.1, the deck number is at positions 118-120:</p>
+<div id="e629bb2d" class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">def</span> get_deck_number(line):</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    <span class="co">"""</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co">    Extract the deck number (DCK) from an IMMA1 record.</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co">    The deck number identifies which collection the record belongs to.</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co">    Deck 701 = US Maury Collection</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co">    """</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a>    DCK_START <span class="op">=</span> <span class="dv">118</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a>    DCK_END <span class="op">=</span> <span class="dv">121</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a></span>
+<span id="cb4-11"><a href="#cb4-11"></a>    <span class="cf">if</span> <span class="bu">len</span>(line) <span class="op">&lt;</span> DCK_END:</span>
+<span id="cb4-12"><a href="#cb4-12"></a>        <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a></span>
+<span id="cb4-14"><a href="#cb4-14"></a>    dck <span class="op">=</span> line[DCK_START:DCK_END]</span>
+<span id="cb4-15"><a href="#cb4-15"></a></span>
+<span id="cb4-16"><a href="#cb4-16"></a>    <span class="co"># Verify it's a valid deck number (3 digits)</span></span>
+<span id="cb4-17"><a href="#cb4-17"></a>    <span class="cf">if</span> dck.isdigit():</span>
+<span id="cb4-18"><a href="#cb4-18"></a>        <span class="cf">return</span> dck</span>
+<span id="cb4-19"><a href="#cb4-19"></a></span>
+<span id="cb4-20"><a href="#cb4-20"></a>    <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb4-21"><a href="#cb4-21"></a></span>
+<span id="cb4-22"><a href="#cb4-22"></a><span class="co"># Demonstrate with a real record</span></span>
+<span id="cb4-23"><a href="#cb4-23"></a>full_record <span class="op">=</span> <span class="st">"1840 1 1     3702 28605 13 4    10LOUISVIL   1 685                                                           165 20673701 69 5 0 1                  FFFFFF77AAAAAAAAAAAA     981500A2243102199 0 760786218400101  3701N 7357W"</span></span>
+<span id="cb4-24"><a href="#cb4-24"></a>deck <span class="op">=</span> get_deck_number(full_record)</span>
+<span id="cb4-25"><a href="#cb4-25"></a><span class="bu">print</span>(<span class="ss">f"Deck number extracted: </span><span class="sc">{</span>deck<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb4-26"><a href="#cb4-26"></a><span class="bu">print</span>(<span class="ss">f"This is </span><span class="sc">{</span><span class="st">'the Maury Collection!'</span> <span class="cf">if</span> deck <span class="op">==</span> <span class="st">'701'</span> <span class="cf">else</span> <span class="st">'a different collection'</span><span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="step-4-the-filter-logic" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-the-filter-logic">Step 4: The Filter Logic</h3>
+<p>For each monthly file, we download, decompress, and filter:</p>
+<div id="2cdd7533" class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="im">import</span> gzip</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="im">import</span> io</span>
+<span id="cb5-3"><a href="#cb5-3"></a></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="kw">def</span> demonstrate_filtering(lines):</span>
+<span id="cb5-5"><a href="#cb5-5"></a>    <span class="co">"""</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="co">    Show how we filter IMMA1 records for deck 701.</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="co">    """</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a>    deck701_count <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a>    other_decks <span class="op">=</span> {}</span>
+<span id="cb5-10"><a href="#cb5-10"></a></span>
+<span id="cb5-11"><a href="#cb5-11"></a>    <span class="cf">for</span> line <span class="kw">in</span> lines:</span>
+<span id="cb5-12"><a href="#cb5-12"></a>        deck <span class="op">=</span> get_deck_number(line)</span>
+<span id="cb5-13"><a href="#cb5-13"></a>        <span class="cf">if</span> deck <span class="op">==</span> <span class="st">'701'</span>:</span>
+<span id="cb5-14"><a href="#cb5-14"></a>            deck701_count <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a>        <span class="cf">elif</span> deck:</span>
+<span id="cb5-16"><a href="#cb5-16"></a>            other_decks[deck] <span class="op">=</span> other_decks.get(deck, <span class="dv">0</span>) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb5-17"><a href="#cb5-17"></a></span>
+<span id="cb5-18"><a href="#cb5-18"></a>    <span class="cf">return</span> deck701_count, other_decks</span>
+<span id="cb5-19"><a href="#cb5-19"></a></span>
+<span id="cb5-20"><a href="#cb5-20"></a><span class="co"># Simulate filtering results (representative numbers)</span></span>
+<span id="cb5-21"><a href="#cb5-21"></a><span class="bu">print</span>(<span class="st">"Filtering Process:"</span>)</span>
+<span id="cb5-22"><a href="#cb5-22"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">60</span>)</span>
+<span id="cb5-23"><a href="#cb5-23"></a><span class="bu">print</span>(<span class="st">"""</span></span>
+<span id="cb5-24"><a href="#cb5-24"></a><span class="st">For each monthly file:</span></span>
+<span id="cb5-25"><a href="#cb5-25"></a></span>
+<span id="cb5-26"><a href="#cb5-26"></a><span class="st">1. Download compressed .gz file from NOAA archive</span></span>
+<span id="cb5-27"><a href="#cb5-27"></a><span class="st">2. Decompress in memory (gzip)</span></span>
+<span id="cb5-28"><a href="#cb5-28"></a><span class="st">  3. Parse each line, extract deck number at position 118-120</span></span>
+<span id="cb5-29"><a href="#cb5-29"></a><span class="st">  4. If deck == '701', write to output file</span></span>
+<span id="cb5-30"><a href="#cb5-30"></a><span class="st">  5. Otherwise, skip the record</span></span>
+<span id="cb5-31"><a href="#cb5-31"></a></span>
+<span id="cb5-32"><a href="#cb5-32"></a><span class="st">Typical results for a month in the 1840s:</span></span>
+<span id="cb5-33"><a href="#cb5-33"></a></span>
+<span id="cb5-34"><a href="#cb5-34"></a><span class="st">- Total records in file: ~50,000</span></span>
+<span id="cb5-35"><a href="#cb5-35"></a><span class="st">- Deck 701 (Maury) records: ~2,000 (4%)</span></span>
+<span id="cb5-36"><a href="#cb5-36"></a><span class="st">  - Other decks: ~48,000 (96%)</span></span>
+<span id="cb5-37"><a href="#cb5-37"></a><span class="st">"""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="step-5-the-main-download-loop" class="level3">
+<h3 class="anchored" data-anchor-id="step-5-the-main-download-loop">Step 5: The Main Download Loop</h3>
+<p>Here’s the core logic from <code>scripts/download_icoads_deck701.py</code>:</p>
+<div id="1662d07a" class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Simplified version of the download function (don't run - just for illustration)</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a>DOWNLOAD_CODE <span class="op">=</span> <span class="st">'''</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="st">import gzip</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="st">import urllib.request</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="st">def download_and_filter_deck701(start_year=1795, end_year=1861, output_file='data/icoads_deck701_maury.imma'):</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="st">    """Download ICOADS IMMA1 files and filter for deck 701 records."""</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="st">    base_url = "https://www.ncei.noaa.gov/data/international-comprehensive-ocean-atmosphere/v3/archive/final-untrim/"</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a></span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="st">    with open(output_file, 'w') as outf:</span></span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="st">        for year in range(start_year, end_year + 1):</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a><span class="st">            for month in range(1, 13):</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a><span class="st">                filename = f"IMMA1_R3.1.0_</span><span class="sc">{year}</span><span class="st">-</span><span class="sc">{month:02d}</span><span class="st">.gz"</span></span>
+<span id="cb6-15"><a href="#cb6-15"></a><span class="st">                url = base_url + filename</span></span>
+<span id="cb6-16"><a href="#cb6-16"></a></span>
+<span id="cb6-17"><a href="#cb6-17"></a><span class="st">                try:</span></span>
+<span id="cb6-18"><a href="#cb6-18"></a><span class="st">                    # Download compressed file</span></span>
+<span id="cb6-19"><a href="#cb6-19"></a><span class="st">                    with urllib.request.urlopen(url, timeout=60) as response:</span></span>
+<span id="cb6-20"><a href="#cb6-20"></a><span class="st">                        compressed_data = response.read()</span></span>
+<span id="cb6-21"><a href="#cb6-21"></a></span>
+<span id="cb6-22"><a href="#cb6-22"></a><span class="st">                    # Decompress and process</span></span>
+<span id="cb6-23"><a href="#cb6-23"></a><span class="st">                    data = gzip.decompress(compressed_data).decode('utf-8', errors='replace')</span></span>
+<span id="cb6-24"><a href="#cb6-24"></a></span>
+<span id="cb6-25"><a href="#cb6-25"></a><span class="st">                    for line in data.strip().split('</span><span class="ch">\\</span><span class="st">n'):</span></span>
+<span id="cb6-26"><a href="#cb6-26"></a><span class="st">                        # Check if this record is from deck 701</span></span>
+<span id="cb6-27"><a href="#cb6-27"></a><span class="st">                        if len(line) &gt; 120 and line[118:121] == '701':</span></span>
+<span id="cb6-28"><a href="#cb6-28"></a><span class="st">                            outf.write(line + '</span><span class="ch">\\</span><span class="st">n')</span></span>
+<span id="cb6-29"><a href="#cb6-29"></a></span>
+<span id="cb6-30"><a href="#cb6-30"></a><span class="st">                except urllib.error.HTTPError as e:</span></span>
+<span id="cb6-31"><a href="#cb6-31"></a><span class="st">                    if e.code == 404:</span></span>
+<span id="cb6-32"><a href="#cb6-32"></a><span class="st">                        print(f"No data for </span><span class="sc">{year}</span><span class="st">-</span><span class="sc">{month:02d}</span><span class="st">")</span></span>
+<span id="cb6-33"><a href="#cb6-33"></a><span class="st">                    else:</span></span>
+<span id="cb6-34"><a href="#cb6-34"></a><span class="st">                        raise</span></span>
+<span id="cb6-35"><a href="#cb6-35"></a><span class="st">'''</span></span>
+<span id="cb6-36"><a href="#cb6-36"></a></span>
+<span id="cb6-37"><a href="#cb6-37"></a><span class="bu">print</span>(<span class="st">"Download Script Overview:"</span>)</span>
+<span id="cb6-38"><a href="#cb6-38"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">60</span>)</span>
+<span id="cb6-39"><a href="#cb6-39"></a><span class="bu">print</span>(DOWNLOAD_CODE)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="running-the-download" class="level2">
+<h2 class="anchored" data-anchor-id="running-the-download">Running the Download</h2>
+<p>To actually download the data, it is certainly <em>possible</em> to use the associated notebook. But it is easier to run the full script in teh background. From the project root:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="ex">uv</span> run python scripts/download_icoads_deck701.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Options:</p>
+<ul>
+<li><code>--start-year 1840 --end-year 1850</code>: Download only a subset of years</li>
+<li><code>-o custom_output.imma</code>: Specify output file</li>
+<li><code>-q</code>: Quiet mode (suppress progress)</li>
+</ul>
+<p><strong>Expected output:</strong> - Time: Fifteen minutes to several hours (depends on network speed) - File: <code>data/icoads_deck701_maury.imma</code> (~567 MB) - Records: ~1.3 million Maury collection observations</p>
+</section>
+<section id="whats-next" class="level2">
+<h2 class="anchored" data-anchor-id="whats-next">What’s Next?</h2>
+<p>The downloaded IMMA1 file is in a legacy fixed-width format. In the next notebook, we’ll convert it to Apache Parquet for efficient analysis:</p>
+<ul>
+<li><strong>37× compression</strong>: 567 MB → 15 MB</li>
+<li><strong>Selective column reading</strong>: Load only the fields you need</li>
+<li><strong>Native data types</strong>: Proper integers and floats instead of text</li>
+</ul>
+</section>
+<section id="key-takeaways" class="level2">
+<h2 class="anchored" data-anchor-id="key-takeaways">Key Takeaways</h2>
+<ol type="1">
+<li><strong>ICOADS</strong> is a massive archive of historical marine observations</li>
+<li><strong>Deck 701</strong> contains Maury’s original ship logbook collection (1795-1861)</li>
+<li><strong>IMMA1</strong> is a fixed-width text format; the deck number is at positions 118-120</li>
+<li>The download script filters ~50 million records down to ~1.3 million Maury records</li>
+<li>This process takes hours but only needs to be done once</li>
+</ol>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<ul>
+<li><a href="https://icoads.noaa.gov/">ICOADS Homepage</a></li>
+<li><a href="https://www.ncei.noaa.gov/products/international-comprehensive-ocean-atmosphere-data-set">NCEI ICOADS Data</a></li>
+<li><a href="https://icoads.noaa.gov/e-doc/imma/R3.0-imma1.pdf">IMMA Format Documentation</a></li>
+<li><a href="https://oceanservice.noaa.gov/facts/maury.html">Matthew Maury Biography (NOAA)</a></li>
+</ul>
+
+
+<!-- -->
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb8" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1"></a><span class="co">---</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="an">title:</span><span class="co"> "Step 1: Downloading Historical Ship Logbook Data from ICOADS"</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="an">jupyter:</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co">  jupytext:</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="co">    text_representation:</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co">      extension: .qmd</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co">      format_name: quarto</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="co">      format_version: '1.0'</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="co">  kernelspec:</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="co">    display_name: Python 3 (ipykernel)</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="co">    language: python</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a><span class="co">    name: python3</span></span>
+<span id="cb8-13"><a href="#cb8-13"></a><span class="an">format:</span></span>
+<span id="cb8-14"><a href="#cb8-14"></a><span class="co">  html:</span></span>
+<span id="cb8-15"><a href="#cb8-15"></a><span class="co">    code-fold: false</span></span>
+<span id="cb8-16"><a href="#cb8-16"></a><span class="co">---</span></span>
+<span id="cb8-17"><a href="#cb8-17"></a></span>
+<span id="cb8-18"><a href="#cb8-18"></a><span class="fu"># Downloading Historical Ship Logbook Data from ICOADS</span></span>
+<span id="cb8-19"><a href="#cb8-19"></a></span>
+<span id="cb8-20"><a href="#cb8-20"></a>This notebook explains how to download Matthew Maury's historic ship logbook collection</span>
+<span id="cb8-21"><a href="#cb8-21"></a>from the ICOADS (International Comprehensive Ocean-Atmosphere Data Set) archive. By the</span>
+<span id="cb8-22"><a href="#cb8-22"></a>end, you'll understand:</span>
+<span id="cb8-23"><a href="#cb8-23"></a></span>
+<span id="cb8-24"><a href="#cb8-24"></a><span class="ss">1. </span>**What ICOADS is** and why it matters for historical research</span>
+<span id="cb8-25"><a href="#cb8-25"></a><span class="ss">2. </span>**What a "deck" is** and why we want deck 701</span>
+<span id="cb8-26"><a href="#cb8-26"></a><span class="ss">3. </span>**How the download script works** step by step</span>
+<span id="cb8-27"><a href="#cb8-27"></a><span class="ss">4. </span>**The IMMA1 fixed-width format** used to store the data</span>
+<span id="cb8-28"><a href="#cb8-28"></a></span>
+<span id="cb8-29"><a href="#cb8-29"></a>**Note:** The full download takes several hours and downloads ~500MB. This notebook</span>
+<span id="cb8-30"><a href="#cb8-30"></a>explains the process; you can run the script separately or use pre-built data files.</span>
+<span id="cb8-31"><a href="#cb8-31"></a></span>
+<span id="cb8-32"><a href="#cb8-32"></a>---</span>
+<span id="cb8-33"><a href="#cb8-33"></a></span>
+<span id="cb8-34"><a href="#cb8-34"></a><span class="fu">## Who Was Matthew Maury?</span></span>
+<span id="cb8-35"><a href="#cb8-35"></a></span>
+<span id="cb8-36"><a href="#cb8-36"></a>Matthew Fontaine Maury (1806-1873) was a US Navy officer who revolutionized maritime</span>
+<span id="cb8-37"><a href="#cb8-37"></a>navigation and founded modern oceanography. After an injury ended his sea career, he</span>
+<span id="cb8-38"><a href="#cb8-38"></a>became Superintendent of the US Naval Observatory where he had a brilliant insight:</span>
+<span id="cb8-39"><a href="#cb8-39"></a>**systematically collect and analyze ship logbooks**.</span>
+<span id="cb8-40"><a href="#cb8-40"></a></span>
+<span id="cb8-41"><a href="#cb8-41"></a>Maury convinced ship captains worldwide to record standardized observations of wind,</span>
+<span id="cb8-42"><a href="#cb8-42"></a>weather, currents, and sea conditions. By synthesizing thousands of logbooks, he created</span>
+<span id="cb8-43"><a href="#cb8-43"></a>the first **wind and current charts** that dramatically reduced sailing times—sometimes</span>
+<span id="cb8-44"><a href="#cb8-44"></a>by weeks!</span>
+<span id="cb8-45"><a href="#cb8-45"></a></span>
+<span id="cb8-46"><a href="#cb8-46"></a>His 1855 book *"[The Physical Geography of the Sea](*https://library.si.edu/digital-library/book/physicalgeograp00maura)"* is widely considered the first textbook of modern oceanography.</span>
+<span id="cb8-47"><a href="#cb8-47"></a></span>
+<span id="cb8-48"><a href="#cb8-48"></a><span class="fu">## What is ICOADS?</span></span>
+<span id="cb8-49"><a href="#cb8-49"></a></span>
+<span id="cb8-50"><a href="#cb8-50"></a>**ICOADS** (International Comprehensive Ocean-Atmosphere Data Set) is the world's largest</span>
+<span id="cb8-51"><a href="#cb8-51"></a>collection of historical ocean-atmosphere observations. Maintained by NOAA's National</span>
+<span id="cb8-52"><a href="#cb8-52"></a>Centers for Environmental Information (NCEI), it contains hundreds of millions of marine</span>
+<span id="cb8-53"><a href="#cb8-53"></a>observations dating back to the 1600s.</span>
+<span id="cb8-54"><a href="#cb8-54"></a></span>
+<span id="cb8-55"><a href="#cb8-55"></a>The data is organized by **deck number**—a historical term from the punch card era.</span>
+<span id="cb8-56"><a href="#cb8-56"></a>Each deck represents a distinct data collection:</span>
+<span id="cb8-57"><a href="#cb8-57"></a></span>
+<span id="cb8-58"><a href="#cb8-58"></a><span class="pp">|</span> Deck <span class="pp">|</span> Description <span class="pp">|</span></span>
+<span id="cb8-59"><a href="#cb8-59"></a><span class="pp">|------|-------------|</span></span>
+<span id="cb8-60"><a href="#cb8-60"></a><span class="pp">|</span> **701** <span class="pp">|</span> US Maury Collection (our focus!) <span class="pp">|</span></span>
+<span id="cb8-61"><a href="#cb8-61"></a><span class="pp">|</span> 702 <span class="pp">|</span> US Marine Meteorological Journals <span class="pp">|</span></span>
+<span id="cb8-62"><a href="#cb8-62"></a><span class="pp">|</span> 704 <span class="pp">|</span> US Merchant Marine Collection <span class="pp">|</span></span>
+<span id="cb8-63"><a href="#cb8-63"></a><span class="pp">|</span> 720 <span class="pp">|</span> UK Met Office Main Marine Data Bank <span class="pp">|</span></span>
+<span id="cb8-64"><a href="#cb8-64"></a></span>
+<span id="cb8-65"><a href="#cb8-65"></a>**Deck 701** contains Maury's original digitized logbook collection from 1795-1861.</span>
+<span id="cb8-66"><a href="#cb8-66"></a></span>
+<span id="cb8-67"><a href="#cb8-67"></a><span class="fu">## The Download Process</span></span>
+<span id="cb8-68"><a href="#cb8-68"></a></span>
+<span id="cb8-69"><a href="#cb8-69"></a>Let's walk through the download script (<span class="in">`scripts/download_icoads_deck701.py`</span>) to</span>
+<span id="cb8-70"><a href="#cb8-70"></a>understand how it works.</span>
+<span id="cb8-71"><a href="#cb8-71"></a></span>
+<span id="cb8-72"><a href="#cb8-72"></a><span class="fu">### Step 1: Understanding the Archive Structure</span></span>
+<span id="cb8-73"><a href="#cb8-73"></a></span>
+<span id="cb8-74"><a href="#cb8-74"></a>ICOADS data is organized by year and month. Each file is gzip-compressed and made available at a URL of the form <span class="in">`https://www.ncei.noaa.gov/data/international-comprehensive-ocean-atmosphere/v3/archive/final-untrim/IMMA1_R3.1.-_{TEAR}-{MONTH}.jz`</span></span>
+<span id="cb8-75"><a href="#cb8-75"></a></span>
+<span id="cb8-78"><a href="#cb8-78"></a><span class="in">```{python}</span></span>
+<span id="cb8-79"><a href="#cb8-79"></a><span class="co"># The archive URL structure</span></span>
+<span id="cb8-80"><a href="#cb8-80"></a>BASE_URL <span class="op">=</span> <span class="st">"https://www.ncei.noaa.gov/data/international-comprehensive-ocean-atmosphere/v3/archive/final-untrim/"</span></span>
+<span id="cb8-81"><a href="#cb8-81"></a></span>
+<span id="cb8-82"><a href="#cb8-82"></a><span class="co"># Example file for January 1840</span></span>
+<span id="cb8-83"><a href="#cb8-83"></a>example_file <span class="op">=</span> <span class="st">"IMMA1_R3.1.0_1840-01.gz"</span></span>
+<span id="cb8-84"><a href="#cb8-84"></a><span class="bu">print</span>(<span class="ss">f"Full URL: </span><span class="sc">{</span>BASE_URL<span class="sc">}{</span>example_file<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb8-85"><a href="#cb8-85"></a></span>
+<span id="cb8-86"><a href="#cb8-86"></a><span class="co"># For Maury's collection period (1795-1861), we need:</span></span>
+<span id="cb8-87"><a href="#cb8-87"></a>n_years <span class="op">=</span> <span class="dv">1861</span> <span class="op">-</span> <span class="dv">1795</span> <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb8-88"><a href="#cb8-88"></a>n_files <span class="op">=</span> n_years <span class="op">*</span> <span class="dv">12</span></span>
+<span id="cb8-89"><a href="#cb8-89"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Total files to download: </span><span class="sc">{</span>n_files<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>n_years<span class="sc">}</span><span class="ss"> years × 12 months)"</span>)</span>
+<span id="cb8-90"><a href="#cb8-90"></a><span class="in">```</span></span>
+<span id="cb8-91"><a href="#cb8-91"></a></span>
+<span id="cb8-92"><a href="#cb8-92"></a><span class="fu">### Step 2: Understanding IMMA1 Format</span></span>
+<span id="cb8-93"><a href="#cb8-93"></a></span>
+<span id="cb8-94"><a href="#cb8-94"></a>ICOADS uses the IMMA1 (International Maritime Meteorological Archive) format—a</span>
+<span id="cb8-95"><a href="#cb8-95"></a>**fixed-width text format** where each field occupies specific character positions.</span>
+<span id="cb8-96"><a href="#cb8-96"></a></span>
+<span id="cb8-97"><a href="#cb8-97"></a>Here's a sample observation:</span>
+<span id="cb8-98"><a href="#cb8-98"></a></span>
+<span id="cb8-99"><a href="#cb8-99"></a><span class="in">``` text</span></span>
+<span id="cb8-100"><a href="#cb8-100"></a><span class="in">1840 1 1     3702 28605 13 4    10LOUISVIL   1 685                                                           165 20673701 69 5 0 1</span></span>
+<span id="cb8-101"><a href="#cb8-101"></a><span class="in">```</span></span>
+<span id="cb8-102"><a href="#cb8-102"></a></span>
+<span id="cb8-103"><a href="#cb8-103"></a>The following code block explains what each character grouping means:</span>
+<span id="cb8-104"><a href="#cb8-104"></a></span>
+<span id="cb8-107"><a href="#cb8-107"></a><span class="in">```{python}</span></span>
+<span id="cb8-108"><a href="#cb8-108"></a><span class="co"># A sample IMMA1 record</span></span>
+<span id="cb8-109"><a href="#cb8-109"></a>sample_record <span class="op">=</span> <span class="st">"1840 1 1     3702 28605 13 4    10LOUISVIL   1 685                                                           165 20673701 69 5 0 1"</span></span>
+<span id="cb8-110"><a href="#cb8-110"></a></span>
+<span id="cb8-111"><a href="#cb8-111"></a><span class="bu">print</span>(<span class="st">"IMMA1 Core Section Fields (with values from sample record):"</span>)</span>
+<span id="cb8-112"><a href="#cb8-112"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
+<span id="cb8-113"><a href="#cb8-113"></a></span>
+<span id="cb8-114"><a href="#cb8-114"></a><span class="co"># All IMMA1 Core fields in order (108 characters total)</span></span>
+<span id="cb8-115"><a href="#cb8-115"></a><span class="co"># Based on ICOADS R3.1 IMMA1 format specification</span></span>
+<span id="cb8-116"><a href="#cb8-116"></a>fields <span class="op">=</span> [</span>
+<span id="cb8-117"><a href="#cb8-117"></a>    <span class="co"># Date/Time fields</span></span>
+<span id="cb8-118"><a href="#cb8-118"></a>    (<span class="dv">0</span>, <span class="dv">4</span>, <span class="st">'YR'</span>, <span class="st">'Year'</span>),</span>
+<span id="cb8-119"><a href="#cb8-119"></a>    (<span class="dv">4</span>, <span class="dv">6</span>, <span class="st">'MO'</span>, <span class="st">'Month'</span>),</span>
+<span id="cb8-120"><a href="#cb8-120"></a>    (<span class="dv">6</span>, <span class="dv">8</span>, <span class="st">'DY'</span>, <span class="st">'Day'</span>),</span>
+<span id="cb8-121"><a href="#cb8-121"></a>    (<span class="dv">8</span>, <span class="dv">12</span>, <span class="st">'HR'</span>, <span class="st">'Hour (HHMM format, ÷100 for decimal)'</span>),</span>
+<span id="cb8-122"><a href="#cb8-122"></a>    <span class="co"># Position fields</span></span>
+<span id="cb8-123"><a href="#cb8-123"></a>    (<span class="dv">12</span>, <span class="dv">17</span>, <span class="st">'LAT'</span>, <span class="st">'Latitude (×100, signed)'</span>),</span>
+<span id="cb8-124"><a href="#cb8-124"></a>    (<span class="dv">17</span>, <span class="dv">23</span>, <span class="st">'LON'</span>, <span class="st">'Longitude (×100, subtract 360 if &gt;180)'</span>),</span>
+<span id="cb8-125"><a href="#cb8-125"></a>    <span class="co"># Record metadata</span></span>
+<span id="cb8-126"><a href="#cb8-126"></a>    (<span class="dv">23</span>, <span class="dv">25</span>, <span class="st">'IM'</span>, <span class="st">'IMMA version'</span>),</span>
+<span id="cb8-127"><a href="#cb8-127"></a>    (<span class="dv">25</span>, <span class="dv">27</span>, <span class="st">'ATTC'</span>, <span class="st">'Attachment count'</span>),</span>
+<span id="cb8-128"><a href="#cb8-128"></a>    <span class="co"># Time/position indicators</span></span>
+<span id="cb8-129"><a href="#cb8-129"></a>    (<span class="dv">27</span>, <span class="dv">28</span>, <span class="st">'TI'</span>, <span class="st">'Time indicator'</span>),</span>
+<span id="cb8-130"><a href="#cb8-130"></a>    (<span class="dv">28</span>, <span class="dv">29</span>, <span class="st">'LI'</span>, <span class="st">'Latitude/longitude indicator'</span>),</span>
+<span id="cb8-131"><a href="#cb8-131"></a>    (<span class="dv">29</span>, <span class="dv">30</span>, <span class="st">'DS'</span>, <span class="st">'Direction of ship'</span>),</span>
+<span id="cb8-132"><a href="#cb8-132"></a>    (<span class="dv">30</span>, <span class="dv">31</span>, <span class="st">'VS'</span>, <span class="st">'Speed of ship'</span>),</span>
+<span id="cb8-133"><a href="#cb8-133"></a>    <span class="co"># Ship identification</span></span>
+<span id="cb8-134"><a href="#cb8-134"></a>    (<span class="dv">31</span>, <span class="dv">33</span>, <span class="st">'NID'</span>, <span class="st">'Night/day indicator'</span>),</span>
+<span id="cb8-135"><a href="#cb8-135"></a>    (<span class="dv">33</span>, <span class="dv">35</span>, <span class="st">'II'</span>, <span class="st">'ID indicator'</span>),</span>
+<span id="cb8-136"><a href="#cb8-136"></a>    (<span class="dv">35</span>, <span class="dv">44</span>, <span class="st">'ID'</span>, <span class="st">'Ship ID (9-char truncated name)'</span>),</span>
+<span id="cb8-137"><a href="#cb8-137"></a>    (<span class="dv">44</span>, <span class="dv">46</span>, <span class="st">'C1'</span>, <span class="st">'Country code'</span>),</span>
+<span id="cb8-138"><a href="#cb8-138"></a>    <span class="co"># Ship course and speed</span></span>
+<span id="cb8-139"><a href="#cb8-139"></a>    (<span class="dv">46</span>, <span class="dv">49</span>, <span class="st">'DI'</span>, <span class="st">'Direction indicator'</span>),</span>
+<span id="cb8-140"><a href="#cb8-140"></a>    (<span class="dv">49</span>, <span class="dv">51</span>, <span class="st">'D'</span>, <span class="st">'Direction (tens of degrees)'</span>),</span>
+<span id="cb8-141"><a href="#cb8-141"></a>    (<span class="dv">51</span>, <span class="dv">53</span>, <span class="st">'WI'</span>, <span class="st">'Wind direction indicator'</span>),</span>
+<span id="cb8-142"><a href="#cb8-142"></a>    (<span class="dv">53</span>, <span class="dv">56</span>, <span class="st">'W'</span>, <span class="st">'Wind direction (degrees)'</span>),</span>
+<span id="cb8-143"><a href="#cb8-143"></a>    <span class="co"># Visibility and weather</span></span>
+<span id="cb8-144"><a href="#cb8-144"></a>    (<span class="dv">56</span>, <span class="dv">57</span>, <span class="st">'VI'</span>, <span class="st">'Visibility indicator'</span>),</span>
+<span id="cb8-145"><a href="#cb8-145"></a>    (<span class="dv">57</span>, <span class="dv">59</span>, <span class="st">'VV'</span>, <span class="st">'Visibility'</span>),</span>
+<span id="cb8-146"><a href="#cb8-146"></a>    (<span class="dv">59</span>, <span class="dv">61</span>, <span class="st">'WW'</span>, <span class="st">'Present weather'</span>),</span>
+<span id="cb8-147"><a href="#cb8-147"></a>    (<span class="dv">61</span>, <span class="dv">62</span>, <span class="st">'W1'</span>, <span class="st">'Past weather'</span>),</span>
+<span id="cb8-148"><a href="#cb8-148"></a>    <span class="co"># Pressure</span></span>
+<span id="cb8-149"><a href="#cb8-149"></a>    (<span class="dv">62</span>, <span class="dv">67</span>, <span class="st">'SLP'</span>, <span class="st">'Sea level pressure (×10 hPa)'</span>),</span>
+<span id="cb8-150"><a href="#cb8-150"></a>    (<span class="dv">67</span>, <span class="dv">68</span>, <span class="st">'A'</span>, <span class="st">'Pressure tendency characteristic'</span>),</span>
+<span id="cb8-151"><a href="#cb8-151"></a>    (<span class="dv">68</span>, <span class="dv">71</span>, <span class="st">'PPP'</span>, <span class="st">'Pressure tendency (×10 hPa)'</span>),</span>
+<span id="cb8-152"><a href="#cb8-152"></a>    <span class="co"># Temperature</span></span>
+<span id="cb8-153"><a href="#cb8-153"></a>    (<span class="dv">71</span>, <span class="dv">72</span>, <span class="st">'IT'</span>, <span class="st">'Temperature indicator'</span>),</span>
+<span id="cb8-154"><a href="#cb8-154"></a>    (<span class="dv">72</span>, <span class="dv">76</span>, <span class="st">'AT'</span>, <span class="st">'Air temperature (×10 °C)'</span>),</span>
+<span id="cb8-155"><a href="#cb8-155"></a>    (<span class="dv">76</span>, <span class="dv">77</span>, <span class="st">'WBTI'</span>, <span class="st">'Wet bulb temp indicator'</span>),</span>
+<span id="cb8-156"><a href="#cb8-156"></a>    (<span class="dv">77</span>, <span class="dv">81</span>, <span class="st">'WBT'</span>, <span class="st">'Wet bulb temperature'</span>),</span>
+<span id="cb8-157"><a href="#cb8-157"></a>    (<span class="dv">81</span>, <span class="dv">82</span>, <span class="st">'DPTI'</span>, <span class="st">'Dew point temp indicator'</span>),</span>
+<span id="cb8-158"><a href="#cb8-158"></a>    (<span class="dv">82</span>, <span class="dv">86</span>, <span class="st">'DPT'</span>, <span class="st">'Dew point temperature'</span>),</span>
+<span id="cb8-159"><a href="#cb8-159"></a>    <span class="co"># Sea surface temperature</span></span>
+<span id="cb8-160"><a href="#cb8-160"></a>    (<span class="dv">86</span>, <span class="dv">87</span>, <span class="st">'SI'</span>, <span class="st">'SST measurement indicator'</span>),</span>
+<span id="cb8-161"><a href="#cb8-161"></a>    (<span class="dv">87</span>, <span class="dv">91</span>, <span class="st">'SST'</span>, <span class="st">'Sea surface temperature (×10 °C)'</span>),</span>
+<span id="cb8-162"><a href="#cb8-162"></a>    <span class="co"># Cloud data</span></span>
+<span id="cb8-163"><a href="#cb8-163"></a>    (<span class="dv">91</span>, <span class="dv">92</span>, <span class="st">'N'</span>, <span class="st">'Total cloud amount'</span>),</span>
+<span id="cb8-164"><a href="#cb8-164"></a>    (<span class="dv">92</span>, <span class="dv">93</span>, <span class="st">'NH'</span>, <span class="st">'Low cloud amount'</span>),</span>
+<span id="cb8-165"><a href="#cb8-165"></a>    (<span class="dv">93</span>, <span class="dv">94</span>, <span class="st">'CL'</span>, <span class="st">'Low cloud type'</span>),</span>
+<span id="cb8-166"><a href="#cb8-166"></a>    (<span class="dv">94</span>, <span class="dv">95</span>, <span class="st">'HI'</span>, <span class="st">'Cloud height indicator'</span>),</span>
+<span id="cb8-167"><a href="#cb8-167"></a>    (<span class="dv">95</span>, <span class="dv">96</span>, <span class="st">'H'</span>, <span class="st">'Cloud base height'</span>),</span>
+<span id="cb8-168"><a href="#cb8-168"></a>    (<span class="dv">96</span>, <span class="dv">97</span>, <span class="st">'CM'</span>, <span class="st">'Middle cloud type'</span>),</span>
+<span id="cb8-169"><a href="#cb8-169"></a>    (<span class="dv">97</span>, <span class="dv">98</span>, <span class="st">'CH'</span>, <span class="st">'High cloud type'</span>),</span>
+<span id="cb8-170"><a href="#cb8-170"></a>    <span class="co"># Wave data</span></span>
+<span id="cb8-171"><a href="#cb8-171"></a>    (<span class="dv">98</span>, <span class="dv">100</span>, <span class="st">'WD'</span>, <span class="st">'Wave direction'</span>),</span>
+<span id="cb8-172"><a href="#cb8-172"></a>    (<span class="dv">100</span>, <span class="dv">102</span>, <span class="st">'WP'</span>, <span class="st">'Wave period'</span>),</span>
+<span id="cb8-173"><a href="#cb8-173"></a>    (<span class="dv">102</span>, <span class="dv">104</span>, <span class="st">'WH'</span>, <span class="st">'Wave height'</span>),</span>
+<span id="cb8-174"><a href="#cb8-174"></a>    <span class="co"># (Core ends at position 108; C1 attachment follows)</span></span>
+<span id="cb8-175"><a href="#cb8-175"></a>]</span>
+<span id="cb8-176"><a href="#cb8-176"></a></span>
+<span id="cb8-177"><a href="#cb8-177"></a><span class="cf">for</span> start, end, abbr, description <span class="kw">in</span> fields:</span>
+<span id="cb8-178"><a href="#cb8-178"></a>    value <span class="op">=</span> sample_record[start:end] <span class="cf">if</span> end <span class="op">&lt;=</span> <span class="bu">len</span>(sample_record) <span class="cf">else</span> <span class="st">''</span></span>
+<span id="cb8-179"><a href="#cb8-179"></a>    <span class="co"># Only print fields that have non-blank values</span></span>
+<span id="cb8-180"><a href="#cb8-180"></a>    <span class="cf">if</span> value.strip():</span>
+<span id="cb8-181"><a href="#cb8-181"></a>        <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>start<span class="sc">:3}</span><span class="ss">-</span><span class="sc">{</span>end<span class="sc">:3}</span><span class="ss">  </span><span class="sc">{</span>abbr<span class="sc">:5}</span><span class="ss">  '</span><span class="sc">{</span>value<span class="sc">}</span><span class="ss">'  </span><span class="sc">{</span>description<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb8-182"><a href="#cb8-182"></a></span>
+<span id="cb8-183"><a href="#cb8-183"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">"</span> <span class="op">+</span> <span class="st">"="</span> <span class="op">*</span> <span class="dv">70</span>)</span>
+<span id="cb8-184"><a href="#cb8-184"></a><span class="bu">print</span>(<span class="st">"C1 Attachment (follows Core at position 108+):"</span>)</span>
+<span id="cb8-185"><a href="#cb8-185"></a>c1_fields <span class="op">=</span> [</span>
+<span id="cb8-186"><a href="#cb8-186"></a>    (<span class="dv">113</span>, <span class="dv">118</span>, <span class="st">'UID'</span>, <span class="st">'Unique record identifier'</span>),</span>
+<span id="cb8-187"><a href="#cb8-187"></a>    (<span class="dv">118</span>, <span class="dv">121</span>, <span class="st">'DCK'</span>, <span class="st">'Deck number (701 = Maury Collection)'</span>),</span>
+<span id="cb8-188"><a href="#cb8-188"></a>    (<span class="dv">121</span>, <span class="dv">124</span>, <span class="st">'SID'</span>, <span class="st">'Source ID'</span>),</span>
+<span id="cb8-189"><a href="#cb8-189"></a>    (<span class="dv">124</span>, <span class="dv">126</span>, <span class="st">'PT'</span>, <span class="st">'Platform type'</span>),</span>
+<span id="cb8-190"><a href="#cb8-190"></a>]</span>
+<span id="cb8-191"><a href="#cb8-191"></a><span class="cf">for</span> start, end, abbr, description <span class="kw">in</span> c1_fields:</span>
+<span id="cb8-192"><a href="#cb8-192"></a>    value <span class="op">=</span> sample_record[start:end] <span class="cf">if</span> end <span class="op">&lt;=</span> <span class="bu">len</span>(sample_record) <span class="cf">else</span> <span class="st">''</span></span>
+<span id="cb8-193"><a href="#cb8-193"></a>    <span class="cf">if</span> value.strip():</span>
+<span id="cb8-194"><a href="#cb8-194"></a>        <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>start<span class="sc">:3}</span><span class="ss">-</span><span class="sc">{</span>end<span class="sc">:3}</span><span class="ss">  </span><span class="sc">{</span>abbr<span class="sc">:5}</span><span class="ss">  '</span><span class="sc">{</span>value<span class="sc">}</span><span class="ss">'  </span><span class="sc">{</span>description<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb8-195"><a href="#cb8-195"></a><span class="in">```</span></span>
+<span id="cb8-196"><a href="#cb8-196"></a></span>
+<span id="cb8-197"><a href="#cb8-197"></a><span class="fu">### Step 3: Finding the Deck Number</span></span>
+<span id="cb8-198"><a href="#cb8-198"></a></span>
+<span id="cb8-199"><a href="#cb8-199"></a>The deck number is in the **C1 attachment**, which follows the core section.</span>
+<span id="cb8-200"><a href="#cb8-200"></a>For ICOADS R3.1, the deck number is at positions 118-120:</span>
+<span id="cb8-201"><a href="#cb8-201"></a></span>
+<span id="cb8-204"><a href="#cb8-204"></a><span class="in">```{python}</span></span>
+<span id="cb8-205"><a href="#cb8-205"></a><span class="kw">def</span> get_deck_number(line):</span>
+<span id="cb8-206"><a href="#cb8-206"></a>    <span class="co">"""</span></span>
+<span id="cb8-207"><a href="#cb8-207"></a><span class="co">    Extract the deck number (DCK) from an IMMA1 record.</span></span>
+<span id="cb8-208"><a href="#cb8-208"></a></span>
+<span id="cb8-209"><a href="#cb8-209"></a><span class="co">    The deck number identifies which collection the record belongs to.</span></span>
+<span id="cb8-210"><a href="#cb8-210"></a><span class="co">    Deck 701 = US Maury Collection</span></span>
+<span id="cb8-211"><a href="#cb8-211"></a><span class="co">    """</span></span>
+<span id="cb8-212"><a href="#cb8-212"></a>    DCK_START <span class="op">=</span> <span class="dv">118</span></span>
+<span id="cb8-213"><a href="#cb8-213"></a>    DCK_END <span class="op">=</span> <span class="dv">121</span></span>
+<span id="cb8-214"><a href="#cb8-214"></a></span>
+<span id="cb8-215"><a href="#cb8-215"></a>    <span class="cf">if</span> <span class="bu">len</span>(line) <span class="op">&lt;</span> DCK_END:</span>
+<span id="cb8-216"><a href="#cb8-216"></a>        <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb8-217"><a href="#cb8-217"></a></span>
+<span id="cb8-218"><a href="#cb8-218"></a>    dck <span class="op">=</span> line[DCK_START:DCK_END]</span>
+<span id="cb8-219"><a href="#cb8-219"></a></span>
+<span id="cb8-220"><a href="#cb8-220"></a>    <span class="co"># Verify it's a valid deck number (3 digits)</span></span>
+<span id="cb8-221"><a href="#cb8-221"></a>    <span class="cf">if</span> dck.isdigit():</span>
+<span id="cb8-222"><a href="#cb8-222"></a>        <span class="cf">return</span> dck</span>
+<span id="cb8-223"><a href="#cb8-223"></a></span>
+<span id="cb8-224"><a href="#cb8-224"></a>    <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb8-225"><a href="#cb8-225"></a></span>
+<span id="cb8-226"><a href="#cb8-226"></a><span class="co"># Demonstrate with a real record</span></span>
+<span id="cb8-227"><a href="#cb8-227"></a>full_record <span class="op">=</span> <span class="st">"1840 1 1     3702 28605 13 4    10LOUISVIL   1 685                                                           165 20673701 69 5 0 1                  FFFFFF77AAAAAAAAAAAA     981500A2243102199 0 760786218400101  3701N 7357W"</span></span>
+<span id="cb8-228"><a href="#cb8-228"></a>deck <span class="op">=</span> get_deck_number(full_record)</span>
+<span id="cb8-229"><a href="#cb8-229"></a><span class="bu">print</span>(<span class="ss">f"Deck number extracted: </span><span class="sc">{</span>deck<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb8-230"><a href="#cb8-230"></a><span class="bu">print</span>(<span class="ss">f"This is </span><span class="sc">{</span><span class="st">'the Maury Collection!'</span> <span class="cf">if</span> deck <span class="op">==</span> <span class="st">'701'</span> <span class="cf">else</span> <span class="st">'a different collection'</span><span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb8-231"><a href="#cb8-231"></a><span class="in">```</span></span>
+<span id="cb8-232"><a href="#cb8-232"></a></span>
+<span id="cb8-233"><a href="#cb8-233"></a><span class="fu">### Step 4: The Filter Logic</span></span>
+<span id="cb8-234"><a href="#cb8-234"></a></span>
+<span id="cb8-235"><a href="#cb8-235"></a>For each monthly file, we download, decompress, and filter:</span>
+<span id="cb8-236"><a href="#cb8-236"></a></span>
+<span id="cb8-239"><a href="#cb8-239"></a><span class="in">```{python}</span></span>
+<span id="cb8-240"><a href="#cb8-240"></a><span class="im">import</span> gzip</span>
+<span id="cb8-241"><a href="#cb8-241"></a><span class="im">import</span> io</span>
+<span id="cb8-242"><a href="#cb8-242"></a></span>
+<span id="cb8-243"><a href="#cb8-243"></a><span class="kw">def</span> demonstrate_filtering(lines):</span>
+<span id="cb8-244"><a href="#cb8-244"></a>    <span class="co">"""</span></span>
+<span id="cb8-245"><a href="#cb8-245"></a><span class="co">    Show how we filter IMMA1 records for deck 701.</span></span>
+<span id="cb8-246"><a href="#cb8-246"></a><span class="co">    """</span></span>
+<span id="cb8-247"><a href="#cb8-247"></a>    deck701_count <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb8-248"><a href="#cb8-248"></a>    other_decks <span class="op">=</span> {}</span>
+<span id="cb8-249"><a href="#cb8-249"></a></span>
+<span id="cb8-250"><a href="#cb8-250"></a>    <span class="cf">for</span> line <span class="kw">in</span> lines:</span>
+<span id="cb8-251"><a href="#cb8-251"></a>        deck <span class="op">=</span> get_deck_number(line)</span>
+<span id="cb8-252"><a href="#cb8-252"></a>        <span class="cf">if</span> deck <span class="op">==</span> <span class="st">'701'</span>:</span>
+<span id="cb8-253"><a href="#cb8-253"></a>            deck701_count <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb8-254"><a href="#cb8-254"></a>        <span class="cf">elif</span> deck:</span>
+<span id="cb8-255"><a href="#cb8-255"></a>            other_decks[deck] <span class="op">=</span> other_decks.get(deck, <span class="dv">0</span>) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb8-256"><a href="#cb8-256"></a></span>
+<span id="cb8-257"><a href="#cb8-257"></a>    <span class="cf">return</span> deck701_count, other_decks</span>
+<span id="cb8-258"><a href="#cb8-258"></a></span>
+<span id="cb8-259"><a href="#cb8-259"></a><span class="co"># Simulate filtering results (representative numbers)</span></span>
+<span id="cb8-260"><a href="#cb8-260"></a><span class="bu">print</span>(<span class="st">"Filtering Process:"</span>)</span>
+<span id="cb8-261"><a href="#cb8-261"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">60</span>)</span>
+<span id="cb8-262"><a href="#cb8-262"></a><span class="bu">print</span>(<span class="st">"""</span></span>
+<span id="cb8-263"><a href="#cb8-263"></a><span class="st">For each monthly file:</span></span>
+<span id="cb8-264"><a href="#cb8-264"></a></span>
+<span id="cb8-265"><a href="#cb8-265"></a><span class="st">1. Download compressed .gz file from NOAA archive</span></span>
+<span id="cb8-266"><a href="#cb8-266"></a><span class="st">2. Decompress in memory (gzip)</span></span>
+<span id="cb8-267"><a href="#cb8-267"></a><span class="st">  3. Parse each line, extract deck number at position 118-120</span></span>
+<span id="cb8-268"><a href="#cb8-268"></a><span class="st">  4. If deck == '701', write to output file</span></span>
+<span id="cb8-269"><a href="#cb8-269"></a><span class="st">  5. Otherwise, skip the record</span></span>
+<span id="cb8-270"><a href="#cb8-270"></a></span>
+<span id="cb8-271"><a href="#cb8-271"></a><span class="st">Typical results for a month in the 1840s:</span></span>
+<span id="cb8-272"><a href="#cb8-272"></a></span>
+<span id="cb8-273"><a href="#cb8-273"></a><span class="st">- Total records in file: ~50,000</span></span>
+<span id="cb8-274"><a href="#cb8-274"></a><span class="st">- Deck 701 (Maury) records: ~2,000 (4%)</span></span>
+<span id="cb8-275"><a href="#cb8-275"></a><span class="st">  - Other decks: ~48,000 (96%)</span></span>
+<span id="cb8-276"><a href="#cb8-276"></a><span class="st">"""</span>)</span>
+<span id="cb8-277"><a href="#cb8-277"></a><span class="in">```</span></span>
+<span id="cb8-278"><a href="#cb8-278"></a></span>
+<span id="cb8-279"><a href="#cb8-279"></a><span class="fu">### Step 5: The Main Download Loop</span></span>
+<span id="cb8-280"><a href="#cb8-280"></a></span>
+<span id="cb8-281"><a href="#cb8-281"></a>Here's the core logic from <span class="in">`scripts/download_icoads_deck701.py`</span>:</span>
+<span id="cb8-282"><a href="#cb8-282"></a></span>
+<span id="cb8-285"><a href="#cb8-285"></a><span class="in">```{python}</span></span>
+<span id="cb8-286"><a href="#cb8-286"></a><span class="co"># Simplified version of the download function (don't run - just for illustration)</span></span>
+<span id="cb8-287"><a href="#cb8-287"></a>DOWNLOAD_CODE <span class="op">=</span> <span class="st">'''</span></span>
+<span id="cb8-288"><a href="#cb8-288"></a><span class="st">import gzip</span></span>
+<span id="cb8-289"><a href="#cb8-289"></a><span class="st">import urllib.request</span></span>
+<span id="cb8-290"><a href="#cb8-290"></a></span>
+<span id="cb8-291"><a href="#cb8-291"></a><span class="st">def download_and_filter_deck701(start_year=1795, end_year=1861, output_file='data/icoads_deck701_maury.imma'):</span></span>
+<span id="cb8-292"><a href="#cb8-292"></a><span class="st">    """Download ICOADS IMMA1 files and filter for deck 701 records."""</span></span>
+<span id="cb8-293"><a href="#cb8-293"></a></span>
+<span id="cb8-294"><a href="#cb8-294"></a><span class="st">    base_url = "https://www.ncei.noaa.gov/data/international-comprehensive-ocean-atmosphere/v3/archive/final-untrim/"</span></span>
+<span id="cb8-295"><a href="#cb8-295"></a></span>
+<span id="cb8-296"><a href="#cb8-296"></a><span class="st">    with open(output_file, 'w') as outf:</span></span>
+<span id="cb8-297"><a href="#cb8-297"></a><span class="st">        for year in range(start_year, end_year + 1):</span></span>
+<span id="cb8-298"><a href="#cb8-298"></a><span class="st">            for month in range(1, 13):</span></span>
+<span id="cb8-299"><a href="#cb8-299"></a><span class="st">                filename = f"IMMA1_R3.1.0_</span><span class="sc">{year}</span><span class="st">-</span><span class="sc">{month:02d}</span><span class="st">.gz"</span></span>
+<span id="cb8-300"><a href="#cb8-300"></a><span class="st">                url = base_url + filename</span></span>
+<span id="cb8-301"><a href="#cb8-301"></a></span>
+<span id="cb8-302"><a href="#cb8-302"></a><span class="st">                try:</span></span>
+<span id="cb8-303"><a href="#cb8-303"></a><span class="st">                    # Download compressed file</span></span>
+<span id="cb8-304"><a href="#cb8-304"></a><span class="st">                    with urllib.request.urlopen(url, timeout=60) as response:</span></span>
+<span id="cb8-305"><a href="#cb8-305"></a><span class="st">                        compressed_data = response.read()</span></span>
+<span id="cb8-306"><a href="#cb8-306"></a></span>
+<span id="cb8-307"><a href="#cb8-307"></a><span class="st">                    # Decompress and process</span></span>
+<span id="cb8-308"><a href="#cb8-308"></a><span class="st">                    data = gzip.decompress(compressed_data).decode('utf-8', errors='replace')</span></span>
+<span id="cb8-309"><a href="#cb8-309"></a></span>
+<span id="cb8-310"><a href="#cb8-310"></a><span class="st">                    for line in data.strip().split('</span><span class="ch">\\</span><span class="st">n'):</span></span>
+<span id="cb8-311"><a href="#cb8-311"></a><span class="st">                        # Check if this record is from deck 701</span></span>
+<span id="cb8-312"><a href="#cb8-312"></a><span class="st">                        if len(line) &gt; 120 and line[118:121] == '701':</span></span>
+<span id="cb8-313"><a href="#cb8-313"></a><span class="st">                            outf.write(line + '</span><span class="ch">\\</span><span class="st">n')</span></span>
+<span id="cb8-314"><a href="#cb8-314"></a></span>
+<span id="cb8-315"><a href="#cb8-315"></a><span class="st">                except urllib.error.HTTPError as e:</span></span>
+<span id="cb8-316"><a href="#cb8-316"></a><span class="st">                    if e.code == 404:</span></span>
+<span id="cb8-317"><a href="#cb8-317"></a><span class="st">                        print(f"No data for </span><span class="sc">{year}</span><span class="st">-</span><span class="sc">{month:02d}</span><span class="st">")</span></span>
+<span id="cb8-318"><a href="#cb8-318"></a><span class="st">                    else:</span></span>
+<span id="cb8-319"><a href="#cb8-319"></a><span class="st">                        raise</span></span>
+<span id="cb8-320"><a href="#cb8-320"></a><span class="st">'''</span></span>
+<span id="cb8-321"><a href="#cb8-321"></a></span>
+<span id="cb8-322"><a href="#cb8-322"></a><span class="bu">print</span>(<span class="st">"Download Script Overview:"</span>)</span>
+<span id="cb8-323"><a href="#cb8-323"></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">60</span>)</span>
+<span id="cb8-324"><a href="#cb8-324"></a><span class="bu">print</span>(DOWNLOAD_CODE)</span>
+<span id="cb8-325"><a href="#cb8-325"></a><span class="in">```</span></span>
+<span id="cb8-326"><a href="#cb8-326"></a></span>
+<span id="cb8-327"><a href="#cb8-327"></a><span class="fu">## Running the Download</span></span>
+<span id="cb8-328"><a href="#cb8-328"></a></span>
+<span id="cb8-329"><a href="#cb8-329"></a>To actually download the data, it is certainly *possible* to use the associated notebook. But it is easier to run the full script in teh background.  From the project root:</span>
+<span id="cb8-330"><a href="#cb8-330"></a></span>
+<span id="cb8-331"><a href="#cb8-331"></a><span class="in">```bash</span></span>
+<span id="cb8-332"><a href="#cb8-332"></a><span class="ex">uv</span> run python scripts/download_icoads_deck701.py</span>
+<span id="cb8-333"><a href="#cb8-333"></a><span class="in">```</span></span>
+<span id="cb8-334"><a href="#cb8-334"></a></span>
+<span id="cb8-335"><a href="#cb8-335"></a>Options:</span>
+<span id="cb8-336"><a href="#cb8-336"></a></span>
+<span id="cb8-337"><a href="#cb8-337"></a><span class="ss">- </span><span class="in">`--start-year 1840 --end-year 1850`</span>: Download only a subset of years</span>
+<span id="cb8-338"><a href="#cb8-338"></a><span class="ss">- </span><span class="in">`-o custom_output.imma`</span>: Specify output file</span>
+<span id="cb8-339"><a href="#cb8-339"></a><span class="ss">- </span><span class="in">`-q`</span>: Quiet mode (suppress progress)</span>
+<span id="cb8-340"><a href="#cb8-340"></a></span>
+<span id="cb8-341"><a href="#cb8-341"></a>**Expected output:**</span>
+<span id="cb8-342"><a href="#cb8-342"></a><span class="ss">- </span>Time: Fifteen minutes to several hours (depends on network speed)</span>
+<span id="cb8-343"><a href="#cb8-343"></a><span class="ss">- </span>File: <span class="in">`data/icoads_deck701_maury.imma`</span> (~567 MB)</span>
+<span id="cb8-344"><a href="#cb8-344"></a><span class="ss">- </span>Records: ~1.3 million Maury collection observations</span>
+<span id="cb8-345"><a href="#cb8-345"></a></span>
+<span id="cb8-346"><a href="#cb8-346"></a><span class="fu">## What's Next?</span></span>
+<span id="cb8-347"><a href="#cb8-347"></a></span>
+<span id="cb8-348"><a href="#cb8-348"></a>The downloaded IMMA1 file is in a legacy fixed-width format. In the next notebook,</span>
+<span id="cb8-349"><a href="#cb8-349"></a>we'll convert it to Apache Parquet for efficient analysis:</span>
+<span id="cb8-350"><a href="#cb8-350"></a></span>
+<span id="cb8-351"><a href="#cb8-351"></a><span class="ss">- </span>**37× compression**: 567 MB → 15 MB</span>
+<span id="cb8-352"><a href="#cb8-352"></a><span class="ss">- </span>**Selective column reading**: Load only the fields you need</span>
+<span id="cb8-353"><a href="#cb8-353"></a><span class="ss">- </span>**Native data types**: Proper integers and floats instead of text</span>
+<span id="cb8-354"><a href="#cb8-354"></a></span>
+<span id="cb8-355"><a href="#cb8-355"></a><span class="fu">## Key Takeaways</span></span>
+<span id="cb8-356"><a href="#cb8-356"></a></span>
+<span id="cb8-357"><a href="#cb8-357"></a><span class="ss">1. </span>**ICOADS** is a massive archive of historical marine observations</span>
+<span id="cb8-358"><a href="#cb8-358"></a><span class="ss">2. </span>**Deck 701** contains Maury's original ship logbook collection (1795-1861)</span>
+<span id="cb8-359"><a href="#cb8-359"></a><span class="ss">3. </span>**IMMA1** is a fixed-width text format; the deck number is at positions 118-120</span>
+<span id="cb8-360"><a href="#cb8-360"></a><span class="ss">4. </span>The download script filters ~50 million records down to ~1.3 million Maury records</span>
+<span id="cb8-361"><a href="#cb8-361"></a><span class="ss">5. </span>This process takes hours but only needs to be done once</span>
+<span id="cb8-362"><a href="#cb8-362"></a></span>
+<span id="cb8-363"><a href="#cb8-363"></a><span class="fu">## References</span></span>
+<span id="cb8-364"><a href="#cb8-364"></a></span>
+<span id="cb8-365"><a href="#cb8-365"></a><span class="ss">- </span><span class="co">[</span><span class="ot">ICOADS Homepage</span><span class="co">](https://icoads.noaa.gov/)</span></span>
+<span id="cb8-366"><a href="#cb8-366"></a><span class="ss">- </span><span class="co">[</span><span class="ot">NCEI ICOADS Data</span><span class="co">](https://www.ncei.noaa.gov/products/international-comprehensive-ocean-atmosphere-data-set)</span></span>
+<span id="cb8-367"><a href="#cb8-367"></a><span class="ss">- </span><span class="co">[</span><span class="ot">IMMA Format Documentation</span><span class="co">](https://icoads.noaa.gov/e-doc/imma/R3.0-imma1.pdf)</span></span>
+<span id="cb8-368"><a href="#cb8-368"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Matthew Maury Biography (NOAA)</span><span class="co">](https://oceanservice.noaa.gov/facts/maury.html)</span></span>
+</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Based on work by <a href="https://sappingattention.blogspot.com/">Ben Schmidt</a></p>
+</div>   
+    <div class="nav-footer-center">
+<p>Data from <a href="https://icoads.noaa.gov/">ICOADS</a></p>
+</div>
+    <div class="nav-footer-right">
+<p>Built with <a href="https://quarto.org/">Quarto</a></p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

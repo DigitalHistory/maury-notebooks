@@ -1,0 +1,80 @@
+/* Custom styles for Maury Collection website */
+
+/* Hero image styling */
+.hero-image {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+/* Figure captions */
+figcaption {
+  font-style: italic;
+  color: #666;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* Code block improvements */
+pre {
+  border-radius: 6px;
+}
+
+/* Callout boxes */
+.callout {
+  margin: 1.5rem 0;
+}
+
+/* Table styling */
+table {
+  margin: 1rem 0;
+}
+
+/* Navigation improvements */
+.navbar-brand {
+  font-weight: 600;
+}
+
+/* Sidebar styling */
+.sidebar-title {
+  font-weight: 600;
+}
+
+/* Video/animation container */
+.animation-container {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.animation-container video,
+.animation-container img {
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Grid layout for side-by-side images */
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.image-grid img {
+  width: 100%;
+  border-radius: 4px;
+}
+
+/* Timeline/pipeline visualization */
+.pipeline-step {
+  border-left: 3px solid #007bff;
+  padding-left: 1rem;
+  margin: 1rem 0;
+}
+
+.pipeline-step h3 {
+  margin-top: 0;
+}
