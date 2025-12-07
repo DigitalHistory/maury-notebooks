@@ -471,7 +471,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="about-this-project">About This Project</h2>
 <p>I’ve been teaching with Ben Schmidt’s <a href="http://sappingattention.blogspot.com/2012/11/reading-digital-sources-case-study-in.html">classic digital history blog series on mapping whaling voyages</a> for well over a decade. They provide arresting visuals of the history of American whaling voyages alongside a series of interesting methodological reflections on how to use quantitative data effectively in historical practice. However, they were written in a moment when sharing code and data was harder than it is today, and the lack of those artifacts has limited how students can engage with the material.</p>
 <p>As we move into the second quarter of the twenty-first century, data has generally become easier to find, code has become easier to share, and new data formats have made it easier to perform calculations that were prohibitively difficult 14 years ago.</p>
-<p>The project you are reading attempts attempts to reconstruct Schmidt’s full pipeline, using modern Python libraries that can run on a well-provisioned laptop. In a series of discrete steps, we: - locate the dataset in its current location - extract the relevant records using the method that Schmidt describes - take advantage of major advances in data storage &amp; rewrite the dataset to Parquet format - explore Schmidt’s method for classifying voyages, as well as some alternative methods - mimic his static visualizations, and - use modern open source mapping tools to imitate the complex voyage animations which made the blog so popular a decade and a half ago - <strong>TODO:</strong> I also hope to discuss and implement some enhancements to Schmidt’s work, when I get the time.</p>
+<p>The project you are reading attempts attempts to reconstruct Schmidt’s full pipeline, using modern Python libraries that can run on a well-provisioned laptop. In a series of discrete steps, we:</p>
+<ul>
+<li>locate the dataset in its current location</li>
+<li>extract the relevant records using the method that Schmidt describes</li>
+<li>take advantage of major advances in data storage &amp; rewrite the dataset to Parquet format</li>
+<li>explore Schmidt’s method for classifying voyages, as well as some alternative methods</li>
+<li>mimic his static visualizations, and</li>
+<li>use modern open source mapping tools to imitate the complex voyage animations which made the blog so popular a decade and a half ago</li>
+<li><strong>TODO:</strong> I also hope to discuss and implement some enhancements to Schmidt’s work, when I get the time.</li>
+</ul>
 <p>The project can be read here, on the web, but it’s also possible to run all of the code locally as a set of Jupyter notebooks. I hope the multiple formats help you engage with the project in different ways: passively reading for those with less time or technical skill, active tinkering for those with more.</p>
 <p>Either way, by following along you’ll learn to:</p>
 <ol type="1">
@@ -481,7 +490,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Classify</strong> voyages as whaling or merchant ships using machine learning</li>
 <li><strong>Visualize</strong> the results with animated “ghost ship” maps</li>
 </ol>
-<p><strong>Before you begin, you should read through Schmidt’s whole series of posts.</strong> A suggested order is: - <a href="http://sappingattention.blogspot.com/2012/11/reading-digital-sources-case-study-in.html">Reading digital sources: a case study in ship’s logs</a>, an overview of the whole project. - <a href="https://sappingattention.blogspot.com/2012/10/data-narratives-and-structural.html">Data Narratives and Structural History</a>, an introduction to the main arguments about <strong>how</strong> to do history with data - You can probably skip <a href="https://sappingattention.blogspot.com/2012/10/melville-plots.html">Melville Plots</a>, though if you’re interested in Melville for other reasons this post has a few good tidbits, - <a href="https://sappingattention.blogspot.com/2012/11/machine-learning-on-high-seas.html">Machine learning at sea</a>, the most direct discussion of his classification technique, - <a href="https://sappingattention.blogspot.com/2012/11/when-you-have-mallet-everything-looks.html">When you have a MALLET</a>, a critique of topic modelling, - <a href="https://sappingattention.blogspot.com/2012/11/where-are-individuals-in-data-driven.html">Where are the individuals</a>, a metahistorical reflection, and finally - <a href="https://sappingattention.blogspot.com/2012/11/reading-digital-sources-case-study-in.html">Reading Digital Sources</a>, a synopsis of the series.</p>
+<p><strong>Before you begin, you should read through Schmidt’s whole series of posts.</strong> A suggested order is:</p>
+<ul>
+<li><a href="http://sappingattention.blogspot.com/2012/11/reading-digital-sources-case-study-in.html">Reading digital sources: a case study in ship’s logs</a>, an overview of the whole project.</li>
+<li><a href="https://sappingattention.blogspot.com/2012/10/data-narratives-and-structural.html">Data Narratives and Structural History</a>, an introduction to the main arguments about <strong>how</strong> to do history with data</li>
+<li>You can probably skip <a href="https://sappingattention.blogspot.com/2012/10/melville-plots.html">Melville Plots</a>, though if you’re interested in Melville for other reasons this post has a few good tidbits,</li>
+<li><a href="https://sappingattention.blogspot.com/2012/11/machine-learning-on-high-seas.html">Machine learning at sea</a>, the most direct discussion of his classification technique,</li>
+<li><a href="https://sappingattention.blogspot.com/2012/11/when-you-have-mallet-everything-looks.html">When you have a MALLET</a>, a critique of topic modelling,</li>
+<li><a href="https://sappingattention.blogspot.com/2012/11/where-are-individuals-in-data-driven.html">Where are the individuals</a>, a metahistorical reflection, and finally</li>
+<li><a href="https://sappingattention.blogspot.com/2012/11/reading-digital-sources-case-study-in.html">Reading Digital Sources</a>, a synopsis of the series.</li>
+</ul>
 <p>We won’t address all the questions he raises in the series, but his reflections will help make sense of the steps we’re taking.</p>
 </section>
 <section id="the-data-maury-collection-icoads-deck-701" class="level2">
@@ -800,7 +818,7 @@ Who Was Matthew Maury?
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/DigitalHistory\.github\.io\/maury-notebooks\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
@@ -1142,156 +1160,158 @@ Who Was Matthew Maury?
 <span id="cb3-13"><a href="#cb3-13"></a>As we move into the second quarter of the twenty-first century, data has generally become easier to find, code has become easier to share, and new data formats have made it easier to perform calculations that were prohibitively difficult 14 years ago.  </span>
 <span id="cb3-14"><a href="#cb3-14"></a></span>
 <span id="cb3-15"><a href="#cb3-15"></a>The project you are reading attempts attempts to reconstruct Schmidt's full pipeline, using modern Python libraries that can run on a well-provisioned laptop. In a series of discrete steps, we:</span>
-<span id="cb3-16"><a href="#cb3-16"></a><span class="ss">- </span>locate the dataset in its current location</span>
-<span id="cb3-17"><a href="#cb3-17"></a><span class="ss">- </span>extract the relevant records using the method that Schmidt describes </span>
-<span id="cb3-18"><a href="#cb3-18"></a><span class="ss">- </span>take advantage of major advances in data storage &amp; rewrite the dataset to Parquet format </span>
-<span id="cb3-19"><a href="#cb3-19"></a><span class="ss">- </span>explore Schmidt's method for classifying voyages, as well as some alternative methods</span>
-<span id="cb3-20"><a href="#cb3-20"></a><span class="ss">- </span>mimic his static visualizations, and</span>
-<span id="cb3-21"><a href="#cb3-21"></a><span class="ss">- </span>use modern open source mapping tools to imitate the complex voyage animations which made the blog so popular a decade and a half ago</span>
-<span id="cb3-22"><a href="#cb3-22"></a><span class="ss">- </span>**TODO:** I also hope to discuss and implement some enhancements to Schmidt's work, when I get the time.  </span>
-<span id="cb3-23"><a href="#cb3-23"></a></span>
-<span id="cb3-24"><a href="#cb3-24"></a>The project can be read here, on the web, but it's also possible to run all of the code locally as a set of Jupyter notebooks. I hope the multiple formats help you engage with the project in different ways: passively reading for those with less time or technical skill, active tinkering for those with more.  </span>
-<span id="cb3-25"><a href="#cb3-25"></a></span>
-<span id="cb3-26"><a href="#cb3-26"></a>Either way, by following along you'll learn to:</span>
-<span id="cb3-27"><a href="#cb3-27"></a></span>
-<span id="cb3-28"><a href="#cb3-28"></a><span class="ss">1. </span>**Download** raw logbook data from NOAA's ICOADS archive</span>
-<span id="cb3-29"><a href="#cb3-29"></a><span class="ss">2. </span>**Parse** the cryptic IMMA1 fixed-width format into modern data structures</span>
-<span id="cb3-30"><a href="#cb3-30"></a><span class="ss">3. </span>**Reconstruct** individual ship voyages from scattered observations</span>
-<span id="cb3-31"><a href="#cb3-31"></a><span class="ss">4. </span>**Classify** voyages as whaling or merchant ships using machine learning</span>
-<span id="cb3-32"><a href="#cb3-32"></a><span class="ss">5. </span>**Visualize** the results with animated "ghost ship" maps</span>
-<span id="cb3-33"><a href="#cb3-33"></a></span>
-<span id="cb3-34"><a href="#cb3-34"></a>**Before you begin, you should read through Schmidt's whole series of posts.** A suggested order is:</span>
-<span id="cb3-35"><a href="#cb3-35"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Reading digital sources: a case study in ship's logs</span><span class="co">](http://sappingattention.blogspot.com/2012/11/reading-digital-sources-case-study-in.html)</span>, an overview of the whole project.</span>
-<span id="cb3-36"><a href="#cb3-36"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Data Narratives and Structural History</span><span class="co">](https://sappingattention.blogspot.com/2012/10/data-narratives-and-structural.html)</span>, an introduction to the main arguments about **how** to do history  with data</span>
-<span id="cb3-37"><a href="#cb3-37"></a><span class="ss">- </span>You can probably skip <span class="co">[</span><span class="ot">Melville Plots</span><span class="co">](https://sappingattention.blogspot.com/2012/10/melville-plots.html)</span>, though if you're interested in Melville for other reasons this post has a few good tidbits,</span>
-<span id="cb3-38"><a href="#cb3-38"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Machine learning at sea</span><span class="co">](https://sappingattention.blogspot.com/2012/11/machine-learning-on-high-seas.html)</span>, the   most direct discussion of his classification technique,</span>
-<span id="cb3-39"><a href="#cb3-39"></a><span class="ss">- </span><span class="co">[</span><span class="ot">When you have a MALLET</span><span class="co">](https://sappingattention.blogspot.com/2012/11/when-you-have-mallet-everything-looks.html)</span>, a critique of topic modelling,</span>
-<span id="cb3-40"><a href="#cb3-40"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Where are the individuals</span><span class="co">](https://sappingattention.blogspot.com/2012/11/where-are-individuals-in-data-driven.html)</span>, a metahistorical reflection, and finally</span>
-<span id="cb3-41"><a href="#cb3-41"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Reading Digital Sources</span><span class="co">](https://sappingattention.blogspot.com/2012/11/reading-digital-sources-case-study-in.html)</span>, a synopsis of the series. </span>
-<span id="cb3-42"><a href="#cb3-42"></a></span>
-<span id="cb3-43"><a href="#cb3-43"></a>We won't address all the questions he raises in the series, but his reflections will help make sense of the steps we're taking.  </span>
+<span id="cb3-16"><a href="#cb3-16"></a></span>
+<span id="cb3-17"><a href="#cb3-17"></a><span class="ss">- </span>locate the dataset in its current location</span>
+<span id="cb3-18"><a href="#cb3-18"></a><span class="ss">- </span>extract the relevant records using the method that Schmidt describes </span>
+<span id="cb3-19"><a href="#cb3-19"></a><span class="ss">- </span>take advantage of major advances in data storage &amp; rewrite the dataset to Parquet format </span>
+<span id="cb3-20"><a href="#cb3-20"></a><span class="ss">- </span>explore Schmidt's method for classifying voyages, as well as some alternative methods</span>
+<span id="cb3-21"><a href="#cb3-21"></a><span class="ss">- </span>mimic his static visualizations, and</span>
+<span id="cb3-22"><a href="#cb3-22"></a><span class="ss">- </span>use modern open source mapping tools to imitate the complex voyage animations which made the blog so popular a decade and a half ago</span>
+<span id="cb3-23"><a href="#cb3-23"></a><span class="ss">- </span>**TODO:** I also hope to discuss and implement some enhancements to Schmidt's work, when I get the time.  </span>
+<span id="cb3-24"><a href="#cb3-24"></a></span>
+<span id="cb3-25"><a href="#cb3-25"></a>The project can be read here, on the web, but it's also possible to run all of the code locally as a set of Jupyter notebooks. I hope the multiple formats help you engage with the project in different ways: passively reading for those with less time or technical skill, active tinkering for those with more.  </span>
+<span id="cb3-26"><a href="#cb3-26"></a></span>
+<span id="cb3-27"><a href="#cb3-27"></a>Either way, by following along you'll learn to:</span>
+<span id="cb3-28"><a href="#cb3-28"></a></span>
+<span id="cb3-29"><a href="#cb3-29"></a><span class="ss">1. </span>**Download** raw logbook data from NOAA's ICOADS archive</span>
+<span id="cb3-30"><a href="#cb3-30"></a><span class="ss">2. </span>**Parse** the cryptic IMMA1 fixed-width format into modern data structures</span>
+<span id="cb3-31"><a href="#cb3-31"></a><span class="ss">3. </span>**Reconstruct** individual ship voyages from scattered observations</span>
+<span id="cb3-32"><a href="#cb3-32"></a><span class="ss">4. </span>**Classify** voyages as whaling or merchant ships using machine learning</span>
+<span id="cb3-33"><a href="#cb3-33"></a><span class="ss">5. </span>**Visualize** the results with animated "ghost ship" maps</span>
+<span id="cb3-34"><a href="#cb3-34"></a></span>
+<span id="cb3-35"><a href="#cb3-35"></a>**Before you begin, you should read through Schmidt's whole series of posts.** A suggested order is:</span>
+<span id="cb3-36"><a href="#cb3-36"></a></span>
+<span id="cb3-37"><a href="#cb3-37"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Reading digital sources: a case study in ship's logs</span><span class="co">](http://sappingattention.blogspot.com/2012/11/reading-digital-sources-case-study-in.html)</span>, an overview of the whole project.</span>
+<span id="cb3-38"><a href="#cb3-38"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Data Narratives and Structural History</span><span class="co">](https://sappingattention.blogspot.com/2012/10/data-narratives-and-structural.html)</span>, an introduction to the main arguments about **how** to do history  with data</span>
+<span id="cb3-39"><a href="#cb3-39"></a><span class="ss">- </span>You can probably skip <span class="co">[</span><span class="ot">Melville Plots</span><span class="co">](https://sappingattention.blogspot.com/2012/10/melville-plots.html)</span>, though if you're interested in Melville for other reasons this post has a few good tidbits,</span>
+<span id="cb3-40"><a href="#cb3-40"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Machine learning at sea</span><span class="co">](https://sappingattention.blogspot.com/2012/11/machine-learning-on-high-seas.html)</span>, the   most direct discussion of his classification technique,</span>
+<span id="cb3-41"><a href="#cb3-41"></a><span class="ss">- </span><span class="co">[</span><span class="ot">When you have a MALLET</span><span class="co">](https://sappingattention.blogspot.com/2012/11/when-you-have-mallet-everything-looks.html)</span>, a critique of topic modelling,</span>
+<span id="cb3-42"><a href="#cb3-42"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Where are the individuals</span><span class="co">](https://sappingattention.blogspot.com/2012/11/where-are-individuals-in-data-driven.html)</span>, a metahistorical reflection, and finally</span>
+<span id="cb3-43"><a href="#cb3-43"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Reading Digital Sources</span><span class="co">](https://sappingattention.blogspot.com/2012/11/reading-digital-sources-case-study-in.html)</span>, a synopsis of the series. </span>
 <span id="cb3-44"><a href="#cb3-44"></a></span>
-<span id="cb3-45"><a href="#cb3-45"></a><span class="fu">## The Data: Maury Collection (ICOADS Deck 701)</span></span>
+<span id="cb3-45"><a href="#cb3-45"></a>We won't address all the questions he raises in the series, but his reflections will help make sense of the steps we're taking.  </span>
 <span id="cb3-46"><a href="#cb3-46"></a></span>
-<span id="cb3-47"><a href="#cb3-47"></a>:::{.callout-note}</span>
-<span id="cb3-48"><a href="#cb3-48"></a><span class="fu">## Who Was Matthew Maury?</span></span>
-<span id="cb3-49"><a href="#cb3-49"></a>**Matthew Fontaine Maury** (1806-1873) was something of a data pioneer, and generally thought of as a founder of oceanography. For almost twenty years, he systematically collecting ship logbooks from captains worldwide. His synthesis of thousands of voyages created the first wind and current charts, with numerous practical benefits for sailors, and scientific benefits for future generations of oceanographers and climate scientists.</span>
-<span id="cb3-50"><a href="#cb3-50"></a></span>
-<span id="cb3-51"><a href="#cb3-51"></a><span class="co">[</span><span class="ot">Maury's Wikipedia page</span><span class="co">](https://en.wikipedia.org/wiki/Matthew_Fontaine_Maury)</span></span>
-<span id="cb3-52"><a href="#cb3-52"></a>:::</span>
-<span id="cb3-53"><a href="#cb3-53"></a></span>
-<span id="cb3-54"><a href="#cb3-54"></a>The **Maury Collection** contains approximately **1.3 million observations** from over **13,700 voyages** between 1795 and 1861. Each observation records:</span>
+<span id="cb3-47"><a href="#cb3-47"></a><span class="fu">## The Data: Maury Collection (ICOADS Deck 701)</span></span>
+<span id="cb3-48"><a href="#cb3-48"></a></span>
+<span id="cb3-49"><a href="#cb3-49"></a>:::{.callout-note}</span>
+<span id="cb3-50"><a href="#cb3-50"></a><span class="fu">## Who Was Matthew Maury?</span></span>
+<span id="cb3-51"><a href="#cb3-51"></a>**Matthew Fontaine Maury** (1806-1873) was something of a data pioneer, and generally thought of as a founder of oceanography. For almost twenty years, he systematically collecting ship logbooks from captains worldwide. His synthesis of thousands of voyages created the first wind and current charts, with numerous practical benefits for sailors, and scientific benefits for future generations of oceanographers and climate scientists.</span>
+<span id="cb3-52"><a href="#cb3-52"></a></span>
+<span id="cb3-53"><a href="#cb3-53"></a><span class="co">[</span><span class="ot">Maury's Wikipedia page</span><span class="co">](https://en.wikipedia.org/wiki/Matthew_Fontaine_Maury)</span></span>
+<span id="cb3-54"><a href="#cb3-54"></a>:::</span>
 <span id="cb3-55"><a href="#cb3-55"></a></span>
-<span id="cb3-56"><a href="#cb3-56"></a><span class="ss">- </span>**Position**: Latitude and longitude</span>
-<span id="cb3-57"><a href="#cb3-57"></a><span class="ss">- </span>**Date/Time**: Year, month, day, hour</span>
-<span id="cb3-58"><a href="#cb3-58"></a><span class="ss">- </span>**Weather**: Wind direction/speed, barometric pressure, air/sea temperature</span>
-<span id="cb3-59"><a href="#cb3-59"></a><span class="ss">- </span>**Ship identity**: Partial ship names, voyage identifiers</span>
-<span id="cb3-60"><a href="#cb3-60"></a></span>
-<span id="cb3-61"><a href="#cb3-61"></a>As Schmidt notes, the original hand-written logs were much more complex than the records that survive today.  We'll talk more about that in <span class="co">[</span><span class="ot">the next section</span><span class="co">](./notebooks/01_download_icoads.qmd)</span>. </span>
+<span id="cb3-56"><a href="#cb3-56"></a>The **Maury Collection** contains approximately **1.3 million observations** from over **13,700 voyages** between 1795 and 1861. Each observation records:</span>
+<span id="cb3-57"><a href="#cb3-57"></a></span>
+<span id="cb3-58"><a href="#cb3-58"></a><span class="ss">- </span>**Position**: Latitude and longitude</span>
+<span id="cb3-59"><a href="#cb3-59"></a><span class="ss">- </span>**Date/Time**: Year, month, day, hour</span>
+<span id="cb3-60"><a href="#cb3-60"></a><span class="ss">- </span>**Weather**: Wind direction/speed, barometric pressure, air/sea temperature</span>
+<span id="cb3-61"><a href="#cb3-61"></a><span class="ss">- </span>**Ship identity**: Partial ship names, voyage identifiers</span>
 <span id="cb3-62"><a href="#cb3-62"></a></span>
-<span id="cb3-63"><a href="#cb3-63"></a>The <span class="co">[</span><span class="ot">next notebook in our series</span><span class="co">](./notebooks/02_imma_to_parquet.qmd)</span> deviates from Schidt's discussion in order to make further work go much faster.  </span>
+<span id="cb3-63"><a href="#cb3-63"></a>As Schmidt notes, the original hand-written logs were much more complex than the records that survive today.  We'll talk more about that in <span class="co">[</span><span class="ot">the next section</span><span class="co">](./notebooks/01_download_icoads.qmd)</span>. </span>
 <span id="cb3-64"><a href="#cb3-64"></a></span>
-<span id="cb3-65"><a href="#cb3-65"></a><span class="fu">## The Challenge: Identifying Whaling Ships</span></span>
+<span id="cb3-65"><a href="#cb3-65"></a>The <span class="co">[</span><span class="ot">next notebook in our series</span><span class="co">](./notebooks/02_imma_to_parquet.qmd)</span> deviates from Schidt's discussion in order to make further work go much faster.  </span>
 <span id="cb3-66"><a href="#cb3-66"></a></span>
-<span id="cb3-67"><a href="#cb3-67"></a>The logbooks don't explicitly label ship types. However, different ships have distinctive **spatial signatures**:</span>
+<span id="cb3-67"><a href="#cb3-67"></a><span class="fu">## The Challenge: Identifying Whaling Ships</span></span>
 <span id="cb3-68"><a href="#cb3-68"></a></span>
-<span id="cb3-69"><a href="#cb3-69"></a>::: {.image-grid}</span>
-<span id="cb3-70"><a href="#cb3-70"></a><span class="al">![Whaling voyages concentrate in known whaling grounds](output/ghost_ships_whaling.png)</span>{fig-alt="Map showing whaling voyage tracks concentrated in the Pacific and around Cape Horn"}</span>
-<span id="cb3-71"><a href="#cb3-71"></a></span>
-<span id="cb3-72"><a href="#cb3-72"></a><span class="al">![Classification comparison: Whaling vs. Merchant routes](output/whaling_vs_merchant.png)</span>{fig-alt="Side-by-side comparison showing distinct patterns of whaling ships vs merchant vessels"}</span>
-<span id="cb3-73"><a href="#cb3-73"></a>:::</span>
-<span id="cb3-74"><a href="#cb3-74"></a></span>
-<span id="cb3-75"><a href="#cb3-75"></a>**Whaling ships** spent months hunting in remote Pacific waters, while **merchant ships** followed direct trade routes between ports. By training a classifier on known whaling grounds, we can automatically identify the ~900 whaling voyages hidden in the data.</span>
+<span id="cb3-69"><a href="#cb3-69"></a>The logbooks don't explicitly label ship types. However, different ships have distinctive **spatial signatures**:</span>
+<span id="cb3-70"><a href="#cb3-70"></a></span>
+<span id="cb3-71"><a href="#cb3-71"></a>::: {.image-grid}</span>
+<span id="cb3-72"><a href="#cb3-72"></a><span class="al">![Whaling voyages concentrate in known whaling grounds](output/ghost_ships_whaling.png)</span>{fig-alt="Map showing whaling voyage tracks concentrated in the Pacific and around Cape Horn"}</span>
+<span id="cb3-73"><a href="#cb3-73"></a></span>
+<span id="cb3-74"><a href="#cb3-74"></a><span class="al">![Classification comparison: Whaling vs. Merchant routes](output/whaling_vs_merchant.png)</span>{fig-alt="Side-by-side comparison showing distinct patterns of whaling ships vs merchant vessels"}</span>
+<span id="cb3-75"><a href="#cb3-75"></a>:::</span>
 <span id="cb3-76"><a href="#cb3-76"></a></span>
-<span id="cb3-77"><a href="#cb3-77"></a>Schmidt used a k-nearest neighbour algorithm for his classficiation; we proproduce that <span class="co">[</span><span class="ot">in the following notebook</span><span class="co">](./notebooks/03_reconstruct_voyages.qmd)</span>. </span>
+<span id="cb3-77"><a href="#cb3-77"></a>**Whaling ships** spent months hunting in remote Pacific waters, while **merchant ships** followed direct trade routes between ports. By training a classifier on known whaling grounds, we can automatically identify the ~900 whaling voyages hidden in the data.</span>
 <span id="cb3-78"><a href="#cb3-78"></a></span>
-<span id="cb3-79"><a href="#cb3-79"></a><span class="fu">## Results: Animated Voyage Maps</span></span>
+<span id="cb3-79"><a href="#cb3-79"></a>Schmidt used a k-nearest neighbour algorithm for his classficiation; we proproduce that <span class="co">[</span><span class="ot">in the following notebook</span><span class="co">](./notebooks/03_reconstruct_voyages.qmd)</span>. </span>
 <span id="cb3-80"><a href="#cb3-80"></a></span>
-<span id="cb3-81"><a href="#cb3-81"></a>The ultimate goal is to create visualizations like Ben Schmidt's famous animated maps showing ships moving across the oceans over decades:</span>
+<span id="cb3-81"><a href="#cb3-81"></a><span class="fu">## Results: Animated Voyage Maps</span></span>
 <span id="cb3-82"><a href="#cb3-82"></a></span>
-<span id="cb3-83"><a href="#cb3-83"></a>::: {.animation-container}</span>
-<span id="cb3-84"><a href="#cb3-84"></a><span class="dt">&lt;</span><span class="kw">video</span><span class="ot"> controls loop muted playsinline</span><span class="dt">&gt;</span></span>
-<span id="cb3-85"><a href="#cb3-85"></a>  <span class="dt">&lt;</span><span class="kw">source</span><span class="ot"> src</span><span class="op">=</span><span class="st">"output/whaling_voyages.mp4"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"video/mp4"</span><span class="dt">&gt;</span></span>
-<span id="cb3-86"><a href="#cb3-86"></a>  <span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">"output/whaling_voyages.gif"</span><span class="ot"> alt</span><span class="op">=</span><span class="st">"Animation of whaling voyages from 1797-1860"</span><span class="dt">&gt;</span></span>
-<span id="cb3-87"><a href="#cb3-87"></a><span class="dt">&lt;/</span><span class="kw">video</span><span class="dt">&gt;</span></span>
-<span id="cb3-88"><a href="#cb3-88"></a>*Classified whaling voyages, 1797-1860. Yellow dots show current ship positions; red trails show recent movement.*</span>
-<span id="cb3-89"><a href="#cb3-89"></a>:::</span>
-<span id="cb3-90"><a href="#cb3-90"></a></span>
-<span id="cb3-91"><a href="#cb3-91"></a><span class="fu">## The Pipeline</span></span>
+<span id="cb3-83"><a href="#cb3-83"></a>The ultimate goal is to create visualizations like Ben Schmidt's famous animated maps showing ships moving across the oceans over decades:</span>
+<span id="cb3-84"><a href="#cb3-84"></a></span>
+<span id="cb3-85"><a href="#cb3-85"></a>::: {.animation-container}</span>
+<span id="cb3-86"><a href="#cb3-86"></a><span class="dt">&lt;</span><span class="kw">video</span><span class="ot"> controls loop muted playsinline</span><span class="dt">&gt;</span></span>
+<span id="cb3-87"><a href="#cb3-87"></a>  <span class="dt">&lt;</span><span class="kw">source</span><span class="ot"> src</span><span class="op">=</span><span class="st">"output/whaling_voyages.mp4"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"video/mp4"</span><span class="dt">&gt;</span></span>
+<span id="cb3-88"><a href="#cb3-88"></a>  <span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">"output/whaling_voyages.gif"</span><span class="ot"> alt</span><span class="op">=</span><span class="st">"Animation of whaling voyages from 1797-1860"</span><span class="dt">&gt;</span></span>
+<span id="cb3-89"><a href="#cb3-89"></a><span class="dt">&lt;/</span><span class="kw">video</span><span class="dt">&gt;</span></span>
+<span id="cb3-90"><a href="#cb3-90"></a>*Classified whaling voyages, 1797-1860. Yellow dots show current ship positions; red trails show recent movement.*</span>
+<span id="cb3-91"><a href="#cb3-91"></a>:::</span>
 <span id="cb3-92"><a href="#cb3-92"></a></span>
-<span id="cb3-95"><a href="#cb3-95"></a><span class="in">```{mermaid}</span></span>
-<span id="cb3-96"><a href="#cb3-96"></a>flowchart LR</span>
-<span id="cb3-97"><a href="#cb3-97"></a>    A[ICOADS Archive] --&gt; B[Download\nDeck <span class="dv">701</span>]</span>
-<span id="cb3-98"><a href="#cb3-98"></a>    B --&gt; C[Parse IMMA1\nFormat]</span>
-<span id="cb3-99"><a href="#cb3-99"></a>    C --&gt; D[Reconstruct\nVoyages]</span>
-<span id="cb3-100"><a href="#cb3-100"></a>    D --&gt; E[Classify\nWhaling/Merchant]</span>
-<span id="cb3-101"><a href="#cb3-101"></a>    E --&gt; F[Visualize\nAnimations]</span>
-<span id="cb3-102"><a href="#cb3-102"></a></span>
-<span id="cb3-103"><a href="#cb3-103"></a>    style A fill:<span class="co">#e1f5fe</span></span>
-<span id="cb3-104"><a href="#cb3-104"></a>    style F fill:<span class="co">#c8e6c9</span></span>
-<span id="cb3-105"><a href="#cb3-105"></a><span class="in">```</span></span>
-<span id="cb3-106"><a href="#cb3-106"></a></span>
-<span id="cb3-107"><a href="#cb3-107"></a>As mentioned, each step is available in a separate notebook:</span>
+<span id="cb3-93"><a href="#cb3-93"></a><span class="fu">## The Pipeline</span></span>
+<span id="cb3-94"><a href="#cb3-94"></a></span>
+<span id="cb3-97"><a href="#cb3-97"></a><span class="in">```{mermaid}</span></span>
+<span id="cb3-98"><a href="#cb3-98"></a>flowchart LR</span>
+<span id="cb3-99"><a href="#cb3-99"></a>    A[ICOADS Archive] --&gt; B[Download\nDeck <span class="dv">701</span>]</span>
+<span id="cb3-100"><a href="#cb3-100"></a>    B --&gt; C[Parse IMMA1\nFormat]</span>
+<span id="cb3-101"><a href="#cb3-101"></a>    C --&gt; D[Reconstruct\nVoyages]</span>
+<span id="cb3-102"><a href="#cb3-102"></a>    D --&gt; E[Classify\nWhaling/Merchant]</span>
+<span id="cb3-103"><a href="#cb3-103"></a>    E --&gt; F[Visualize\nAnimations]</span>
+<span id="cb3-104"><a href="#cb3-104"></a></span>
+<span id="cb3-105"><a href="#cb3-105"></a>    style A fill:<span class="co">#e1f5fe</span></span>
+<span id="cb3-106"><a href="#cb3-106"></a>    style F fill:<span class="co">#c8e6c9</span></span>
+<span id="cb3-107"><a href="#cb3-107"></a><span class="in">```</span></span>
 <span id="cb3-108"><a href="#cb3-108"></a></span>
-<span id="cb3-109"><a href="#cb3-109"></a><span class="pp">|</span> Notebook <span class="pp">|</span> Description <span class="pp">|</span> Key Technique <span class="pp">|</span></span>
-<span id="cb3-110"><a href="#cb3-110"></a><span class="pp">|----------|-------------|---------------|</span></span>
-<span id="cb3-111"><a href="#cb3-111"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">01_download_icoads</span><span class="co">](notebooks/01_download_icoads.qmd)</span> <span class="pp">|</span> Fetch raw data from NOAA <span class="pp">|</span> HTTP requests, gzip <span class="pp">|</span></span>
-<span id="cb3-112"><a href="#cb3-112"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">02_imma_to_parquet</span><span class="co">](notebooks/02_imma_to_parquet.qmd)</span> <span class="pp">|</span> Parse fixed-width format <span class="pp">|</span> Columnar storage <span class="pp">|</span></span>
-<span id="cb3-113"><a href="#cb3-113"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">03_reconstruct_voyages</span><span class="co">](notebooks/03_reconstruct_voyages.qmd)</span> <span class="pp">|</span> Identify voyage boundaries <span class="pp">|</span> Heuristic segmentation <span class="pp">|</span></span>
-<span id="cb3-114"><a href="#cb3-114"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">04_classify_voyages</span><span class="co">](notebooks/04_classify_voyages.qmd)</span> <span class="pp">|</span> ML classification <span class="pp">|</span> K-Nearest Neighbours <span class="pp">|</span></span>
-<span id="cb3-115"><a href="#cb3-115"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">05_visualize_voyages</span><span class="co">](notebooks/05_visualize_voyages.qmd)</span> <span class="pp">|</span> Create maps &amp; animations <span class="pp">|</span> Matplotlib, ffmpeg <span class="pp">|</span></span>
-<span id="cb3-116"><a href="#cb3-116"></a></span>
-<span id="cb3-117"><a href="#cb3-117"></a>Running this code will likely take considerable time and ocmputation resources on an ordinary laptop; before you run code, be sure you understand what it's doing and how long it will likely take. </span>
+<span id="cb3-109"><a href="#cb3-109"></a>As mentioned, each step is available in a separate notebook:</span>
+<span id="cb3-110"><a href="#cb3-110"></a></span>
+<span id="cb3-111"><a href="#cb3-111"></a><span class="pp">|</span> Notebook <span class="pp">|</span> Description <span class="pp">|</span> Key Technique <span class="pp">|</span></span>
+<span id="cb3-112"><a href="#cb3-112"></a><span class="pp">|----------|-------------|---------------|</span></span>
+<span id="cb3-113"><a href="#cb3-113"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">01_download_icoads</span><span class="co">](notebooks/01_download_icoads.qmd)</span> <span class="pp">|</span> Fetch raw data from NOAA <span class="pp">|</span> HTTP requests, gzip <span class="pp">|</span></span>
+<span id="cb3-114"><a href="#cb3-114"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">02_imma_to_parquet</span><span class="co">](notebooks/02_imma_to_parquet.qmd)</span> <span class="pp">|</span> Parse fixed-width format <span class="pp">|</span> Columnar storage <span class="pp">|</span></span>
+<span id="cb3-115"><a href="#cb3-115"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">03_reconstruct_voyages</span><span class="co">](notebooks/03_reconstruct_voyages.qmd)</span> <span class="pp">|</span> Identify voyage boundaries <span class="pp">|</span> Heuristic segmentation <span class="pp">|</span></span>
+<span id="cb3-116"><a href="#cb3-116"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">04_classify_voyages</span><span class="co">](notebooks/04_classify_voyages.qmd)</span> <span class="pp">|</span> ML classification <span class="pp">|</span> K-Nearest Neighbours <span class="pp">|</span></span>
+<span id="cb3-117"><a href="#cb3-117"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">05_visualize_voyages</span><span class="co">](notebooks/05_visualize_voyages.qmd)</span> <span class="pp">|</span> Create maps &amp; animations <span class="pp">|</span> Matplotlib, ffmpeg <span class="pp">|</span></span>
 <span id="cb3-118"><a href="#cb3-118"></a></span>
-<span id="cb3-119"><a href="#cb3-119"></a><span class="fu">## Traffic Patterns Through History</span></span>
+<span id="cb3-119"><a href="#cb3-119"></a>Running this code will likely take considerable time and ocmputation resources on an ordinary laptop; before you run code, be sure you understand what it's doing and how long it will likely take. </span>
 <span id="cb3-120"><a href="#cb3-120"></a></span>
-<span id="cb3-121"><a href="#cb3-121"></a>The data reveals how maritime traffic evolved over the early 19th century:</span>
+<span id="cb3-121"><a href="#cb3-121"></a><span class="fu">## Traffic Patterns Through History</span></span>
 <span id="cb3-122"><a href="#cb3-122"></a></span>
-<span id="cb3-123"><a href="#cb3-123"></a><span class="al">![Maritime traffic by decade showing the explosion of Pacific voyages in the 1840s-1850s](output/traffic_by_decade.png)</span>{fig-alt="Four-panel map showing maritime traffic patterns from 1800s through 1860s, with dramatic increase in Pacific coverage during the 1840s-1850s whaling boom"}</span>
+<span id="cb3-123"><a href="#cb3-123"></a>The data reveals how maritime traffic evolved over the early 19th century:</span>
 <span id="cb3-124"><a href="#cb3-124"></a></span>
-<span id="cb3-125"><a href="#cb3-125"></a>The 1840s-1850s show a dramatic increase in Pacific coverage, corresponding to the peak of American whaling.</span>
+<span id="cb3-125"><a href="#cb3-125"></a><span class="al">![Maritime traffic by decade showing the explosion of Pacific voyages in the 1840s-1850s](output/traffic_by_decade.png)</span>{fig-alt="Four-panel map showing maritime traffic patterns from 1800s through 1860s, with dramatic increase in Pacific coverage during the 1840s-1850s whaling boom"}</span>
 <span id="cb3-126"><a href="#cb3-126"></a></span>
-<span id="cb3-127"><a href="#cb3-127"></a><span class="fu">## Getting Started</span></span>
+<span id="cb3-127"><a href="#cb3-127"></a>The 1840s-1850s show a dramatic increase in Pacific coverage, corresponding to the peak of American whaling.</span>
 <span id="cb3-128"><a href="#cb3-128"></a></span>
-<span id="cb3-129"><a href="#cb3-129"></a>You can read all of the code and see a lthe results in the website version of this code. </span>
+<span id="cb3-129"><a href="#cb3-129"></a><span class="fu">## Getting Started</span></span>
 <span id="cb3-130"><a href="#cb3-130"></a></span>
-<span id="cb3-131"><a href="#cb3-131"></a>If you want to  run these notebooks yourself:</span>
+<span id="cb3-131"><a href="#cb3-131"></a>You can read all of the code and see a lthe results in the website version of this code. </span>
 <span id="cb3-132"><a href="#cb3-132"></a></span>
-<span id="cb3-133"><a href="#cb3-133"></a><span class="in">```bash</span></span>
-<span id="cb3-134"><a href="#cb3-134"></a><span class="co"># Clone the repository</span></span>
-<span id="cb3-135"><a href="#cb3-135"></a><span class="fu">git</span> clone https://github.com/example/maury-notebooks.git</span>
-<span id="cb3-136"><a href="#cb3-136"></a><span class="bu">cd</span> maury-notebooks</span>
-<span id="cb3-137"><a href="#cb3-137"></a></span>
-<span id="cb3-138"><a href="#cb3-138"></a><span class="co"># Install dependencies with uv</span></span>
-<span id="cb3-139"><a href="#cb3-139"></a><span class="ex">uv</span> sync</span>
-<span id="cb3-140"><a href="#cb3-140"></a></span>
-<span id="cb3-141"><a href="#cb3-141"></a><span class="co"># Download the data (takes several hours)</span></span>
-<span id="cb3-142"><a href="#cb3-142"></a><span class="ex">uv</span> run python scripts/download_icoads_deck701.py</span>
-<span id="cb3-143"><a href="#cb3-143"></a></span>
-<span id="cb3-144"><a href="#cb3-144"></a><span class="co"># Or run the full pipeline</span></span>
-<span id="cb3-145"><a href="#cb3-145"></a><span class="ex">uv</span> run python scripts/imma_to_parquet.py</span>
-<span id="cb3-146"><a href="#cb3-146"></a><span class="ex">uv</span> run python scripts/reconstruct_voyages.py</span>
-<span id="cb3-147"><a href="#cb3-147"></a><span class="ex">uv</span> run python scripts/classify_voyages.py</span>
-<span id="cb3-148"><a href="#cb3-148"></a><span class="ex">uv</span> run python scripts/visualize_voyages.py</span>
-<span id="cb3-149"><a href="#cb3-149"></a><span class="in">```</span></span>
-<span id="cb3-150"><a href="#cb3-150"></a></span>
-<span id="cb3-151"><a href="#cb3-151"></a>Or jump straight to <span class="co">[</span><span class="ot">Notebook 1</span><span class="co">](notebooks/01_download_icoads.qmd)</span> to learn about the data.</span>
+<span id="cb3-133"><a href="#cb3-133"></a>If you want to  run these notebooks yourself:</span>
+<span id="cb3-134"><a href="#cb3-134"></a></span>
+<span id="cb3-135"><a href="#cb3-135"></a><span class="in">```bash</span></span>
+<span id="cb3-136"><a href="#cb3-136"></a><span class="co"># Clone the repository</span></span>
+<span id="cb3-137"><a href="#cb3-137"></a><span class="fu">git</span> clone https://github.com/example/maury-notebooks.git</span>
+<span id="cb3-138"><a href="#cb3-138"></a><span class="bu">cd</span> maury-notebooks</span>
+<span id="cb3-139"><a href="#cb3-139"></a></span>
+<span id="cb3-140"><a href="#cb3-140"></a><span class="co"># Install dependencies with uv</span></span>
+<span id="cb3-141"><a href="#cb3-141"></a><span class="ex">uv</span> sync</span>
+<span id="cb3-142"><a href="#cb3-142"></a></span>
+<span id="cb3-143"><a href="#cb3-143"></a><span class="co"># Download the data (takes several hours)</span></span>
+<span id="cb3-144"><a href="#cb3-144"></a><span class="ex">uv</span> run python scripts/download_icoads_deck701.py</span>
+<span id="cb3-145"><a href="#cb3-145"></a></span>
+<span id="cb3-146"><a href="#cb3-146"></a><span class="co"># Or run the full pipeline</span></span>
+<span id="cb3-147"><a href="#cb3-147"></a><span class="ex">uv</span> run python scripts/imma_to_parquet.py</span>
+<span id="cb3-148"><a href="#cb3-148"></a><span class="ex">uv</span> run python scripts/reconstruct_voyages.py</span>
+<span id="cb3-149"><a href="#cb3-149"></a><span class="ex">uv</span> run python scripts/classify_voyages.py</span>
+<span id="cb3-150"><a href="#cb3-150"></a><span class="ex">uv</span> run python scripts/visualize_voyages.py</span>
+<span id="cb3-151"><a href="#cb3-151"></a><span class="in">```</span></span>
 <span id="cb3-152"><a href="#cb3-152"></a></span>
-<span id="cb3-153"><a href="#cb3-153"></a><span class="fu">## Acknowledgements</span></span>
+<span id="cb3-153"><a href="#cb3-153"></a>Or jump straight to <span class="co">[</span><span class="ot">Notebook 1</span><span class="co">](notebooks/01_download_icoads.qmd)</span> to learn about the data.</span>
 <span id="cb3-154"><a href="#cb3-154"></a></span>
-<span id="cb3-155"><a href="#cb3-155"></a>This project builds on the work of:</span>
+<span id="cb3-155"><a href="#cb3-155"></a><span class="fu">## Acknowledgements</span></span>
 <span id="cb3-156"><a href="#cb3-156"></a></span>
-<span id="cb3-157"><a href="#cb3-157"></a><span class="ss">- </span>**[Ben Schmidt](https://benschmidt.org/)** - Original analysis and visualizations at <span class="co">[</span><span class="ot">Sapping Attention</span><span class="co">](https://sappingattention.blogspot.com/)</span></span>
-<span id="cb3-158"><a href="#cb3-158"></a><span class="ss">- </span>**[ICOADS](https://icoads.noaa.gov/)** - Maintaining the world's largest marine climate archive</span>
-<span id="cb3-159"><a href="#cb3-159"></a><span class="ss">- </span>**[NOAA NCEI](https://www.ncei.noaa.gov/)** - Hosting the data publicly</span>
-<span id="cb3-160"><a href="#cb3-160"></a></span>
-<span id="cb3-161"><a href="#cb3-161"></a><span class="fu">## License</span></span>
+<span id="cb3-157"><a href="#cb3-157"></a>This project builds on the work of:</span>
+<span id="cb3-158"><a href="#cb3-158"></a></span>
+<span id="cb3-159"><a href="#cb3-159"></a><span class="ss">- </span>**[Ben Schmidt](https://benschmidt.org/)** - Original analysis and visualizations at <span class="co">[</span><span class="ot">Sapping Attention</span><span class="co">](https://sappingattention.blogspot.com/)</span></span>
+<span id="cb3-160"><a href="#cb3-160"></a><span class="ss">- </span>**[ICOADS](https://icoads.noaa.gov/)** - Maintaining the world's largest marine climate archive</span>
+<span id="cb3-161"><a href="#cb3-161"></a><span class="ss">- </span>**[NOAA NCEI](https://www.ncei.noaa.gov/)** - Hosting the data publicly</span>
 <span id="cb3-162"><a href="#cb3-162"></a></span>
-<span id="cb3-163"><a href="#cb3-163"></a>The code in this repository is released under a GPL3 License. The underlying ICOADS data is in the public domain.</span>
+<span id="cb3-163"><a href="#cb3-163"></a><span class="fu">## License</span></span>
 <span id="cb3-164"><a href="#cb3-164"></a></span>
-<span id="cb3-165"><a href="#cb3-165"></a><span class="co">&lt;!-- Local Variables: --&gt;</span></span>
-<span id="cb3-166"><a href="#cb3-166"></a><span class="co">&lt;!-- jinx-local-words: "Fontaine Matplotlib Maury Maury's" --&gt;</span></span>
-<span id="cb3-167"><a href="#cb3-167"></a><span class="co">&lt;!-- End: --&gt;</span></span>
+<span id="cb3-165"><a href="#cb3-165"></a>The code in this repository is released under a GPL3 License. The underlying ICOADS data is in the public domain.</span>
+<span id="cb3-166"><a href="#cb3-166"></a></span>
+<span id="cb3-167"><a href="#cb3-167"></a><span class="co">&lt;!-- Local Variables: --&gt;</span></span>
+<span id="cb3-168"><a href="#cb3-168"></a><span class="co">&lt;!-- jinx-local-words: "Fontaine Matplotlib Maury Maury's" --&gt;</span></span>
+<span id="cb3-169"><a href="#cb3-169"></a><span class="co">&lt;!-- End: --&gt;</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

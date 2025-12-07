@@ -437,7 +437,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#comparing-whaling-vs.-merchant-routes" id="toc-comparing-whaling-vs.-merchant-routes" class="nav-link" data-scroll-target="#comparing-whaling-vs.-merchant-routes">Comparing Whaling vs.&nbsp;Merchant Routes</a></li>
   <li><a href="#creating-animations" id="toc-creating-animations" class="nav-link" data-scroll-target="#creating-animations">Creating Animations</a></li>
   <li><a href="#animation-frame-rendering" id="toc-animation-frame-rendering" class="nav-link" data-scroll-target="#animation-frame-rendering">Animation Frame Rendering</a></li>
-  <li><a href="#generating-the-full-animation" id="toc-generating-the-full-animation" class="nav-link" data-scroll-target="#generating-the-full-animation">Generating the Full Animation</a></li>
+  <li><a href="#generating-the-full-animation" id="toc-generating-the-full-animation" class="nav-link" data-scroll-target="#generating-the-full-animation">Generating the Full Animation</a>
+  <ul class="collapse">
+  <li><a href="#running-the-animation-script" id="toc-running-the-animation-script" class="nav-link" data-scroll-target="#running-the-animation-script">Running the Animation Script</a></li>
+  </ul></li>
   <li><a href="#video-output-with-ffmpeg" id="toc-video-output-with-ffmpeg" class="nav-link" data-scroll-target="#video-output-with-ffmpeg">Video Output with ffmpeg</a></li>
   <li><a href="#performance-summary" id="toc-performance-summary" class="nav-link" data-scroll-target="#performance-summary">Performance Summary</a></li>
   <li><a href="#gallery" id="toc-gallery" class="nav-link" data-scroll-target="#gallery">Gallery</a>
@@ -486,8 +489,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 <section id="the-ghost-ship-aesthetic" class="level2">
 <h2 class="anchored" data-anchor-id="the-ghost-ship-aesthetic">The Ghost Ship Aesthetic</h2>
-<p>The “ghost ship” visualization works by drawing thousands of voyage tracks with very low opacity (alpha ≈ 0.02-0.05). Where many ships traveled the same route, the overlapping lines create darker regions, revealing maritime highways.</p>
-<div id="53e59a5c" class="cell">
+<p>The “ghost ship” visualization is deceptively simple: we draw thousands of voyage tracks with very low opacity (alpha ≈ 0.02-0.05). Where many ships traveled the same route, the overlapping lines accumulate and create darker regions. The result reveals maritime highways that would be invisible if we plotted voyages one at a time.</p>
+<p>This technique transforms a dataset that’s too large to comprehend into a single image that communicates the overall pattern immediately. The name “ghost ships” comes from the ethereal, semi-transparent quality of the overlapping tracks.</p>
+<div id="87473117" class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -506,20 +510,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="challenge-rendering-performance" class="level2">
 <h2 class="anchored" data-anchor-id="challenge-rendering-performance">Challenge: Rendering Performance</h2>
-<p>Plotting 13,000+ voyages individually is extremely slow. The naive approach:</p>
+<p>Plotting 13,000+ voyages individually is extremely slow. The naive approach looks something like this:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># SLOW: O(n²) - don't do this!</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="cf">for</span> voyage_id <span class="kw">in</span> df[<span class="st">'voyage_id'</span>].unique():</span>
 <span id="cb2-3"><a href="#cb2-3"></a>    voyage <span class="op">=</span> df[df[<span class="st">'voyage_id'</span>] <span class="op">==</span> voyage_id]  <span class="co"># Full scan for each voyage!</span></span>
 <span id="cb2-4"><a href="#cb2-4"></a>    ax.plot(voyage[<span class="st">'LON'</span>], voyage[<span class="st">'LAT'</span>], alpha<span class="op">=</span><span class="fl">0.02</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>This has two problems:</p>
-<ol type="1">
-<li><strong>O(n²) filtering</strong>: Each <code>df[df['voyage_id'] == vid]</code> scans the entire DataFrame</li>
-<li><strong>Individual plot calls</strong>: Each <code>ax.plot()</code> has overhead; thousands add up</li>
-</ol>
+<p>This code has two serious performance problems. First, <strong>O(n²) filtering</strong>: each <code>df[df['voyage_id'] == vid]</code> scans the entire DataFrame, and we do this for every voyage. Second, <strong>individual plot calls</strong>: each <code>ax.plot()</code> has overhead from setting up line properties and updating the figure; with thousands of voyages, this overhead dominates.</p>
+<p>Let’s look at two solutions that make this fast enough to be practical.</p>
 </section>
 <section id="solution-1-use-groupby-instead-of-repeated-filtering" class="level2">
 <h2 class="anchored" data-anchor-id="solution-1-use-groupby-instead-of-repeated-filtering">Solution 1: Use <code>groupby()</code> Instead of Repeated Filtering</h2>
-<div id="32e1fc22" class="cell">
+<p>The first optimization is to sort the data once, then use <code>groupby()</code> to iterate through voyages. This avoids the repeated full-DataFrame scans:</p>
+<div id="cdb00bde" class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> demonstrate_groupby_speedup():</span>
 <span id="cb3-2"><a href="#cb3-2"></a>    <span class="co">"""Show the performance difference between filtering and groupby."""</span></span>
 <span id="cb3-3"><a href="#cb3-3"></a>    <span class="cf">if</span> df <span class="kw">is</span> <span class="va">None</span>:</span>
@@ -554,8 +556,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="solution-2-use-linecollection-for-batch-rendering" class="level2">
 <h2 class="anchored" data-anchor-id="solution-2-use-linecollection-for-batch-rendering">Solution 2: Use <code>LineCollection</code> for Batch Rendering</h2>
-<p>Instead of calling <code>ax.plot()</code> thousands of times, collect all line segments and render them in a single <code>LineCollection</code>:</p>
-<div id="c74658b6" class="cell">
+<p>The second optimization addresses the rendering overhead. Instead of calling <code>ax.plot()</code> thousands of times, we collect all line segments into a list and render them in a single call using matplotlib’s <code>LineCollection</code>. This batches all the rendering work:</p>
+<div id="d1a8d0e7" class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="im">from</span> matplotlib.collections <span class="im">import</span> LineCollection</span>
 <span id="cb4-2"><a href="#cb4-2"></a></span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="kw">def</span> create_line_segments(voyage_df):</span>
@@ -596,8 +598,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="creating-a-ghost-ship-map" class="level2">
 <h2 class="anchored" data-anchor-id="creating-a-ghost-ship-map">Creating a Ghost Ship Map</h2>
-<p>Here’s the optimized approach combining both techniques:</p>
-<div id="3d986c84" class="cell">
+<p>Now let’s put both optimizations together. The function below sorts once, iterates with <code>groupby()</code>, collects all segments, and renders them with a single <code>LineCollection</code>:</p>
+<div id="b3e3d6c8" class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> create_ghost_ship_map(df, ax, color<span class="op">=</span><span class="st">'black'</span>, alpha<span class="op">=</span><span class="fl">0.03</span>, linewidth<span class="op">=</span><span class="fl">0.4</span>):</span>
 <span id="cb5-2"><a href="#cb5-2"></a>    <span class="co">"""</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="co">    Plot all voyage tracks efficiently using LineCollection.</span></span>
@@ -643,8 +645,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="comparing-whaling-vs.-merchant-routes" class="level2">
 <h2 class="anchored" data-anchor-id="comparing-whaling-vs.-merchant-routes">Comparing Whaling vs.&nbsp;Merchant Routes</h2>
-<p>The classification allows us to visualize the distinct spatial patterns:</p>
-<div id="cec89614" class="cell">
+<p>With classified voyages, we can render whaling and merchant tracks separately to see how their spatial patterns differ. Whaling ships should concentrate in the Pacific and other whaling grounds, while merchant ships should follow Atlantic trade routes:</p>
+<div id="b2316904" class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="cf">if</span> df <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="kw">and</span> <span class="st">'classification'</span> <span class="kw">in</span> df.columns:</span>
 <span id="cb6-2"><a href="#cb6-2"></a>    fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">5</span>))</span>
 <span id="cb6-3"><a href="#cb6-3"></a></span>
@@ -667,8 +669,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="creating-animations" class="level2">
 <h2 class="anchored" data-anchor-id="creating-animations">Creating Animations</h2>
-<p>For animations, we need to show ships at each point in time. The key insight is to <strong>pre-compute voyage data</strong> once, then render frames efficiently.</p>
-<div id="0de32c5b" class="cell">
+<p>Static maps show accumulated patterns, but animations reveal the temporal dimension: ships moving across the ocean, routes shifting with seasons, whaling grounds being discovered and exploited over decades.</p>
+<p>For animations, we need to show ships at each point in time. The key insight is to <strong>pre-compute voyage data</strong> once, then render frames efficiently. Without this pre-computation, we’d repeat expensive data processing for every frame.</p>
+<div id="abc0a1ed" class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">def</span> precompute_voyage_data(df):</span>
 <span id="cb7-2"><a href="#cb7-2"></a>    <span class="co">"""</span></span>
 <span id="cb7-3"><a href="#cb7-3"></a><span class="co">    Pre-compute voyage segments with date information for animation.</span></span>
@@ -734,13 +737,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="animation-frame-rendering" class="level2">
 <h2 class="anchored" data-anchor-id="animation-frame-rendering">Animation Frame Rendering</h2>
-<p>Each frame shows:</p>
+<p>Each animation frame shows three layers of information:</p>
 <ul>
-<li><strong>Trail</strong>: Full voyage path up to current date (faded)</li>
-<li><strong>Recent segment</strong>: Last 10 points (highlighted)</li>
-<li><strong>Ship position</strong>: Current location (bright marker)</li>
+<li><strong>Trail</strong>: The full voyage path up to the current date, rendered with low opacity to show where ships have been.</li>
+<li><strong>Recent segment</strong>: The last 10 points of each active voyage, highlighted to show recent movement direction.</li>
+<li><strong>Ship position</strong>: A bright marker at each ship’s current location.</li>
 </ul>
-<div id="da620261" class="cell">
+<p>This layered approach gives the animation a sense of motion and history simultaneously:</p>
+<div id="33128531" class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">def</span> render_frame_example(voyage_data, current_date, ax):</span>
 <span id="cb8-2"><a href="#cb8-2"></a>    <span class="co">"""Render a single animation frame."""</span></span>
 <span id="cb8-3"><a href="#cb8-3"></a>    current_np <span class="op">=</span> np.datetime64(current_date)</span>
@@ -813,29 +817,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="generating-the-full-animation" class="level2">
 <h2 class="anchored" data-anchor-id="generating-the-full-animation">Generating the Full Animation</h2>
-<p>The <code>animate_voyages.py</code> script handles the full animation process:</p>
+<p>The animation script handles the complete process of generating a multi-frame animation from the classified voyage data. Here’s what it does:</p>
 <ol type="1">
-<li>Pre-compute voyage data</li>
-<li>Generate date range for frames</li>
-<li>Render each frame to PIL Image</li>
-<li>Save as GIF and/or MP4</li>
+<li><strong>Pre-compute voyage data</strong> — Parse all voyages once and store in an efficient format</li>
+<li><strong>Generate date range</strong> — Create a sequence of dates from the data’s time span</li>
+<li><strong>Render each frame</strong> — Apply the layered rendering for each date</li>
+<li><strong>Save output</strong> — Write as GIF and/or MP4</li>
 </ol>
-<div id="3c49ac0a" class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># Command to generate the animation</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a><span class="co"># uv run python scripts/animate_voyages.py --classification whaling --n-frames 100 -o output/whaling_voyages</span></span>
-<span id="cb9-3"><a href="#cb9-3"></a></span>
-<span id="cb9-4"><a href="#cb9-4"></a><span class="co"># Key options:</span></span>
-<span id="cb9-5"><a href="#cb9-5"></a><span class="co">#   --classification whaling|merchant  Filter by ship type</span></span>
-<span id="cb9-6"><a href="#cb9-6"></a><span class="co">#   --n-frames 100                     Number of animation frames</span></span>
-<span id="cb9-7"><a href="#cb9-7"></a><span class="co">#   --fps 10                           Frames per second</span></span>
-<span id="cb9-8"><a href="#cb9-8"></a><span class="co">#   --format gif|mp4|both              Output format(s)</span></span>
-<span id="cb9-9"><a href="#cb9-9"></a><span class="co">#   --max-voyages 50                   Limit voyages for preview</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<section id="running-the-animation-script" class="level3">
+<h3 class="anchored" data-anchor-id="running-the-animation-script">Running the Animation Script</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a><span class="ex">uv</span> run python scripts/animate_voyages.py <span class="at">--classification</span> whaling <span class="at">--n-frames</span> 100 <span class="at">-o</span> output/whaling_voyages</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Options:</p>
+<ul>
+<li><code>--classification whaling|merchant</code>: Filter by ship type</li>
+<li><code>--n-frames 100</code>: Number of animation frames</li>
+<li><code>--fps 10</code>: Frames per second</li>
+<li><code>--format gif|mp4|both</code>: Output format(s)</li>
+<li><code>--max-voyages 50</code>: Limit voyages for quick preview</li>
+</ul>
+</section>
 </section>
 <section id="video-output-with-ffmpeg" class="level2">
 <h2 class="anchored" data-anchor-id="video-output-with-ffmpeg">Video Output with ffmpeg</h2>
-<p>GIFs can’t be paused or scrubbed. For longer animations, MP4 is better:</p>
-<div id="dee9a878" class="cell">
+<p>GIFs have a significant limitation: they can’t be paused or scrubbed. For longer animations, MP4 video is a better format. The script can use ffmpeg to convert rendered frames into a compressed video file:</p>
+<div id="ec2f78f4" class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="im">import</span> subprocess</span>
 <span id="cb10-2"><a href="#cb10-2"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb10-3"><a href="#cb10-3"></a><span class="im">import</span> tempfile</span>
@@ -863,6 +868,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="performance-summary" class="level2">
 <h2 class="anchored" data-anchor-id="performance-summary">Performance Summary</h2>
+<p>The optimizations we’ve discussed combine to make large-scale visualization practical:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -889,7 +895,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-<p>With these optimizations, rendering 100 frames of 800+ whaling voyages takes ~15 seconds.</p>
+<p>With these optimizations, rendering 100 frames of 800+ whaling voyages takes approximately 15 seconds—fast enough for iterative experimentation.</p>
 </section>
 <section id="gallery" class="level2">
 <h2 class="anchored" data-anchor-id="gallery">Gallery</h2>
@@ -930,14 +936,41 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>:::</p>
 <section id="next-steps" class="level2">
 <h2 class="anchored" data-anchor-id="next-steps">Next Steps</h2>
-<p>With these visualization tools, you can:</p>
+<p>With these visualization tools, you can explore the data in many directions:</p>
 <ul>
-<li>Compare whaling activity by decade</li>
-<li>Identify specific whaling grounds</li>
-<li>Track individual ship journeys</li>
-<li>Create custom animations for specific time periods or regions</li>
+<li>Compare whaling activity by decade to see how patterns shifted over time</li>
+<li>Identify specific whaling grounds and trace their discovery and exploitation</li>
+<li>Track individual ship journeys to understand the life of a whaling voyage</li>
+<li>Create custom animations for specific time periods or geographic regions</li>
 </ul>
-<p>The classified data also enables deeper analysis: correlating whaling activity with whale population data, studying seasonal patterns, or comparing American vs.&nbsp;foreign whaling fleets.</p>
+<p>The classified data also enables deeper historical analysis. You might correlate whaling activity with what we know about whale population declines, study seasonal patterns in different whaling grounds, or compare American whaling fleets with those of other nations.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Questions to Consider
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>The “ghost ship” visualization uses very low alpha values (0.02-0.05). How would you choose the right alpha for a dataset of a different size? What happens if you have 100 voyages vs.&nbsp;100,000?</p></li>
+<li><p>The animation shows ships at discrete time steps. But observations aren’t evenly spaced—a ship might have daily observations for a week, then nothing for a month. How might you handle this unevenness? Should ships “pause” or “jump”?</p></li>
+<li><p>These visualizations use a simple equirectangular projection (latitude/longitude as x/y). What distortions does this introduce? Would a different map projection better represent maritime routes?</p></li>
+<li><p>The color scheme distinguishes whaling from merchant voyages. But within whaling, there were different types: sperm whaling, right whaling, Arctic expeditions. How might you modify the visualization to show these distinctions?</p></li>
+<li><p>These maps show where ships went, but not <em>why</em>. What additional data sources might you overlay to tell a richer story? (Think: whale catch records, port locations, ocean currents, weather patterns.)</p></li>
+</ol>
+</div>
+</div>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<ul>
+<li>Schmidt, Ben. “Reading Digital Sources: A Case Study in Ship’s Logs.” Sapping Attention, 2012.</li>
+<li>Matplotlib LineCollection: https://matplotlib.org/stable/api/collections_api.html</li>
+<li>ffmpeg documentation: https://ffmpeg.org/documentation.html</li>
+</ul>
 
 
 <!-- -->
@@ -1085,7 +1118,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/DigitalHistory\.github\.io\/maury-notebooks\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
@@ -1443,442 +1476,504 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb11-29"><a href="#cb11-29"></a></span>
 <span id="cb11-30"><a href="#cb11-30"></a><span class="fu">## The Ghost Ship Aesthetic</span></span>
 <span id="cb11-31"><a href="#cb11-31"></a></span>
-<span id="cb11-32"><a href="#cb11-32"></a>The "ghost ship" visualization works by drawing thousands of voyage tracks with</span>
-<span id="cb11-33"><a href="#cb11-33"></a>very low opacity (alpha ≈ 0.02-0.05). Where many ships traveled the same route,</span>
-<span id="cb11-34"><a href="#cb11-34"></a>the overlapping lines create darker regions, revealing maritime highways.</span>
-<span id="cb11-35"><a href="#cb11-35"></a></span>
-<span id="cb11-38"><a href="#cb11-38"></a><span class="in">```{python}</span></span>
-<span id="cb11-39"><a href="#cb11-39"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb11-40"><a href="#cb11-40"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb11-41"><a href="#cb11-41"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb11-42"><a href="#cb11-42"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb11-43"><a href="#cb11-43"></a></span>
-<span id="cb11-44"><a href="#cb11-44"></a><span class="co"># Load classified data</span></span>
-<span id="cb11-45"><a href="#cb11-45"></a>data_path <span class="op">=</span> Path(<span class="st">"../data/observations_classified.parquet"</span>)</span>
-<span id="cb11-46"><a href="#cb11-46"></a><span class="cf">if</span> data_path.exists():</span>
-<span id="cb11-47"><a href="#cb11-47"></a>    df <span class="op">=</span> pd.read_parquet(data_path)</span>
-<span id="cb11-48"><a href="#cb11-48"></a>    <span class="bu">print</span>(<span class="ss">f"Loaded </span><span class="sc">{</span><span class="bu">len</span>(df)<span class="sc">:,}</span><span class="ss"> observations from </span><span class="sc">{</span>df[<span class="st">'voyage_id'</span>]<span class="sc">.</span>nunique()<span class="sc">:,}</span><span class="ss"> voyages"</span>)</span>
-<span id="cb11-49"><a href="#cb11-49"></a>    <span class="bu">print</span>(<span class="ss">f"Classifications: </span><span class="sc">{</span>df[<span class="st">'classification'</span>]<span class="sc">.</span>value_counts()<span class="sc">.</span>to_dict()<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb11-50"><a href="#cb11-50"></a><span class="cf">else</span>:</span>
-<span id="cb11-51"><a href="#cb11-51"></a>    <span class="bu">print</span>(<span class="st">"Note: Run classify_voyages.py first to generate classified data"</span>)</span>
-<span id="cb11-52"><a href="#cb11-52"></a>    df <span class="op">=</span> <span class="va">None</span></span>
-<span id="cb11-53"><a href="#cb11-53"></a><span class="in">```</span></span>
-<span id="cb11-54"><a href="#cb11-54"></a></span>
-<span id="cb11-55"><a href="#cb11-55"></a><span class="fu">## Challenge: Rendering Performance</span></span>
-<span id="cb11-56"><a href="#cb11-56"></a></span>
-<span id="cb11-57"><a href="#cb11-57"></a>Plotting 13,000+ voyages individually is extremely slow. The naive approach:</span>
-<span id="cb11-58"><a href="#cb11-58"></a></span>
-<span id="cb11-59"><a href="#cb11-59"></a><span class="in">```python</span></span>
-<span id="cb11-60"><a href="#cb11-60"></a><span class="co"># SLOW: O(n²) - don't do this!</span></span>
-<span id="cb11-61"><a href="#cb11-61"></a><span class="cf">for</span> voyage_id <span class="kw">in</span> df[<span class="st">'voyage_id'</span>].unique():</span>
-<span id="cb11-62"><a href="#cb11-62"></a>    voyage <span class="op">=</span> df[df[<span class="st">'voyage_id'</span>] <span class="op">==</span> voyage_id]  <span class="co"># Full scan for each voyage!</span></span>
-<span id="cb11-63"><a href="#cb11-63"></a>    ax.plot(voyage[<span class="st">'LON'</span>], voyage[<span class="st">'LAT'</span>], alpha<span class="op">=</span><span class="fl">0.02</span>)</span>
-<span id="cb11-64"><a href="#cb11-64"></a><span class="in">```</span></span>
-<span id="cb11-65"><a href="#cb11-65"></a></span>
-<span id="cb11-66"><a href="#cb11-66"></a>This has two problems:</span>
-<span id="cb11-67"><a href="#cb11-67"></a></span>
-<span id="cb11-68"><a href="#cb11-68"></a><span class="ss">1. </span>**O(n²) filtering**: Each <span class="in">`df[df['voyage_id'] == vid]`</span> scans the entire DataFrame</span>
-<span id="cb11-69"><a href="#cb11-69"></a><span class="ss">2. </span>**Individual plot calls**: Each <span class="in">`ax.plot()`</span> has overhead; thousands add up</span>
-<span id="cb11-70"><a href="#cb11-70"></a></span>
-<span id="cb11-71"><a href="#cb11-71"></a><span class="fu">## Solution 1: Use `groupby()` Instead of Repeated Filtering</span></span>
-<span id="cb11-72"><a href="#cb11-72"></a></span>
-<span id="cb11-75"><a href="#cb11-75"></a><span class="in">```{python}</span></span>
-<span id="cb11-76"><a href="#cb11-76"></a><span class="kw">def</span> demonstrate_groupby_speedup():</span>
-<span id="cb11-77"><a href="#cb11-77"></a>    <span class="co">"""Show the performance difference between filtering and groupby."""</span></span>
-<span id="cb11-78"><a href="#cb11-78"></a>    <span class="cf">if</span> df <span class="kw">is</span> <span class="va">None</span>:</span>
-<span id="cb11-79"><a href="#cb11-79"></a>        <span class="cf">return</span></span>
-<span id="cb11-80"><a href="#cb11-80"></a></span>
-<span id="cb11-81"><a href="#cb11-81"></a>    <span class="im">import</span> time</span>
-<span id="cb11-82"><a href="#cb11-82"></a></span>
-<span id="cb11-83"><a href="#cb11-83"></a>    <span class="co"># Sample 100 voyages for timing comparison</span></span>
-<span id="cb11-84"><a href="#cb11-84"></a>    sample_ids <span class="op">=</span> df[<span class="st">'voyage_id'</span>].unique()[:<span class="dv">100</span>]</span>
-<span id="cb11-85"><a href="#cb11-85"></a>    sample_df <span class="op">=</span> df[df[<span class="st">'voyage_id'</span>].isin(sample_ids)]</span>
-<span id="cb11-86"><a href="#cb11-86"></a></span>
-<span id="cb11-87"><a href="#cb11-87"></a>    <span class="co"># Method 1: Repeated filtering (slow)</span></span>
-<span id="cb11-88"><a href="#cb11-88"></a>    start <span class="op">=</span> time.time()</span>
-<span id="cb11-89"><a href="#cb11-89"></a>    <span class="cf">for</span> vid <span class="kw">in</span> sample_ids:</span>
-<span id="cb11-90"><a href="#cb11-90"></a>        voyage <span class="op">=</span> sample_df[sample_df[<span class="st">'voyage_id'</span>] <span class="op">==</span> vid]</span>
-<span id="cb11-91"><a href="#cb11-91"></a>        _ <span class="op">=</span> <span class="bu">len</span>(voyage)</span>
-<span id="cb11-92"><a href="#cb11-92"></a>    filter_time <span class="op">=</span> time.time() <span class="op">-</span> start</span>
-<span id="cb11-93"><a href="#cb11-93"></a></span>
-<span id="cb11-94"><a href="#cb11-94"></a>    <span class="co"># Method 2: Sort + groupby (fast)</span></span>
-<span id="cb11-95"><a href="#cb11-95"></a>    start <span class="op">=</span> time.time()</span>
-<span id="cb11-96"><a href="#cb11-96"></a>    sorted_df <span class="op">=</span> sample_df.sort_values([<span class="st">'voyage_id'</span>, <span class="st">'YR'</span>, <span class="st">'MO'</span>, <span class="st">'DY'</span>])</span>
-<span id="cb11-97"><a href="#cb11-97"></a>    <span class="cf">for</span> vid, voyage <span class="kw">in</span> sorted_df.groupby(<span class="st">'voyage_id'</span>, sort<span class="op">=</span><span class="va">False</span>):</span>
-<span id="cb11-98"><a href="#cb11-98"></a>        _ <span class="op">=</span> <span class="bu">len</span>(voyage)</span>
-<span id="cb11-99"><a href="#cb11-99"></a>    groupby_time <span class="op">=</span> time.time() <span class="op">-</span> start</span>
-<span id="cb11-100"><a href="#cb11-100"></a></span>
-<span id="cb11-101"><a href="#cb11-101"></a>    <span class="bu">print</span>(<span class="ss">f"Filtering 100 voyages: </span><span class="sc">{</span>filter_time<span class="sc">:.3f}</span><span class="ss">s"</span>)</span>
-<span id="cb11-102"><a href="#cb11-102"></a>    <span class="bu">print</span>(<span class="ss">f"Groupby 100 voyages:   </span><span class="sc">{</span>groupby_time<span class="sc">:.3f}</span><span class="ss">s"</span>)</span>
-<span id="cb11-103"><a href="#cb11-103"></a>    <span class="bu">print</span>(<span class="ss">f"Speedup: </span><span class="sc">{</span>filter_time<span class="op">/</span>groupby_time<span class="sc">:.1f}</span><span class="ss">x faster"</span>)</span>
-<span id="cb11-104"><a href="#cb11-104"></a></span>
-<span id="cb11-105"><a href="#cb11-105"></a>demonstrate_groupby_speedup()</span>
-<span id="cb11-106"><a href="#cb11-106"></a><span class="in">```</span></span>
-<span id="cb11-107"><a href="#cb11-107"></a></span>
-<span id="cb11-108"><a href="#cb11-108"></a><span class="fu">## Solution 2: Use `LineCollection` for Batch Rendering</span></span>
-<span id="cb11-109"><a href="#cb11-109"></a></span>
-<span id="cb11-110"><a href="#cb11-110"></a>Instead of calling <span class="in">`ax.plot()`</span> thousands of times, collect all line segments</span>
-<span id="cb11-111"><a href="#cb11-111"></a>and render them in a single <span class="in">`LineCollection`</span>:</span>
+<span id="cb11-32"><a href="#cb11-32"></a>The "ghost ship" visualization is deceptively simple: we draw thousands of voyage tracks</span>
+<span id="cb11-33"><a href="#cb11-33"></a>with very low opacity (alpha ≈ 0.02-0.05). Where many ships traveled the same route,</span>
+<span id="cb11-34"><a href="#cb11-34"></a>the overlapping lines accumulate and create darker regions. The result reveals maritime</span>
+<span id="cb11-35"><a href="#cb11-35"></a>highways that would be invisible if we plotted voyages one at a time.</span>
+<span id="cb11-36"><a href="#cb11-36"></a></span>
+<span id="cb11-37"><a href="#cb11-37"></a>This technique transforms a dataset that's too large to comprehend into a single image</span>
+<span id="cb11-38"><a href="#cb11-38"></a>that communicates the overall pattern immediately. The name "ghost ships" comes from</span>
+<span id="cb11-39"><a href="#cb11-39"></a>the ethereal, semi-transparent quality of the overlapping tracks.</span>
+<span id="cb11-40"><a href="#cb11-40"></a></span>
+<span id="cb11-43"><a href="#cb11-43"></a><span class="in">```{python}</span></span>
+<span id="cb11-44"><a href="#cb11-44"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb11-45"><a href="#cb11-45"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb11-46"><a href="#cb11-46"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb11-47"><a href="#cb11-47"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb11-48"><a href="#cb11-48"></a></span>
+<span id="cb11-49"><a href="#cb11-49"></a><span class="co"># Load classified data</span></span>
+<span id="cb11-50"><a href="#cb11-50"></a>data_path <span class="op">=</span> Path(<span class="st">"../data/observations_classified.parquet"</span>)</span>
+<span id="cb11-51"><a href="#cb11-51"></a><span class="cf">if</span> data_path.exists():</span>
+<span id="cb11-52"><a href="#cb11-52"></a>    df <span class="op">=</span> pd.read_parquet(data_path)</span>
+<span id="cb11-53"><a href="#cb11-53"></a>    <span class="bu">print</span>(<span class="ss">f"Loaded </span><span class="sc">{</span><span class="bu">len</span>(df)<span class="sc">:,}</span><span class="ss"> observations from </span><span class="sc">{</span>df[<span class="st">'voyage_id'</span>]<span class="sc">.</span>nunique()<span class="sc">:,}</span><span class="ss"> voyages"</span>)</span>
+<span id="cb11-54"><a href="#cb11-54"></a>    <span class="bu">print</span>(<span class="ss">f"Classifications: </span><span class="sc">{</span>df[<span class="st">'classification'</span>]<span class="sc">.</span>value_counts()<span class="sc">.</span>to_dict()<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb11-55"><a href="#cb11-55"></a><span class="cf">else</span>:</span>
+<span id="cb11-56"><a href="#cb11-56"></a>    <span class="bu">print</span>(<span class="st">"Note: Run classify_voyages.py first to generate classified data"</span>)</span>
+<span id="cb11-57"><a href="#cb11-57"></a>    df <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb11-58"><a href="#cb11-58"></a><span class="in">```</span></span>
+<span id="cb11-59"><a href="#cb11-59"></a></span>
+<span id="cb11-60"><a href="#cb11-60"></a><span class="fu">## Challenge: Rendering Performance</span></span>
+<span id="cb11-61"><a href="#cb11-61"></a></span>
+<span id="cb11-62"><a href="#cb11-62"></a>Plotting 13,000+ voyages individually is extremely slow. The naive approach looks</span>
+<span id="cb11-63"><a href="#cb11-63"></a>something like this:</span>
+<span id="cb11-64"><a href="#cb11-64"></a></span>
+<span id="cb11-65"><a href="#cb11-65"></a><span class="in">```python</span></span>
+<span id="cb11-66"><a href="#cb11-66"></a><span class="co"># SLOW: O(n²) - don't do this!</span></span>
+<span id="cb11-67"><a href="#cb11-67"></a><span class="cf">for</span> voyage_id <span class="kw">in</span> df[<span class="st">'voyage_id'</span>].unique():</span>
+<span id="cb11-68"><a href="#cb11-68"></a>    voyage <span class="op">=</span> df[df[<span class="st">'voyage_id'</span>] <span class="op">==</span> voyage_id]  <span class="co"># Full scan for each voyage!</span></span>
+<span id="cb11-69"><a href="#cb11-69"></a>    ax.plot(voyage[<span class="st">'LON'</span>], voyage[<span class="st">'LAT'</span>], alpha<span class="op">=</span><span class="fl">0.02</span>)</span>
+<span id="cb11-70"><a href="#cb11-70"></a><span class="in">```</span></span>
+<span id="cb11-71"><a href="#cb11-71"></a></span>
+<span id="cb11-72"><a href="#cb11-72"></a>This code has two serious performance problems. First, **O(n²) filtering**: each</span>
+<span id="cb11-73"><a href="#cb11-73"></a><span class="in">`df[df['voyage_id'] == vid]`</span> scans the entire DataFrame, and we do this for every</span>
+<span id="cb11-74"><a href="#cb11-74"></a>voyage. Second, **individual plot calls**: each <span class="in">`ax.plot()`</span> has overhead from</span>
+<span id="cb11-75"><a href="#cb11-75"></a>setting up line properties and updating the figure; with thousands of voyages,</span>
+<span id="cb11-76"><a href="#cb11-76"></a>this overhead dominates.</span>
+<span id="cb11-77"><a href="#cb11-77"></a></span>
+<span id="cb11-78"><a href="#cb11-78"></a>Let's look at two solutions that make this fast enough to be practical.</span>
+<span id="cb11-79"><a href="#cb11-79"></a></span>
+<span id="cb11-80"><a href="#cb11-80"></a><span class="fu">## Solution 1: Use `groupby()` Instead of Repeated Filtering</span></span>
+<span id="cb11-81"><a href="#cb11-81"></a></span>
+<span id="cb11-82"><a href="#cb11-82"></a>The first optimization is to sort the data once, then use <span class="in">`groupby()`</span> to iterate</span>
+<span id="cb11-83"><a href="#cb11-83"></a>through voyages. This avoids the repeated full-DataFrame scans:</span>
+<span id="cb11-84"><a href="#cb11-84"></a></span>
+<span id="cb11-87"><a href="#cb11-87"></a><span class="in">```{python}</span></span>
+<span id="cb11-88"><a href="#cb11-88"></a><span class="kw">def</span> demonstrate_groupby_speedup():</span>
+<span id="cb11-89"><a href="#cb11-89"></a>    <span class="co">"""Show the performance difference between filtering and groupby."""</span></span>
+<span id="cb11-90"><a href="#cb11-90"></a>    <span class="cf">if</span> df <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb11-91"><a href="#cb11-91"></a>        <span class="cf">return</span></span>
+<span id="cb11-92"><a href="#cb11-92"></a></span>
+<span id="cb11-93"><a href="#cb11-93"></a>    <span class="im">import</span> time</span>
+<span id="cb11-94"><a href="#cb11-94"></a></span>
+<span id="cb11-95"><a href="#cb11-95"></a>    <span class="co"># Sample 100 voyages for timing comparison</span></span>
+<span id="cb11-96"><a href="#cb11-96"></a>    sample_ids <span class="op">=</span> df[<span class="st">'voyage_id'</span>].unique()[:<span class="dv">100</span>]</span>
+<span id="cb11-97"><a href="#cb11-97"></a>    sample_df <span class="op">=</span> df[df[<span class="st">'voyage_id'</span>].isin(sample_ids)]</span>
+<span id="cb11-98"><a href="#cb11-98"></a></span>
+<span id="cb11-99"><a href="#cb11-99"></a>    <span class="co"># Method 1: Repeated filtering (slow)</span></span>
+<span id="cb11-100"><a href="#cb11-100"></a>    start <span class="op">=</span> time.time()</span>
+<span id="cb11-101"><a href="#cb11-101"></a>    <span class="cf">for</span> vid <span class="kw">in</span> sample_ids:</span>
+<span id="cb11-102"><a href="#cb11-102"></a>        voyage <span class="op">=</span> sample_df[sample_df[<span class="st">'voyage_id'</span>] <span class="op">==</span> vid]</span>
+<span id="cb11-103"><a href="#cb11-103"></a>        _ <span class="op">=</span> <span class="bu">len</span>(voyage)</span>
+<span id="cb11-104"><a href="#cb11-104"></a>    filter_time <span class="op">=</span> time.time() <span class="op">-</span> start</span>
+<span id="cb11-105"><a href="#cb11-105"></a></span>
+<span id="cb11-106"><a href="#cb11-106"></a>    <span class="co"># Method 2: Sort + groupby (fast)</span></span>
+<span id="cb11-107"><a href="#cb11-107"></a>    start <span class="op">=</span> time.time()</span>
+<span id="cb11-108"><a href="#cb11-108"></a>    sorted_df <span class="op">=</span> sample_df.sort_values([<span class="st">'voyage_id'</span>, <span class="st">'YR'</span>, <span class="st">'MO'</span>, <span class="st">'DY'</span>])</span>
+<span id="cb11-109"><a href="#cb11-109"></a>    <span class="cf">for</span> vid, voyage <span class="kw">in</span> sorted_df.groupby(<span class="st">'voyage_id'</span>, sort<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb11-110"><a href="#cb11-110"></a>        _ <span class="op">=</span> <span class="bu">len</span>(voyage)</span>
+<span id="cb11-111"><a href="#cb11-111"></a>    groupby_time <span class="op">=</span> time.time() <span class="op">-</span> start</span>
 <span id="cb11-112"><a href="#cb11-112"></a></span>
-<span id="cb11-115"><a href="#cb11-115"></a><span class="in">```{python}</span></span>
-<span id="cb11-116"><a href="#cb11-116"></a><span class="im">from</span> matplotlib.collections <span class="im">import</span> LineCollection</span>
-<span id="cb11-117"><a href="#cb11-117"></a></span>
-<span id="cb11-118"><a href="#cb11-118"></a><span class="kw">def</span> create_line_segments(voyage_df):</span>
-<span id="cb11-119"><a href="#cb11-119"></a>    <span class="co">"""</span></span>
-<span id="cb11-120"><a href="#cb11-120"></a><span class="co">    Convert voyage DataFrame to line segments for LineCollection.</span></span>
+<span id="cb11-113"><a href="#cb11-113"></a>    <span class="bu">print</span>(<span class="ss">f"Filtering 100 voyages: </span><span class="sc">{</span>filter_time<span class="sc">:.3f}</span><span class="ss">s"</span>)</span>
+<span id="cb11-114"><a href="#cb11-114"></a>    <span class="bu">print</span>(<span class="ss">f"Groupby 100 voyages:   </span><span class="sc">{</span>groupby_time<span class="sc">:.3f}</span><span class="ss">s"</span>)</span>
+<span id="cb11-115"><a href="#cb11-115"></a>    <span class="bu">print</span>(<span class="ss">f"Speedup: </span><span class="sc">{</span>filter_time<span class="op">/</span>groupby_time<span class="sc">:.1f}</span><span class="ss">x faster"</span>)</span>
+<span id="cb11-116"><a href="#cb11-116"></a></span>
+<span id="cb11-117"><a href="#cb11-117"></a>demonstrate_groupby_speedup()</span>
+<span id="cb11-118"><a href="#cb11-118"></a><span class="in">```</span></span>
+<span id="cb11-119"><a href="#cb11-119"></a></span>
+<span id="cb11-120"><a href="#cb11-120"></a><span class="fu">## Solution 2: Use `LineCollection` for Batch Rendering</span></span>
 <span id="cb11-121"><a href="#cb11-121"></a></span>
-<span id="cb11-122"><a href="#cb11-122"></a><span class="co">    Handles date line crossings by breaking tracks at longitude jumps &gt; 180°.</span></span>
-<span id="cb11-123"><a href="#cb11-123"></a><span class="co">    """</span></span>
-<span id="cb11-124"><a href="#cb11-124"></a>    segments <span class="op">=</span> []</span>
+<span id="cb11-122"><a href="#cb11-122"></a>The second optimization addresses the rendering overhead. Instead of calling <span class="in">`ax.plot()`</span></span>
+<span id="cb11-123"><a href="#cb11-123"></a>thousands of times, we collect all line segments into a list and render them in a</span>
+<span id="cb11-124"><a href="#cb11-124"></a>single call using matplotlib's <span class="in">`LineCollection`</span>. This batches all the rendering work:</span>
 <span id="cb11-125"><a href="#cb11-125"></a></span>
-<span id="cb11-126"><a href="#cb11-126"></a>    lons <span class="op">=</span> voyage_df[<span class="st">'LON'</span>].values</span>
-<span id="cb11-127"><a href="#cb11-127"></a>    lats <span class="op">=</span> voyage_df[<span class="st">'LAT'</span>].values</span>
-<span id="cb11-128"><a href="#cb11-128"></a></span>
-<span id="cb11-129"><a href="#cb11-129"></a>    seg_start <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb11-130"><a href="#cb11-130"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="bu">len</span>(lons)):</span>
-<span id="cb11-131"><a href="#cb11-131"></a>        <span class="co"># Break at date line crossings</span></span>
-<span id="cb11-132"><a href="#cb11-132"></a>        <span class="cf">if</span> <span class="bu">abs</span>(lons[j] <span class="op">-</span> lons[j<span class="op">-</span><span class="dv">1</span>]) <span class="op">&gt;</span> <span class="dv">180</span>:</span>
-<span id="cb11-133"><a href="#cb11-133"></a>            <span class="cf">if</span> j <span class="op">&gt;</span> seg_start <span class="op">+</span> <span class="dv">1</span>:</span>
-<span id="cb11-134"><a href="#cb11-134"></a>                points <span class="op">=</span> np.column_stack([lons[seg_start:j], lats[seg_start:j]])</span>
-<span id="cb11-135"><a href="#cb11-135"></a>                <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(points) <span class="op">-</span> <span class="dv">1</span>):</span>
-<span id="cb11-136"><a href="#cb11-136"></a>                    segments.append([points[k], points[k <span class="op">+</span> <span class="dv">1</span>]])</span>
-<span id="cb11-137"><a href="#cb11-137"></a>            seg_start <span class="op">=</span> j</span>
+<span id="cb11-128"><a href="#cb11-128"></a><span class="in">```{python}</span></span>
+<span id="cb11-129"><a href="#cb11-129"></a><span class="im">from</span> matplotlib.collections <span class="im">import</span> LineCollection</span>
+<span id="cb11-130"><a href="#cb11-130"></a></span>
+<span id="cb11-131"><a href="#cb11-131"></a><span class="kw">def</span> create_line_segments(voyage_df):</span>
+<span id="cb11-132"><a href="#cb11-132"></a>    <span class="co">"""</span></span>
+<span id="cb11-133"><a href="#cb11-133"></a><span class="co">    Convert voyage DataFrame to line segments for LineCollection.</span></span>
+<span id="cb11-134"><a href="#cb11-134"></a></span>
+<span id="cb11-135"><a href="#cb11-135"></a><span class="co">    Handles date line crossings by breaking tracks at longitude jumps &gt; 180°.</span></span>
+<span id="cb11-136"><a href="#cb11-136"></a><span class="co">    """</span></span>
+<span id="cb11-137"><a href="#cb11-137"></a>    segments <span class="op">=</span> []</span>
 <span id="cb11-138"><a href="#cb11-138"></a></span>
-<span id="cb11-139"><a href="#cb11-139"></a>    <span class="co"># Final segment</span></span>
-<span id="cb11-140"><a href="#cb11-140"></a>    <span class="cf">if</span> <span class="bu">len</span>(lons) <span class="op">&gt;</span> seg_start <span class="op">+</span> <span class="dv">1</span>:</span>
-<span id="cb11-141"><a href="#cb11-141"></a>        points <span class="op">=</span> np.column_stack([lons[seg_start:], lats[seg_start:]])</span>
-<span id="cb11-142"><a href="#cb11-142"></a>        <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(points) <span class="op">-</span> <span class="dv">1</span>):</span>
-<span id="cb11-143"><a href="#cb11-143"></a>            segments.append([points[k], points[k <span class="op">+</span> <span class="dv">1</span>]])</span>
-<span id="cb11-144"><a href="#cb11-144"></a></span>
-<span id="cb11-145"><a href="#cb11-145"></a>    <span class="cf">return</span> segments</span>
-<span id="cb11-146"><a href="#cb11-146"></a></span>
-<span id="cb11-147"><a href="#cb11-147"></a><span class="co"># Demonstrate with a single voyage</span></span>
-<span id="cb11-148"><a href="#cb11-148"></a><span class="cf">if</span> df <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
-<span id="cb11-149"><a href="#cb11-149"></a>    sample_voyage <span class="op">=</span> df[df[<span class="st">'voyage_id'</span>] <span class="op">==</span> df[<span class="st">'voyage_id'</span>].iloc[<span class="dv">0</span>]].sort_values([<span class="st">'YR'</span>, <span class="st">'MO'</span>, <span class="st">'DY'</span>])</span>
-<span id="cb11-150"><a href="#cb11-150"></a>    segs <span class="op">=</span> create_line_segments(sample_voyage)</span>
-<span id="cb11-151"><a href="#cb11-151"></a>    <span class="bu">print</span>(<span class="ss">f"Voyage with </span><span class="sc">{</span><span class="bu">len</span>(sample_voyage)<span class="sc">}</span><span class="ss"> points → </span><span class="sc">{</span><span class="bu">len</span>(segs)<span class="sc">}</span><span class="ss"> line segments"</span>)</span>
-<span id="cb11-152"><a href="#cb11-152"></a><span class="in">```</span></span>
-<span id="cb11-153"><a href="#cb11-153"></a></span>
-<span id="cb11-154"><a href="#cb11-154"></a><span class="fu">## Creating a Ghost Ship Map</span></span>
-<span id="cb11-155"><a href="#cb11-155"></a></span>
-<span id="cb11-156"><a href="#cb11-156"></a>Here's the optimized approach combining both techniques:</span>
+<span id="cb11-139"><a href="#cb11-139"></a>    lons <span class="op">=</span> voyage_df[<span class="st">'LON'</span>].values</span>
+<span id="cb11-140"><a href="#cb11-140"></a>    lats <span class="op">=</span> voyage_df[<span class="st">'LAT'</span>].values</span>
+<span id="cb11-141"><a href="#cb11-141"></a></span>
+<span id="cb11-142"><a href="#cb11-142"></a>    seg_start <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb11-143"><a href="#cb11-143"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="bu">len</span>(lons)):</span>
+<span id="cb11-144"><a href="#cb11-144"></a>        <span class="co"># Break at date line crossings</span></span>
+<span id="cb11-145"><a href="#cb11-145"></a>        <span class="cf">if</span> <span class="bu">abs</span>(lons[j] <span class="op">-</span> lons[j<span class="op">-</span><span class="dv">1</span>]) <span class="op">&gt;</span> <span class="dv">180</span>:</span>
+<span id="cb11-146"><a href="#cb11-146"></a>            <span class="cf">if</span> j <span class="op">&gt;</span> seg_start <span class="op">+</span> <span class="dv">1</span>:</span>
+<span id="cb11-147"><a href="#cb11-147"></a>                points <span class="op">=</span> np.column_stack([lons[seg_start:j], lats[seg_start:j]])</span>
+<span id="cb11-148"><a href="#cb11-148"></a>                <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(points) <span class="op">-</span> <span class="dv">1</span>):</span>
+<span id="cb11-149"><a href="#cb11-149"></a>                    segments.append([points[k], points[k <span class="op">+</span> <span class="dv">1</span>]])</span>
+<span id="cb11-150"><a href="#cb11-150"></a>            seg_start <span class="op">=</span> j</span>
+<span id="cb11-151"><a href="#cb11-151"></a></span>
+<span id="cb11-152"><a href="#cb11-152"></a>    <span class="co"># Final segment</span></span>
+<span id="cb11-153"><a href="#cb11-153"></a>    <span class="cf">if</span> <span class="bu">len</span>(lons) <span class="op">&gt;</span> seg_start <span class="op">+</span> <span class="dv">1</span>:</span>
+<span id="cb11-154"><a href="#cb11-154"></a>        points <span class="op">=</span> np.column_stack([lons[seg_start:], lats[seg_start:]])</span>
+<span id="cb11-155"><a href="#cb11-155"></a>        <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(points) <span class="op">-</span> <span class="dv">1</span>):</span>
+<span id="cb11-156"><a href="#cb11-156"></a>            segments.append([points[k], points[k <span class="op">+</span> <span class="dv">1</span>]])</span>
 <span id="cb11-157"><a href="#cb11-157"></a></span>
-<span id="cb11-160"><a href="#cb11-160"></a><span class="in">```{python}</span></span>
-<span id="cb11-161"><a href="#cb11-161"></a><span class="kw">def</span> create_ghost_ship_map(df, ax, color<span class="op">=</span><span class="st">'black'</span>, alpha<span class="op">=</span><span class="fl">0.03</span>, linewidth<span class="op">=</span><span class="fl">0.4</span>):</span>
-<span id="cb11-162"><a href="#cb11-162"></a>    <span class="co">"""</span></span>
-<span id="cb11-163"><a href="#cb11-163"></a><span class="co">    Plot all voyage tracks efficiently using LineCollection.</span></span>
-<span id="cb11-164"><a href="#cb11-164"></a></span>
-<span id="cb11-165"><a href="#cb11-165"></a><span class="co">    Parameters:</span></span>
-<span id="cb11-166"><a href="#cb11-166"></a><span class="co">        df: DataFrame with voyage_id, LON, LAT columns</span></span>
-<span id="cb11-167"><a href="#cb11-167"></a><span class="co">        ax: matplotlib Axes</span></span>
-<span id="cb11-168"><a href="#cb11-168"></a><span class="co">        color: Line color</span></span>
-<span id="cb11-169"><a href="#cb11-169"></a><span class="co">        alpha: Transparency (lower = more ghostly)</span></span>
-<span id="cb11-170"><a href="#cb11-170"></a><span class="co">        linewidth: Line width</span></span>
-<span id="cb11-171"><a href="#cb11-171"></a><span class="co">    """</span></span>
-<span id="cb11-172"><a href="#cb11-172"></a>    <span class="co"># Sort once, then iterate with groupby</span></span>
-<span id="cb11-173"><a href="#cb11-173"></a>    df_sorted <span class="op">=</span> df.sort_values([<span class="st">'voyage_id'</span>, <span class="st">'YR'</span>, <span class="st">'MO'</span>, <span class="st">'DY'</span>])</span>
-<span id="cb11-174"><a href="#cb11-174"></a></span>
-<span id="cb11-175"><a href="#cb11-175"></a>    all_segments <span class="op">=</span> []</span>
-<span id="cb11-176"><a href="#cb11-176"></a>    <span class="cf">for</span> vid, voyage <span class="kw">in</span> df_sorted.groupby(<span class="st">'voyage_id'</span>, sort<span class="op">=</span><span class="va">False</span>):</span>
-<span id="cb11-177"><a href="#cb11-177"></a>        <span class="cf">if</span> <span class="bu">len</span>(voyage) <span class="op">&lt;</span> <span class="dv">2</span>:</span>
-<span id="cb11-178"><a href="#cb11-178"></a>            <span class="cf">continue</span></span>
-<span id="cb11-179"><a href="#cb11-179"></a>        all_segments.extend(create_line_segments(voyage))</span>
-<span id="cb11-180"><a href="#cb11-180"></a></span>
-<span id="cb11-181"><a href="#cb11-181"></a>    <span class="co"># Render all segments in one call</span></span>
-<span id="cb11-182"><a href="#cb11-182"></a>    <span class="cf">if</span> all_segments:</span>
-<span id="cb11-183"><a href="#cb11-183"></a>        lc <span class="op">=</span> LineCollection(all_segments, colors<span class="op">=</span>color, alpha<span class="op">=</span>alpha,</span>
-<span id="cb11-184"><a href="#cb11-184"></a>                           linewidths<span class="op">=</span>linewidth, capstyle<span class="op">=</span><span class="st">'round'</span>)</span>
-<span id="cb11-185"><a href="#cb11-185"></a>        ax.add_collection(lc)</span>
-<span id="cb11-186"><a href="#cb11-186"></a></span>
-<span id="cb11-187"><a href="#cb11-187"></a>    <span class="cf">return</span> <span class="bu">len</span>(all_segments)</span>
+<span id="cb11-158"><a href="#cb11-158"></a>    <span class="cf">return</span> segments</span>
+<span id="cb11-159"><a href="#cb11-159"></a></span>
+<span id="cb11-160"><a href="#cb11-160"></a><span class="co"># Demonstrate with a single voyage</span></span>
+<span id="cb11-161"><a href="#cb11-161"></a><span class="cf">if</span> df <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb11-162"><a href="#cb11-162"></a>    sample_voyage <span class="op">=</span> df[df[<span class="st">'voyage_id'</span>] <span class="op">==</span> df[<span class="st">'voyage_id'</span>].iloc[<span class="dv">0</span>]].sort_values([<span class="st">'YR'</span>, <span class="st">'MO'</span>, <span class="st">'DY'</span>])</span>
+<span id="cb11-163"><a href="#cb11-163"></a>    segs <span class="op">=</span> create_line_segments(sample_voyage)</span>
+<span id="cb11-164"><a href="#cb11-164"></a>    <span class="bu">print</span>(<span class="ss">f"Voyage with </span><span class="sc">{</span><span class="bu">len</span>(sample_voyage)<span class="sc">}</span><span class="ss"> points → </span><span class="sc">{</span><span class="bu">len</span>(segs)<span class="sc">}</span><span class="ss"> line segments"</span>)</span>
+<span id="cb11-165"><a href="#cb11-165"></a><span class="in">```</span></span>
+<span id="cb11-166"><a href="#cb11-166"></a></span>
+<span id="cb11-167"><a href="#cb11-167"></a><span class="fu">## Creating a Ghost Ship Map</span></span>
+<span id="cb11-168"><a href="#cb11-168"></a></span>
+<span id="cb11-169"><a href="#cb11-169"></a>Now let's put both optimizations together. The function below sorts once, iterates</span>
+<span id="cb11-170"><a href="#cb11-170"></a>with <span class="in">`groupby()`</span>, collects all segments, and renders them with a single <span class="in">`LineCollection`</span>:</span>
+<span id="cb11-171"><a href="#cb11-171"></a></span>
+<span id="cb11-174"><a href="#cb11-174"></a><span class="in">```{python}</span></span>
+<span id="cb11-175"><a href="#cb11-175"></a><span class="kw">def</span> create_ghost_ship_map(df, ax, color<span class="op">=</span><span class="st">'black'</span>, alpha<span class="op">=</span><span class="fl">0.03</span>, linewidth<span class="op">=</span><span class="fl">0.4</span>):</span>
+<span id="cb11-176"><a href="#cb11-176"></a>    <span class="co">"""</span></span>
+<span id="cb11-177"><a href="#cb11-177"></a><span class="co">    Plot all voyage tracks efficiently using LineCollection.</span></span>
+<span id="cb11-178"><a href="#cb11-178"></a></span>
+<span id="cb11-179"><a href="#cb11-179"></a><span class="co">    Parameters:</span></span>
+<span id="cb11-180"><a href="#cb11-180"></a><span class="co">        df: DataFrame with voyage_id, LON, LAT columns</span></span>
+<span id="cb11-181"><a href="#cb11-181"></a><span class="co">        ax: matplotlib Axes</span></span>
+<span id="cb11-182"><a href="#cb11-182"></a><span class="co">        color: Line color</span></span>
+<span id="cb11-183"><a href="#cb11-183"></a><span class="co">        alpha: Transparency (lower = more ghostly)</span></span>
+<span id="cb11-184"><a href="#cb11-184"></a><span class="co">        linewidth: Line width</span></span>
+<span id="cb11-185"><a href="#cb11-185"></a><span class="co">    """</span></span>
+<span id="cb11-186"><a href="#cb11-186"></a>    <span class="co"># Sort once, then iterate with groupby</span></span>
+<span id="cb11-187"><a href="#cb11-187"></a>    df_sorted <span class="op">=</span> df.sort_values([<span class="st">'voyage_id'</span>, <span class="st">'YR'</span>, <span class="st">'MO'</span>, <span class="st">'DY'</span>])</span>
 <span id="cb11-188"><a href="#cb11-188"></a></span>
-<span id="cb11-189"><a href="#cb11-189"></a><span class="co"># Create the visualization</span></span>
-<span id="cb11-190"><a href="#cb11-190"></a><span class="cf">if</span> df <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
-<span id="cb11-191"><a href="#cb11-191"></a>    fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">7</span>))</span>
-<span id="cb11-192"><a href="#cb11-192"></a>    ax.set_facecolor(<span class="st">'white'</span>)</span>
-<span id="cb11-193"><a href="#cb11-193"></a>    ax.set_xlim(<span class="op">-</span><span class="dv">180</span>, <span class="dv">180</span>)</span>
-<span id="cb11-194"><a href="#cb11-194"></a>    ax.set_ylim(<span class="op">-</span><span class="dv">90</span>, <span class="dv">90</span>)</span>
-<span id="cb11-195"><a href="#cb11-195"></a></span>
-<span id="cb11-196"><a href="#cb11-196"></a>    n_segments <span class="op">=</span> create_ghost_ship_map(df, ax, alpha<span class="op">=</span><span class="fl">0.02</span>)</span>
-<span id="cb11-197"><a href="#cb11-197"></a></span>
-<span id="cb11-198"><a href="#cb11-198"></a>    ax.set_title(<span class="ss">f'Maritime Voyages: Maury Collection</span><span class="ch">\n</span><span class="ss">(</span><span class="sc">{</span>df[<span class="st">"voyage_id"</span>]<span class="sc">.</span>nunique()<span class="sc">:,}</span><span class="ss"> voyages, </span><span class="sc">{</span>n_segments<span class="sc">:,}</span><span class="ss"> segments)'</span>)</span>
-<span id="cb11-199"><a href="#cb11-199"></a>    ax.axis(<span class="st">'off'</span>)</span>
-<span id="cb11-200"><a href="#cb11-200"></a>    plt.tight_layout()</span>
-<span id="cb11-201"><a href="#cb11-201"></a>    plt.show()</span>
-<span id="cb11-202"><a href="#cb11-202"></a><span class="in">```</span></span>
-<span id="cb11-203"><a href="#cb11-203"></a></span>
-<span id="cb11-204"><a href="#cb11-204"></a><span class="fu">## Comparing Whaling vs. Merchant Routes</span></span>
-<span id="cb11-205"><a href="#cb11-205"></a></span>
-<span id="cb11-206"><a href="#cb11-206"></a>The classification allows us to visualize the distinct spatial patterns:</span>
-<span id="cb11-207"><a href="#cb11-207"></a></span>
-<span id="cb11-210"><a href="#cb11-210"></a><span class="in">```{python}</span></span>
-<span id="cb11-211"><a href="#cb11-211"></a><span class="cf">if</span> df <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="kw">and</span> <span class="st">'classification'</span> <span class="kw">in</span> df.columns:</span>
-<span id="cb11-212"><a href="#cb11-212"></a>    fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">5</span>))</span>
-<span id="cb11-213"><a href="#cb11-213"></a></span>
-<span id="cb11-214"><a href="#cb11-214"></a>    <span class="cf">for</span> ax, (class_name, color) <span class="kw">in</span> <span class="bu">zip</span>(axes, [(<span class="st">'whaling'</span>, <span class="st">'#2171b5'</span>), (<span class="st">'merchant'</span>, <span class="st">'#d94801'</span>)]):</span>
-<span id="cb11-215"><a href="#cb11-215"></a>        ax.set_facecolor(<span class="st">'#fafafa'</span>)</span>
-<span id="cb11-216"><a href="#cb11-216"></a>        ax.set_xlim(<span class="op">-</span><span class="dv">180</span>, <span class="dv">180</span>)</span>
-<span id="cb11-217"><a href="#cb11-217"></a>        ax.set_ylim(<span class="op">-</span><span class="dv">90</span>, <span class="dv">90</span>)</span>
-<span id="cb11-218"><a href="#cb11-218"></a></span>
-<span id="cb11-219"><a href="#cb11-219"></a>        df_class <span class="op">=</span> df[df[<span class="st">'classification'</span>] <span class="op">==</span> class_name]</span>
-<span id="cb11-220"><a href="#cb11-220"></a>        n_voyages <span class="op">=</span> df_class[<span class="st">'voyage_id'</span>].nunique()</span>
-<span id="cb11-221"><a href="#cb11-221"></a></span>
-<span id="cb11-222"><a href="#cb11-222"></a>        n_segs <span class="op">=</span> create_ghost_ship_map(df_class, ax, color<span class="op">=</span>color, alpha<span class="op">=</span><span class="fl">0.08</span>, linewidth<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb11-189"><a href="#cb11-189"></a>    all_segments <span class="op">=</span> []</span>
+<span id="cb11-190"><a href="#cb11-190"></a>    <span class="cf">for</span> vid, voyage <span class="kw">in</span> df_sorted.groupby(<span class="st">'voyage_id'</span>, sort<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb11-191"><a href="#cb11-191"></a>        <span class="cf">if</span> <span class="bu">len</span>(voyage) <span class="op">&lt;</span> <span class="dv">2</span>:</span>
+<span id="cb11-192"><a href="#cb11-192"></a>            <span class="cf">continue</span></span>
+<span id="cb11-193"><a href="#cb11-193"></a>        all_segments.extend(create_line_segments(voyage))</span>
+<span id="cb11-194"><a href="#cb11-194"></a></span>
+<span id="cb11-195"><a href="#cb11-195"></a>    <span class="co"># Render all segments in one call</span></span>
+<span id="cb11-196"><a href="#cb11-196"></a>    <span class="cf">if</span> all_segments:</span>
+<span id="cb11-197"><a href="#cb11-197"></a>        lc <span class="op">=</span> LineCollection(all_segments, colors<span class="op">=</span>color, alpha<span class="op">=</span>alpha,</span>
+<span id="cb11-198"><a href="#cb11-198"></a>                           linewidths<span class="op">=</span>linewidth, capstyle<span class="op">=</span><span class="st">'round'</span>)</span>
+<span id="cb11-199"><a href="#cb11-199"></a>        ax.add_collection(lc)</span>
+<span id="cb11-200"><a href="#cb11-200"></a></span>
+<span id="cb11-201"><a href="#cb11-201"></a>    <span class="cf">return</span> <span class="bu">len</span>(all_segments)</span>
+<span id="cb11-202"><a href="#cb11-202"></a></span>
+<span id="cb11-203"><a href="#cb11-203"></a><span class="co"># Create the visualization</span></span>
+<span id="cb11-204"><a href="#cb11-204"></a><span class="cf">if</span> df <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb11-205"><a href="#cb11-205"></a>    fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">7</span>))</span>
+<span id="cb11-206"><a href="#cb11-206"></a>    ax.set_facecolor(<span class="st">'white'</span>)</span>
+<span id="cb11-207"><a href="#cb11-207"></a>    ax.set_xlim(<span class="op">-</span><span class="dv">180</span>, <span class="dv">180</span>)</span>
+<span id="cb11-208"><a href="#cb11-208"></a>    ax.set_ylim(<span class="op">-</span><span class="dv">90</span>, <span class="dv">90</span>)</span>
+<span id="cb11-209"><a href="#cb11-209"></a></span>
+<span id="cb11-210"><a href="#cb11-210"></a>    n_segments <span class="op">=</span> create_ghost_ship_map(df, ax, alpha<span class="op">=</span><span class="fl">0.02</span>)</span>
+<span id="cb11-211"><a href="#cb11-211"></a></span>
+<span id="cb11-212"><a href="#cb11-212"></a>    ax.set_title(<span class="ss">f'Maritime Voyages: Maury Collection</span><span class="ch">\n</span><span class="ss">(</span><span class="sc">{</span>df[<span class="st">"voyage_id"</span>]<span class="sc">.</span>nunique()<span class="sc">:,}</span><span class="ss"> voyages, </span><span class="sc">{</span>n_segments<span class="sc">:,}</span><span class="ss"> segments)'</span>)</span>
+<span id="cb11-213"><a href="#cb11-213"></a>    ax.axis(<span class="st">'off'</span>)</span>
+<span id="cb11-214"><a href="#cb11-214"></a>    plt.tight_layout()</span>
+<span id="cb11-215"><a href="#cb11-215"></a>    plt.show()</span>
+<span id="cb11-216"><a href="#cb11-216"></a><span class="in">```</span></span>
+<span id="cb11-217"><a href="#cb11-217"></a></span>
+<span id="cb11-218"><a href="#cb11-218"></a><span class="fu">## Comparing Whaling vs. Merchant Routes</span></span>
+<span id="cb11-219"><a href="#cb11-219"></a></span>
+<span id="cb11-220"><a href="#cb11-220"></a>With classified voyages, we can render whaling and merchant tracks separately</span>
+<span id="cb11-221"><a href="#cb11-221"></a>to see how their spatial patterns differ. Whaling ships should concentrate in the</span>
+<span id="cb11-222"><a href="#cb11-222"></a>Pacific and other whaling grounds, while merchant ships should follow Atlantic trade routes:</span>
 <span id="cb11-223"><a href="#cb11-223"></a></span>
-<span id="cb11-224"><a href="#cb11-224"></a>        ax.set_title(<span class="ss">f'</span><span class="sc">{</span>class_name<span class="sc">.</span>title()<span class="sc">}</span><span class="ss"> Voyages</span><span class="ch">\n</span><span class="ss">(</span><span class="sc">{</span>n_voyages<span class="sc">:,}</span><span class="ss"> voyages)'</span>)</span>
-<span id="cb11-225"><a href="#cb11-225"></a>        ax.axis(<span class="st">'off'</span>)</span>
-<span id="cb11-226"><a href="#cb11-226"></a></span>
-<span id="cb11-227"><a href="#cb11-227"></a>    plt.tight_layout()</span>
-<span id="cb11-228"><a href="#cb11-228"></a>    plt.show()</span>
-<span id="cb11-229"><a href="#cb11-229"></a><span class="in">```</span></span>
-<span id="cb11-230"><a href="#cb11-230"></a></span>
-<span id="cb11-231"><a href="#cb11-231"></a><span class="fu">## Creating Animations</span></span>
-<span id="cb11-232"><a href="#cb11-232"></a></span>
-<span id="cb11-233"><a href="#cb11-233"></a>For animations, we need to show ships at each point in time. The key insight is</span>
-<span id="cb11-234"><a href="#cb11-234"></a>to **pre-compute voyage data** once, then render frames efficiently.</span>
-<span id="cb11-235"><a href="#cb11-235"></a></span>
-<span id="cb11-238"><a href="#cb11-238"></a><span class="in">```{python}</span></span>
-<span id="cb11-239"><a href="#cb11-239"></a><span class="kw">def</span> precompute_voyage_data(df):</span>
-<span id="cb11-240"><a href="#cb11-240"></a>    <span class="co">"""</span></span>
-<span id="cb11-241"><a href="#cb11-241"></a><span class="co">    Pre-compute voyage segments with date information for animation.</span></span>
+<span id="cb11-226"><a href="#cb11-226"></a><span class="in">```{python}</span></span>
+<span id="cb11-227"><a href="#cb11-227"></a><span class="cf">if</span> df <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="kw">and</span> <span class="st">'classification'</span> <span class="kw">in</span> df.columns:</span>
+<span id="cb11-228"><a href="#cb11-228"></a>    fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">5</span>))</span>
+<span id="cb11-229"><a href="#cb11-229"></a></span>
+<span id="cb11-230"><a href="#cb11-230"></a>    <span class="cf">for</span> ax, (class_name, color) <span class="kw">in</span> <span class="bu">zip</span>(axes, [(<span class="st">'whaling'</span>, <span class="st">'#2171b5'</span>), (<span class="st">'merchant'</span>, <span class="st">'#d94801'</span>)]):</span>
+<span id="cb11-231"><a href="#cb11-231"></a>        ax.set_facecolor(<span class="st">'#fafafa'</span>)</span>
+<span id="cb11-232"><a href="#cb11-232"></a>        ax.set_xlim(<span class="op">-</span><span class="dv">180</span>, <span class="dv">180</span>)</span>
+<span id="cb11-233"><a href="#cb11-233"></a>        ax.set_ylim(<span class="op">-</span><span class="dv">90</span>, <span class="dv">90</span>)</span>
+<span id="cb11-234"><a href="#cb11-234"></a></span>
+<span id="cb11-235"><a href="#cb11-235"></a>        df_class <span class="op">=</span> df[df[<span class="st">'classification'</span>] <span class="op">==</span> class_name]</span>
+<span id="cb11-236"><a href="#cb11-236"></a>        n_voyages <span class="op">=</span> df_class[<span class="st">'voyage_id'</span>].nunique()</span>
+<span id="cb11-237"><a href="#cb11-237"></a></span>
+<span id="cb11-238"><a href="#cb11-238"></a>        n_segs <span class="op">=</span> create_ghost_ship_map(df_class, ax, color<span class="op">=</span>color, alpha<span class="op">=</span><span class="fl">0.08</span>, linewidth<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb11-239"><a href="#cb11-239"></a></span>
+<span id="cb11-240"><a href="#cb11-240"></a>        ax.set_title(<span class="ss">f'</span><span class="sc">{</span>class_name<span class="sc">.</span>title()<span class="sc">}</span><span class="ss"> Voyages</span><span class="ch">\n</span><span class="ss">(</span><span class="sc">{</span>n_voyages<span class="sc">:,}</span><span class="ss"> voyages)'</span>)</span>
+<span id="cb11-241"><a href="#cb11-241"></a>        ax.axis(<span class="st">'off'</span>)</span>
 <span id="cb11-242"><a href="#cb11-242"></a></span>
-<span id="cb11-243"><a href="#cb11-243"></a><span class="co">    Returns dict mapping voyage_id to:</span></span>
-<span id="cb11-244"><a href="#cb11-244"></a><span class="co">    - segments: list of {lons, lats, dates} dicts</span></span>
-<span id="cb11-245"><a href="#cb11-245"></a><span class="co">    - min_date, max_date: voyage date range</span></span>
-<span id="cb11-246"><a href="#cb11-246"></a><span class="co">    """</span></span>
-<span id="cb11-247"><a href="#cb11-247"></a>    df <span class="op">=</span> df.copy()</span>
-<span id="cb11-248"><a href="#cb11-248"></a>    df[<span class="st">'_date'</span>] <span class="op">=</span> pd.to_datetime(</span>
-<span id="cb11-249"><a href="#cb11-249"></a>        df[<span class="st">'YR'</span>].astype(<span class="bu">str</span>) <span class="op">+</span> <span class="st">'-'</span> <span class="op">+</span></span>
-<span id="cb11-250"><a href="#cb11-250"></a>        df[<span class="st">'MO'</span>].astype(<span class="bu">str</span>).<span class="bu">str</span>.zfill(<span class="dv">2</span>) <span class="op">+</span> <span class="st">'-'</span> <span class="op">+</span></span>
-<span id="cb11-251"><a href="#cb11-251"></a>        df[<span class="st">'DY'</span>].astype(<span class="bu">str</span>).<span class="bu">str</span>.zfill(<span class="dv">2</span>),</span>
-<span id="cb11-252"><a href="#cb11-252"></a>        errors<span class="op">=</span><span class="st">'coerce'</span></span>
-<span id="cb11-253"><a href="#cb11-253"></a>    )</span>
-<span id="cb11-254"><a href="#cb11-254"></a>    df <span class="op">=</span> df.dropna(subset<span class="op">=</span>[<span class="st">'_date'</span>])</span>
-<span id="cb11-255"><a href="#cb11-255"></a></span>
-<span id="cb11-256"><a href="#cb11-256"></a>    df_sorted <span class="op">=</span> df.sort_values([<span class="st">'voyage_id'</span>, <span class="st">'_date'</span>])</span>
-<span id="cb11-257"><a href="#cb11-257"></a></span>
-<span id="cb11-258"><a href="#cb11-258"></a>    voyage_data <span class="op">=</span> {}</span>
-<span id="cb11-259"><a href="#cb11-259"></a>    <span class="cf">for</span> vid, voyage <span class="kw">in</span> df_sorted.groupby(<span class="st">'voyage_id'</span>, sort<span class="op">=</span><span class="va">False</span>):</span>
-<span id="cb11-260"><a href="#cb11-260"></a>        <span class="cf">if</span> <span class="bu">len</span>(voyage) <span class="op">&lt;</span> <span class="dv">2</span>:</span>
-<span id="cb11-261"><a href="#cb11-261"></a>            <span class="cf">continue</span></span>
-<span id="cb11-262"><a href="#cb11-262"></a></span>
-<span id="cb11-263"><a href="#cb11-263"></a>        lons <span class="op">=</span> voyage[<span class="st">'LON'</span>].values</span>
-<span id="cb11-264"><a href="#cb11-264"></a>        lats <span class="op">=</span> voyage[<span class="st">'LAT'</span>].values</span>
-<span id="cb11-265"><a href="#cb11-265"></a>        dates <span class="op">=</span> voyage[<span class="st">'_date'</span>].values</span>
-<span id="cb11-266"><a href="#cb11-266"></a></span>
-<span id="cb11-267"><a href="#cb11-267"></a>        <span class="co"># Break at date line crossings</span></span>
-<span id="cb11-268"><a href="#cb11-268"></a>        segments <span class="op">=</span> []</span>
-<span id="cb11-269"><a href="#cb11-269"></a>        seg_start <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb11-270"><a href="#cb11-270"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="bu">len</span>(lons)):</span>
-<span id="cb11-271"><a href="#cb11-271"></a>            <span class="cf">if</span> <span class="bu">abs</span>(lons[i] <span class="op">-</span> lons[i<span class="op">-</span><span class="dv">1</span>]) <span class="op">&gt;</span> <span class="dv">180</span>:</span>
-<span id="cb11-272"><a href="#cb11-272"></a>                <span class="cf">if</span> i <span class="op">&gt;</span> seg_start:</span>
-<span id="cb11-273"><a href="#cb11-273"></a>                    segments.append({</span>
-<span id="cb11-274"><a href="#cb11-274"></a>                        <span class="st">'lons'</span>: lons[seg_start:i],</span>
-<span id="cb11-275"><a href="#cb11-275"></a>                        <span class="st">'lats'</span>: lats[seg_start:i],</span>
-<span id="cb11-276"><a href="#cb11-276"></a>                        <span class="st">'dates'</span>: dates[seg_start:i]</span>
-<span id="cb11-277"><a href="#cb11-277"></a>                    })</span>
-<span id="cb11-278"><a href="#cb11-278"></a>                seg_start <span class="op">=</span> i</span>
-<span id="cb11-279"><a href="#cb11-279"></a>        <span class="cf">if</span> <span class="bu">len</span>(lons) <span class="op">&gt;</span> seg_start:</span>
-<span id="cb11-280"><a href="#cb11-280"></a>            segments.append({</span>
-<span id="cb11-281"><a href="#cb11-281"></a>                <span class="st">'lons'</span>: lons[seg_start:],</span>
-<span id="cb11-282"><a href="#cb11-282"></a>                <span class="st">'lats'</span>: lats[seg_start:],</span>
-<span id="cb11-283"><a href="#cb11-283"></a>                <span class="st">'dates'</span>: dates[seg_start:]</span>
-<span id="cb11-284"><a href="#cb11-284"></a>            })</span>
-<span id="cb11-285"><a href="#cb11-285"></a></span>
-<span id="cb11-286"><a href="#cb11-286"></a>        <span class="cf">if</span> segments:</span>
-<span id="cb11-287"><a href="#cb11-287"></a>            voyage_data[vid] <span class="op">=</span> {</span>
-<span id="cb11-288"><a href="#cb11-288"></a>                <span class="st">'segments'</span>: segments,</span>
-<span id="cb11-289"><a href="#cb11-289"></a>                <span class="st">'min_date'</span>: dates.<span class="bu">min</span>(),</span>
-<span id="cb11-290"><a href="#cb11-290"></a>                <span class="st">'max_date'</span>: dates.<span class="bu">max</span>()</span>
-<span id="cb11-291"><a href="#cb11-291"></a>            }</span>
-<span id="cb11-292"><a href="#cb11-292"></a></span>
-<span id="cb11-293"><a href="#cb11-293"></a>    <span class="cf">return</span> voyage_data</span>
-<span id="cb11-294"><a href="#cb11-294"></a></span>
-<span id="cb11-295"><a href="#cb11-295"></a><span class="co"># Pre-compute for whaling voyages</span></span>
-<span id="cb11-296"><a href="#cb11-296"></a><span class="cf">if</span> df <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
-<span id="cb11-297"><a href="#cb11-297"></a>    df_whaling <span class="op">=</span> df[df[<span class="st">'classification'</span>] <span class="op">==</span> <span class="st">'whaling'</span>]</span>
-<span id="cb11-298"><a href="#cb11-298"></a>    voyage_data <span class="op">=</span> precompute_voyage_data(df_whaling)</span>
-<span id="cb11-299"><a href="#cb11-299"></a>    <span class="bu">print</span>(<span class="ss">f"Pre-computed </span><span class="sc">{</span><span class="bu">len</span>(voyage_data)<span class="sc">}</span><span class="ss"> whaling voyages"</span>)</span>
-<span id="cb11-300"><a href="#cb11-300"></a><span class="in">```</span></span>
-<span id="cb11-301"><a href="#cb11-301"></a></span>
-<span id="cb11-302"><a href="#cb11-302"></a><span class="fu">## Animation Frame Rendering</span></span>
-<span id="cb11-303"><a href="#cb11-303"></a></span>
-<span id="cb11-304"><a href="#cb11-304"></a>Each frame shows:</span>
-<span id="cb11-305"><a href="#cb11-305"></a></span>
-<span id="cb11-306"><a href="#cb11-306"></a><span class="ss">- </span>**Trail**: Full voyage path up to current date (faded)</span>
-<span id="cb11-307"><a href="#cb11-307"></a><span class="ss">- </span>**Recent segment**: Last 10 points (highlighted)</span>
-<span id="cb11-308"><a href="#cb11-308"></a><span class="ss">- </span>**Ship position**: Current location (bright marker)</span>
-<span id="cb11-309"><a href="#cb11-309"></a></span>
-<span id="cb11-312"><a href="#cb11-312"></a><span class="in">```{python}</span></span>
-<span id="cb11-313"><a href="#cb11-313"></a><span class="kw">def</span> render_frame_example(voyage_data, current_date, ax):</span>
-<span id="cb11-314"><a href="#cb11-314"></a>    <span class="co">"""Render a single animation frame."""</span></span>
-<span id="cb11-315"><a href="#cb11-315"></a>    current_np <span class="op">=</span> np.datetime64(current_date)</span>
-<span id="cb11-316"><a href="#cb11-316"></a></span>
-<span id="cb11-317"><a href="#cb11-317"></a>    trail_segments <span class="op">=</span> []</span>
-<span id="cb11-318"><a href="#cb11-318"></a>    recent_segments <span class="op">=</span> []</span>
-<span id="cb11-319"><a href="#cb11-319"></a>    ship_positions <span class="op">=</span> []</span>
-<span id="cb11-320"><a href="#cb11-320"></a></span>
-<span id="cb11-321"><a href="#cb11-321"></a>    <span class="cf">for</span> vid, data <span class="kw">in</span> voyage_data.items():</span>
-<span id="cb11-322"><a href="#cb11-322"></a>        <span class="cf">if</span> data[<span class="st">'min_date'</span>] <span class="op">&gt;</span> current_np:</span>
-<span id="cb11-323"><a href="#cb11-323"></a>            <span class="cf">continue</span></span>
+<span id="cb11-243"><a href="#cb11-243"></a>    plt.tight_layout()</span>
+<span id="cb11-244"><a href="#cb11-244"></a>    plt.show()</span>
+<span id="cb11-245"><a href="#cb11-245"></a><span class="in">```</span></span>
+<span id="cb11-246"><a href="#cb11-246"></a></span>
+<span id="cb11-247"><a href="#cb11-247"></a><span class="fu">## Creating Animations</span></span>
+<span id="cb11-248"><a href="#cb11-248"></a></span>
+<span id="cb11-249"><a href="#cb11-249"></a>Static maps show accumulated patterns, but animations reveal the temporal dimension:</span>
+<span id="cb11-250"><a href="#cb11-250"></a>ships moving across the ocean, routes shifting with seasons, whaling grounds being</span>
+<span id="cb11-251"><a href="#cb11-251"></a>discovered and exploited over decades.</span>
+<span id="cb11-252"><a href="#cb11-252"></a></span>
+<span id="cb11-253"><a href="#cb11-253"></a>For animations, we need to show ships at each point in time. The key insight is to</span>
+<span id="cb11-254"><a href="#cb11-254"></a>**pre-compute voyage data** once, then render frames efficiently. Without this</span>
+<span id="cb11-255"><a href="#cb11-255"></a>pre-computation, we'd repeat expensive data processing for every frame.</span>
+<span id="cb11-256"><a href="#cb11-256"></a></span>
+<span id="cb11-259"><a href="#cb11-259"></a><span class="in">```{python}</span></span>
+<span id="cb11-260"><a href="#cb11-260"></a><span class="kw">def</span> precompute_voyage_data(df):</span>
+<span id="cb11-261"><a href="#cb11-261"></a>    <span class="co">"""</span></span>
+<span id="cb11-262"><a href="#cb11-262"></a><span class="co">    Pre-compute voyage segments with date information for animation.</span></span>
+<span id="cb11-263"><a href="#cb11-263"></a></span>
+<span id="cb11-264"><a href="#cb11-264"></a><span class="co">    Returns dict mapping voyage_id to:</span></span>
+<span id="cb11-265"><a href="#cb11-265"></a><span class="co">    - segments: list of {lons, lats, dates} dicts</span></span>
+<span id="cb11-266"><a href="#cb11-266"></a><span class="co">    - min_date, max_date: voyage date range</span></span>
+<span id="cb11-267"><a href="#cb11-267"></a><span class="co">    """</span></span>
+<span id="cb11-268"><a href="#cb11-268"></a>    df <span class="op">=</span> df.copy()</span>
+<span id="cb11-269"><a href="#cb11-269"></a>    df[<span class="st">'_date'</span>] <span class="op">=</span> pd.to_datetime(</span>
+<span id="cb11-270"><a href="#cb11-270"></a>        df[<span class="st">'YR'</span>].astype(<span class="bu">str</span>) <span class="op">+</span> <span class="st">'-'</span> <span class="op">+</span></span>
+<span id="cb11-271"><a href="#cb11-271"></a>        df[<span class="st">'MO'</span>].astype(<span class="bu">str</span>).<span class="bu">str</span>.zfill(<span class="dv">2</span>) <span class="op">+</span> <span class="st">'-'</span> <span class="op">+</span></span>
+<span id="cb11-272"><a href="#cb11-272"></a>        df[<span class="st">'DY'</span>].astype(<span class="bu">str</span>).<span class="bu">str</span>.zfill(<span class="dv">2</span>),</span>
+<span id="cb11-273"><a href="#cb11-273"></a>        errors<span class="op">=</span><span class="st">'coerce'</span></span>
+<span id="cb11-274"><a href="#cb11-274"></a>    )</span>
+<span id="cb11-275"><a href="#cb11-275"></a>    df <span class="op">=</span> df.dropna(subset<span class="op">=</span>[<span class="st">'_date'</span>])</span>
+<span id="cb11-276"><a href="#cb11-276"></a></span>
+<span id="cb11-277"><a href="#cb11-277"></a>    df_sorted <span class="op">=</span> df.sort_values([<span class="st">'voyage_id'</span>, <span class="st">'_date'</span>])</span>
+<span id="cb11-278"><a href="#cb11-278"></a></span>
+<span id="cb11-279"><a href="#cb11-279"></a>    voyage_data <span class="op">=</span> {}</span>
+<span id="cb11-280"><a href="#cb11-280"></a>    <span class="cf">for</span> vid, voyage <span class="kw">in</span> df_sorted.groupby(<span class="st">'voyage_id'</span>, sort<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb11-281"><a href="#cb11-281"></a>        <span class="cf">if</span> <span class="bu">len</span>(voyage) <span class="op">&lt;</span> <span class="dv">2</span>:</span>
+<span id="cb11-282"><a href="#cb11-282"></a>            <span class="cf">continue</span></span>
+<span id="cb11-283"><a href="#cb11-283"></a></span>
+<span id="cb11-284"><a href="#cb11-284"></a>        lons <span class="op">=</span> voyage[<span class="st">'LON'</span>].values</span>
+<span id="cb11-285"><a href="#cb11-285"></a>        lats <span class="op">=</span> voyage[<span class="st">'LAT'</span>].values</span>
+<span id="cb11-286"><a href="#cb11-286"></a>        dates <span class="op">=</span> voyage[<span class="st">'_date'</span>].values</span>
+<span id="cb11-287"><a href="#cb11-287"></a></span>
+<span id="cb11-288"><a href="#cb11-288"></a>        <span class="co"># Break at date line crossings</span></span>
+<span id="cb11-289"><a href="#cb11-289"></a>        segments <span class="op">=</span> []</span>
+<span id="cb11-290"><a href="#cb11-290"></a>        seg_start <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb11-291"><a href="#cb11-291"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="bu">len</span>(lons)):</span>
+<span id="cb11-292"><a href="#cb11-292"></a>            <span class="cf">if</span> <span class="bu">abs</span>(lons[i] <span class="op">-</span> lons[i<span class="op">-</span><span class="dv">1</span>]) <span class="op">&gt;</span> <span class="dv">180</span>:</span>
+<span id="cb11-293"><a href="#cb11-293"></a>                <span class="cf">if</span> i <span class="op">&gt;</span> seg_start:</span>
+<span id="cb11-294"><a href="#cb11-294"></a>                    segments.append({</span>
+<span id="cb11-295"><a href="#cb11-295"></a>                        <span class="st">'lons'</span>: lons[seg_start:i],</span>
+<span id="cb11-296"><a href="#cb11-296"></a>                        <span class="st">'lats'</span>: lats[seg_start:i],</span>
+<span id="cb11-297"><a href="#cb11-297"></a>                        <span class="st">'dates'</span>: dates[seg_start:i]</span>
+<span id="cb11-298"><a href="#cb11-298"></a>                    })</span>
+<span id="cb11-299"><a href="#cb11-299"></a>                seg_start <span class="op">=</span> i</span>
+<span id="cb11-300"><a href="#cb11-300"></a>        <span class="cf">if</span> <span class="bu">len</span>(lons) <span class="op">&gt;</span> seg_start:</span>
+<span id="cb11-301"><a href="#cb11-301"></a>            segments.append({</span>
+<span id="cb11-302"><a href="#cb11-302"></a>                <span class="st">'lons'</span>: lons[seg_start:],</span>
+<span id="cb11-303"><a href="#cb11-303"></a>                <span class="st">'lats'</span>: lats[seg_start:],</span>
+<span id="cb11-304"><a href="#cb11-304"></a>                <span class="st">'dates'</span>: dates[seg_start:]</span>
+<span id="cb11-305"><a href="#cb11-305"></a>            })</span>
+<span id="cb11-306"><a href="#cb11-306"></a></span>
+<span id="cb11-307"><a href="#cb11-307"></a>        <span class="cf">if</span> segments:</span>
+<span id="cb11-308"><a href="#cb11-308"></a>            voyage_data[vid] <span class="op">=</span> {</span>
+<span id="cb11-309"><a href="#cb11-309"></a>                <span class="st">'segments'</span>: segments,</span>
+<span id="cb11-310"><a href="#cb11-310"></a>                <span class="st">'min_date'</span>: dates.<span class="bu">min</span>(),</span>
+<span id="cb11-311"><a href="#cb11-311"></a>                <span class="st">'max_date'</span>: dates.<span class="bu">max</span>()</span>
+<span id="cb11-312"><a href="#cb11-312"></a>            }</span>
+<span id="cb11-313"><a href="#cb11-313"></a></span>
+<span id="cb11-314"><a href="#cb11-314"></a>    <span class="cf">return</span> voyage_data</span>
+<span id="cb11-315"><a href="#cb11-315"></a></span>
+<span id="cb11-316"><a href="#cb11-316"></a><span class="co"># Pre-compute for whaling voyages</span></span>
+<span id="cb11-317"><a href="#cb11-317"></a><span class="cf">if</span> df <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb11-318"><a href="#cb11-318"></a>    df_whaling <span class="op">=</span> df[df[<span class="st">'classification'</span>] <span class="op">==</span> <span class="st">'whaling'</span>]</span>
+<span id="cb11-319"><a href="#cb11-319"></a>    voyage_data <span class="op">=</span> precompute_voyage_data(df_whaling)</span>
+<span id="cb11-320"><a href="#cb11-320"></a>    <span class="bu">print</span>(<span class="ss">f"Pre-computed </span><span class="sc">{</span><span class="bu">len</span>(voyage_data)<span class="sc">}</span><span class="ss"> whaling voyages"</span>)</span>
+<span id="cb11-321"><a href="#cb11-321"></a><span class="in">```</span></span>
+<span id="cb11-322"><a href="#cb11-322"></a></span>
+<span id="cb11-323"><a href="#cb11-323"></a><span class="fu">## Animation Frame Rendering</span></span>
 <span id="cb11-324"><a href="#cb11-324"></a></span>
-<span id="cb11-325"><a href="#cb11-325"></a>        <span class="cf">for</span> seg <span class="kw">in</span> data[<span class="st">'segments'</span>]:</span>
-<span id="cb11-326"><a href="#cb11-326"></a>            mask <span class="op">=</span> seg[<span class="st">'dates'</span>] <span class="op">&lt;=</span> current_np</span>
-<span id="cb11-327"><a href="#cb11-327"></a>            <span class="cf">if</span> mask.<span class="bu">sum</span>() <span class="op">&gt;=</span> <span class="dv">2</span>:</span>
-<span id="cb11-328"><a href="#cb11-328"></a>                seg_lons <span class="op">=</span> seg[<span class="st">'lons'</span>][mask]</span>
-<span id="cb11-329"><a href="#cb11-329"></a>                seg_lats <span class="op">=</span> seg[<span class="st">'lats'</span>][mask]</span>
-<span id="cb11-330"><a href="#cb11-330"></a></span>
-<span id="cb11-331"><a href="#cb11-331"></a>                <span class="co"># Collect trail segments</span></span>
-<span id="cb11-332"><a href="#cb11-332"></a>                points <span class="op">=</span> np.column_stack([seg_lons, seg_lats])</span>
-<span id="cb11-333"><a href="#cb11-333"></a>                <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(points) <span class="op">-</span> <span class="dv">1</span>):</span>
-<span id="cb11-334"><a href="#cb11-334"></a>                    trail_segments.append([points[k], points[k <span class="op">+</span> <span class="dv">1</span>]])</span>
-<span id="cb11-335"><a href="#cb11-335"></a></span>
-<span id="cb11-336"><a href="#cb11-336"></a>                <span class="co"># Collect recent segments</span></span>
-<span id="cb11-337"><a href="#cb11-337"></a>                <span class="cf">if</span> <span class="bu">len</span>(seg_lons) <span class="op">&gt;</span> <span class="dv">3</span>:</span>
-<span id="cb11-338"><a href="#cb11-338"></a>                    recent_pts <span class="op">=</span> np.column_stack([seg_lons[<span class="op">-</span><span class="dv">10</span>:], seg_lats[<span class="op">-</span><span class="dv">10</span>:]])</span>
-<span id="cb11-339"><a href="#cb11-339"></a>                    <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(recent_pts) <span class="op">-</span> <span class="dv">1</span>):</span>
-<span id="cb11-340"><a href="#cb11-340"></a>                        recent_segments.append([recent_pts[k], recent_pts[k <span class="op">+</span> <span class="dv">1</span>]])</span>
+<span id="cb11-325"><a href="#cb11-325"></a>Each animation frame shows three layers of information:</span>
+<span id="cb11-326"><a href="#cb11-326"></a></span>
+<span id="cb11-327"><a href="#cb11-327"></a><span class="ss">- </span>**Trail**: The full voyage path up to the current date, rendered with low opacity</span>
+<span id="cb11-328"><a href="#cb11-328"></a>  to show where ships have been.</span>
+<span id="cb11-329"><a href="#cb11-329"></a><span class="ss">- </span>**Recent segment**: The last 10 points of each active voyage, highlighted to show</span>
+<span id="cb11-330"><a href="#cb11-330"></a>  recent movement direction.</span>
+<span id="cb11-331"><a href="#cb11-331"></a><span class="ss">- </span>**Ship position**: A bright marker at each ship's current location.</span>
+<span id="cb11-332"><a href="#cb11-332"></a></span>
+<span id="cb11-333"><a href="#cb11-333"></a>This layered approach gives the animation a sense of motion and history simultaneously:</span>
+<span id="cb11-334"><a href="#cb11-334"></a></span>
+<span id="cb11-337"><a href="#cb11-337"></a><span class="in">```{python}</span></span>
+<span id="cb11-338"><a href="#cb11-338"></a><span class="kw">def</span> render_frame_example(voyage_data, current_date, ax):</span>
+<span id="cb11-339"><a href="#cb11-339"></a>    <span class="co">"""Render a single animation frame."""</span></span>
+<span id="cb11-340"><a href="#cb11-340"></a>    current_np <span class="op">=</span> np.datetime64(current_date)</span>
 <span id="cb11-341"><a href="#cb11-341"></a></span>
-<span id="cb11-342"><a href="#cb11-342"></a>        <span class="co"># Find current position</span></span>
-<span id="cb11-343"><a href="#cb11-343"></a>        <span class="cf">for</span> seg <span class="kw">in</span> <span class="bu">reversed</span>(data[<span class="st">'segments'</span>]):</span>
-<span id="cb11-344"><a href="#cb11-344"></a>            seg_mask <span class="op">=</span> seg[<span class="st">'dates'</span>] <span class="op">&lt;=</span> current_np</span>
-<span id="cb11-345"><a href="#cb11-345"></a>            <span class="cf">if</span> seg_mask.<span class="bu">sum</span>() <span class="op">&gt;</span> <span class="dv">0</span>:</span>
-<span id="cb11-346"><a href="#cb11-346"></a>                ship_positions.append((seg[<span class="st">'lons'</span>][seg_mask][<span class="op">-</span><span class="dv">1</span>], seg[<span class="st">'lats'</span>][seg_mask][<span class="op">-</span><span class="dv">1</span>]))</span>
-<span id="cb11-347"><a href="#cb11-347"></a>                <span class="cf">break</span></span>
-<span id="cb11-348"><a href="#cb11-348"></a></span>
-<span id="cb11-349"><a href="#cb11-349"></a>    <span class="co"># Batch render with LineCollection</span></span>
-<span id="cb11-350"><a href="#cb11-350"></a>    <span class="cf">if</span> trail_segments:</span>
-<span id="cb11-351"><a href="#cb11-351"></a>        lc <span class="op">=</span> LineCollection(trail_segments, colors<span class="op">=</span><span class="st">'#555577'</span>, alpha<span class="op">=</span><span class="fl">0.4</span>, linewidths<span class="op">=</span><span class="fl">0.6</span>)</span>
-<span id="cb11-352"><a href="#cb11-352"></a>        ax.add_collection(lc)</span>
-<span id="cb11-353"><a href="#cb11-353"></a></span>
-<span id="cb11-354"><a href="#cb11-354"></a>    <span class="cf">if</span> recent_segments:</span>
-<span id="cb11-355"><a href="#cb11-355"></a>        lc <span class="op">=</span> LineCollection(recent_segments, colors<span class="op">=</span><span class="st">'#ff6b6b'</span>, alpha<span class="op">=</span><span class="fl">0.8</span>, linewidths<span class="op">=</span><span class="fl">1.5</span>)</span>
-<span id="cb11-356"><a href="#cb11-356"></a>        ax.add_collection(lc)</span>
-<span id="cb11-357"><a href="#cb11-357"></a></span>
-<span id="cb11-358"><a href="#cb11-358"></a>    <span class="cf">if</span> ship_positions:</span>
-<span id="cb11-359"><a href="#cb11-359"></a>        lons, lats <span class="op">=</span> <span class="bu">zip</span>(<span class="op">*</span>ship_positions)</span>
-<span id="cb11-360"><a href="#cb11-360"></a>        ax.scatter(lons, lats, c<span class="op">=</span><span class="st">'#ffd93d'</span>, s<span class="op">=</span><span class="dv">20</span>, zorder<span class="op">=</span><span class="dv">10</span>, edgecolors<span class="op">=</span><span class="st">'white'</span>, linewidth<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb11-361"><a href="#cb11-361"></a></span>
-<span id="cb11-362"><a href="#cb11-362"></a>    <span class="cf">return</span> <span class="bu">len</span>(ship_positions)</span>
-<span id="cb11-363"><a href="#cb11-363"></a></span>
-<span id="cb11-364"><a href="#cb11-364"></a><span class="co"># Show a sample frame</span></span>
-<span id="cb11-365"><a href="#cb11-365"></a><span class="cf">if</span> df <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="kw">and</span> <span class="bu">len</span>(voyage_data) <span class="op">&gt;</span> <span class="dv">0</span>:</span>
-<span id="cb11-366"><a href="#cb11-366"></a>    fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
-<span id="cb11-367"><a href="#cb11-367"></a>    ax.set_facecolor(<span class="st">'#1a1a2e'</span>)</span>
-<span id="cb11-368"><a href="#cb11-368"></a>    ax.set_xlim(<span class="op">-</span><span class="dv">180</span>, <span class="dv">180</span>)</span>
-<span id="cb11-369"><a href="#cb11-369"></a>    ax.set_ylim(<span class="op">-</span><span class="dv">90</span>, <span class="dv">90</span>)</span>
-<span id="cb11-370"><a href="#cb11-370"></a></span>
-<span id="cb11-371"><a href="#cb11-371"></a>    <span class="co"># Pick a date in the middle of the data</span></span>
-<span id="cb11-372"><a href="#cb11-372"></a>    sample_date <span class="op">=</span> pd.Timestamp(<span class="st">'1840-01-01'</span>)</span>
-<span id="cb11-373"><a href="#cb11-373"></a>    n_ships <span class="op">=</span> render_frame_example(voyage_data, sample_date, ax)</span>
-<span id="cb11-374"><a href="#cb11-374"></a></span>
-<span id="cb11-375"><a href="#cb11-375"></a>    ax.set_title(<span class="ss">f'Whaling Voyages: January 1840 (</span><span class="sc">{</span>n_ships<span class="sc">}</span><span class="ss"> active ships)'</span>,</span>
-<span id="cb11-376"><a href="#cb11-376"></a>                 color<span class="op">=</span><span class="st">'white'</span>, fontsize<span class="op">=</span><span class="dv">12</span>)</span>
-<span id="cb11-377"><a href="#cb11-377"></a>    ax.axis(<span class="st">'off'</span>)</span>
-<span id="cb11-378"><a href="#cb11-378"></a>    fig.patch.set_facecolor(<span class="st">'#1a1a2e'</span>)</span>
-<span id="cb11-379"><a href="#cb11-379"></a>    plt.tight_layout()</span>
-<span id="cb11-380"><a href="#cb11-380"></a>    plt.show()</span>
-<span id="cb11-381"><a href="#cb11-381"></a><span class="in">```</span></span>
+<span id="cb11-342"><a href="#cb11-342"></a>    trail_segments <span class="op">=</span> []</span>
+<span id="cb11-343"><a href="#cb11-343"></a>    recent_segments <span class="op">=</span> []</span>
+<span id="cb11-344"><a href="#cb11-344"></a>    ship_positions <span class="op">=</span> []</span>
+<span id="cb11-345"><a href="#cb11-345"></a></span>
+<span id="cb11-346"><a href="#cb11-346"></a>    <span class="cf">for</span> vid, data <span class="kw">in</span> voyage_data.items():</span>
+<span id="cb11-347"><a href="#cb11-347"></a>        <span class="cf">if</span> data[<span class="st">'min_date'</span>] <span class="op">&gt;</span> current_np:</span>
+<span id="cb11-348"><a href="#cb11-348"></a>            <span class="cf">continue</span></span>
+<span id="cb11-349"><a href="#cb11-349"></a></span>
+<span id="cb11-350"><a href="#cb11-350"></a>        <span class="cf">for</span> seg <span class="kw">in</span> data[<span class="st">'segments'</span>]:</span>
+<span id="cb11-351"><a href="#cb11-351"></a>            mask <span class="op">=</span> seg[<span class="st">'dates'</span>] <span class="op">&lt;=</span> current_np</span>
+<span id="cb11-352"><a href="#cb11-352"></a>            <span class="cf">if</span> mask.<span class="bu">sum</span>() <span class="op">&gt;=</span> <span class="dv">2</span>:</span>
+<span id="cb11-353"><a href="#cb11-353"></a>                seg_lons <span class="op">=</span> seg[<span class="st">'lons'</span>][mask]</span>
+<span id="cb11-354"><a href="#cb11-354"></a>                seg_lats <span class="op">=</span> seg[<span class="st">'lats'</span>][mask]</span>
+<span id="cb11-355"><a href="#cb11-355"></a></span>
+<span id="cb11-356"><a href="#cb11-356"></a>                <span class="co"># Collect trail segments</span></span>
+<span id="cb11-357"><a href="#cb11-357"></a>                points <span class="op">=</span> np.column_stack([seg_lons, seg_lats])</span>
+<span id="cb11-358"><a href="#cb11-358"></a>                <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(points) <span class="op">-</span> <span class="dv">1</span>):</span>
+<span id="cb11-359"><a href="#cb11-359"></a>                    trail_segments.append([points[k], points[k <span class="op">+</span> <span class="dv">1</span>]])</span>
+<span id="cb11-360"><a href="#cb11-360"></a></span>
+<span id="cb11-361"><a href="#cb11-361"></a>                <span class="co"># Collect recent segments</span></span>
+<span id="cb11-362"><a href="#cb11-362"></a>                <span class="cf">if</span> <span class="bu">len</span>(seg_lons) <span class="op">&gt;</span> <span class="dv">3</span>:</span>
+<span id="cb11-363"><a href="#cb11-363"></a>                    recent_pts <span class="op">=</span> np.column_stack([seg_lons[<span class="op">-</span><span class="dv">10</span>:], seg_lats[<span class="op">-</span><span class="dv">10</span>:]])</span>
+<span id="cb11-364"><a href="#cb11-364"></a>                    <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(recent_pts) <span class="op">-</span> <span class="dv">1</span>):</span>
+<span id="cb11-365"><a href="#cb11-365"></a>                        recent_segments.append([recent_pts[k], recent_pts[k <span class="op">+</span> <span class="dv">1</span>]])</span>
+<span id="cb11-366"><a href="#cb11-366"></a></span>
+<span id="cb11-367"><a href="#cb11-367"></a>        <span class="co"># Find current position</span></span>
+<span id="cb11-368"><a href="#cb11-368"></a>        <span class="cf">for</span> seg <span class="kw">in</span> <span class="bu">reversed</span>(data[<span class="st">'segments'</span>]):</span>
+<span id="cb11-369"><a href="#cb11-369"></a>            seg_mask <span class="op">=</span> seg[<span class="st">'dates'</span>] <span class="op">&lt;=</span> current_np</span>
+<span id="cb11-370"><a href="#cb11-370"></a>            <span class="cf">if</span> seg_mask.<span class="bu">sum</span>() <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb11-371"><a href="#cb11-371"></a>                ship_positions.append((seg[<span class="st">'lons'</span>][seg_mask][<span class="op">-</span><span class="dv">1</span>], seg[<span class="st">'lats'</span>][seg_mask][<span class="op">-</span><span class="dv">1</span>]))</span>
+<span id="cb11-372"><a href="#cb11-372"></a>                <span class="cf">break</span></span>
+<span id="cb11-373"><a href="#cb11-373"></a></span>
+<span id="cb11-374"><a href="#cb11-374"></a>    <span class="co"># Batch render with LineCollection</span></span>
+<span id="cb11-375"><a href="#cb11-375"></a>    <span class="cf">if</span> trail_segments:</span>
+<span id="cb11-376"><a href="#cb11-376"></a>        lc <span class="op">=</span> LineCollection(trail_segments, colors<span class="op">=</span><span class="st">'#555577'</span>, alpha<span class="op">=</span><span class="fl">0.4</span>, linewidths<span class="op">=</span><span class="fl">0.6</span>)</span>
+<span id="cb11-377"><a href="#cb11-377"></a>        ax.add_collection(lc)</span>
+<span id="cb11-378"><a href="#cb11-378"></a></span>
+<span id="cb11-379"><a href="#cb11-379"></a>    <span class="cf">if</span> recent_segments:</span>
+<span id="cb11-380"><a href="#cb11-380"></a>        lc <span class="op">=</span> LineCollection(recent_segments, colors<span class="op">=</span><span class="st">'#ff6b6b'</span>, alpha<span class="op">=</span><span class="fl">0.8</span>, linewidths<span class="op">=</span><span class="fl">1.5</span>)</span>
+<span id="cb11-381"><a href="#cb11-381"></a>        ax.add_collection(lc)</span>
 <span id="cb11-382"><a href="#cb11-382"></a></span>
-<span id="cb11-383"><a href="#cb11-383"></a><span class="fu">## Generating the Full Animation</span></span>
-<span id="cb11-384"><a href="#cb11-384"></a></span>
-<span id="cb11-385"><a href="#cb11-385"></a>The <span class="in">`animate_voyages.py`</span> script handles the full animation process:</span>
+<span id="cb11-383"><a href="#cb11-383"></a>    <span class="cf">if</span> ship_positions:</span>
+<span id="cb11-384"><a href="#cb11-384"></a>        lons, lats <span class="op">=</span> <span class="bu">zip</span>(<span class="op">*</span>ship_positions)</span>
+<span id="cb11-385"><a href="#cb11-385"></a>        ax.scatter(lons, lats, c<span class="op">=</span><span class="st">'#ffd93d'</span>, s<span class="op">=</span><span class="dv">20</span>, zorder<span class="op">=</span><span class="dv">10</span>, edgecolors<span class="op">=</span><span class="st">'white'</span>, linewidth<span class="op">=</span><span class="fl">0.3</span>)</span>
 <span id="cb11-386"><a href="#cb11-386"></a></span>
-<span id="cb11-387"><a href="#cb11-387"></a><span class="ss">1. </span>Pre-compute voyage data</span>
-<span id="cb11-388"><a href="#cb11-388"></a><span class="ss">2. </span>Generate date range for frames</span>
-<span id="cb11-389"><a href="#cb11-389"></a><span class="ss">3. </span>Render each frame to PIL Image</span>
-<span id="cb11-390"><a href="#cb11-390"></a><span class="ss">4. </span>Save as GIF and/or MP4</span>
-<span id="cb11-391"><a href="#cb11-391"></a></span>
-<span id="cb11-394"><a href="#cb11-394"></a><span class="in">```{python}</span></span>
-<span id="cb11-395"><a href="#cb11-395"></a><span class="co">#| eval: false</span></span>
-<span id="cb11-396"><a href="#cb11-396"></a></span>
-<span id="cb11-397"><a href="#cb11-397"></a><span class="co"># Command to generate the animation</span></span>
-<span id="cb11-398"><a href="#cb11-398"></a><span class="co"># uv run python scripts/animate_voyages.py --classification whaling --n-frames 100 -o output/whaling_voyages</span></span>
+<span id="cb11-387"><a href="#cb11-387"></a>    <span class="cf">return</span> <span class="bu">len</span>(ship_positions)</span>
+<span id="cb11-388"><a href="#cb11-388"></a></span>
+<span id="cb11-389"><a href="#cb11-389"></a><span class="co"># Show a sample frame</span></span>
+<span id="cb11-390"><a href="#cb11-390"></a><span class="cf">if</span> df <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="kw">and</span> <span class="bu">len</span>(voyage_data) <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb11-391"><a href="#cb11-391"></a>    fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
+<span id="cb11-392"><a href="#cb11-392"></a>    ax.set_facecolor(<span class="st">'#1a1a2e'</span>)</span>
+<span id="cb11-393"><a href="#cb11-393"></a>    ax.set_xlim(<span class="op">-</span><span class="dv">180</span>, <span class="dv">180</span>)</span>
+<span id="cb11-394"><a href="#cb11-394"></a>    ax.set_ylim(<span class="op">-</span><span class="dv">90</span>, <span class="dv">90</span>)</span>
+<span id="cb11-395"><a href="#cb11-395"></a></span>
+<span id="cb11-396"><a href="#cb11-396"></a>    <span class="co"># Pick a date in the middle of the data</span></span>
+<span id="cb11-397"><a href="#cb11-397"></a>    sample_date <span class="op">=</span> pd.Timestamp(<span class="st">'1840-01-01'</span>)</span>
+<span id="cb11-398"><a href="#cb11-398"></a>    n_ships <span class="op">=</span> render_frame_example(voyage_data, sample_date, ax)</span>
 <span id="cb11-399"><a href="#cb11-399"></a></span>
-<span id="cb11-400"><a href="#cb11-400"></a><span class="co"># Key options:</span></span>
-<span id="cb11-401"><a href="#cb11-401"></a><span class="co">#   --classification whaling|merchant  Filter by ship type</span></span>
-<span id="cb11-402"><a href="#cb11-402"></a><span class="co">#   --n-frames 100                     Number of animation frames</span></span>
-<span id="cb11-403"><a href="#cb11-403"></a><span class="co">#   --fps 10                           Frames per second</span></span>
-<span id="cb11-404"><a href="#cb11-404"></a><span class="co">#   --format gif|mp4|both              Output format(s)</span></span>
-<span id="cb11-405"><a href="#cb11-405"></a><span class="co">#   --max-voyages 50                   Limit voyages for preview</span></span>
+<span id="cb11-400"><a href="#cb11-400"></a>    ax.set_title(<span class="ss">f'Whaling Voyages: January 1840 (</span><span class="sc">{</span>n_ships<span class="sc">}</span><span class="ss"> active ships)'</span>,</span>
+<span id="cb11-401"><a href="#cb11-401"></a>                 color<span class="op">=</span><span class="st">'white'</span>, fontsize<span class="op">=</span><span class="dv">12</span>)</span>
+<span id="cb11-402"><a href="#cb11-402"></a>    ax.axis(<span class="st">'off'</span>)</span>
+<span id="cb11-403"><a href="#cb11-403"></a>    fig.patch.set_facecolor(<span class="st">'#1a1a2e'</span>)</span>
+<span id="cb11-404"><a href="#cb11-404"></a>    plt.tight_layout()</span>
+<span id="cb11-405"><a href="#cb11-405"></a>    plt.show()</span>
 <span id="cb11-406"><a href="#cb11-406"></a><span class="in">```</span></span>
 <span id="cb11-407"><a href="#cb11-407"></a></span>
-<span id="cb11-408"><a href="#cb11-408"></a><span class="fu">## Video Output with ffmpeg</span></span>
+<span id="cb11-408"><a href="#cb11-408"></a><span class="fu">## Generating the Full Animation</span></span>
 <span id="cb11-409"><a href="#cb11-409"></a></span>
-<span id="cb11-410"><a href="#cb11-410"></a>GIFs can't be paused or scrubbed. For longer animations, MP4 is better:</span>
-<span id="cb11-411"><a href="#cb11-411"></a></span>
-<span id="cb11-414"><a href="#cb11-414"></a><span class="in">```{python}</span></span>
-<span id="cb11-415"><a href="#cb11-415"></a><span class="co">#| eval: false</span></span>
-<span id="cb11-416"><a href="#cb11-416"></a></span>
-<span id="cb11-417"><a href="#cb11-417"></a><span class="im">import</span> subprocess</span>
-<span id="cb11-418"><a href="#cb11-418"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb11-419"><a href="#cb11-419"></a><span class="im">import</span> tempfile</span>
-<span id="cb11-420"><a href="#cb11-420"></a></span>
-<span id="cb11-421"><a href="#cb11-421"></a><span class="kw">def</span> save_as_mp4(frames, output_path, fps<span class="op">=</span><span class="dv">10</span>):</span>
-<span id="cb11-422"><a href="#cb11-422"></a>    <span class="co">"""Convert PIL frames to MP4 using ffmpeg."""</span></span>
-<span id="cb11-423"><a href="#cb11-423"></a>    <span class="cf">with</span> tempfile.TemporaryDirectory() <span class="im">as</span> tmpdir:</span>
-<span id="cb11-424"><a href="#cb11-424"></a>        <span class="co"># Save frames as numbered PNGs</span></span>
-<span id="cb11-425"><a href="#cb11-425"></a>        <span class="cf">for</span> i, frame <span class="kw">in</span> <span class="bu">enumerate</span>(frames):</span>
-<span id="cb11-426"><a href="#cb11-426"></a>            frame.save(Path(tmpdir) <span class="op">/</span> <span class="ss">f"frame_</span><span class="sc">{</span>i<span class="sc">:04d}</span><span class="ss">.png"</span>)</span>
-<span id="cb11-427"><a href="#cb11-427"></a></span>
-<span id="cb11-428"><a href="#cb11-428"></a>        <span class="co"># Use ffmpeg to create MP4</span></span>
-<span id="cb11-429"><a href="#cb11-429"></a>        <span class="co"># -vf scale ensures even dimensions (required for H.264)</span></span>
-<span id="cb11-430"><a href="#cb11-430"></a>        subprocess.run([</span>
-<span id="cb11-431"><a href="#cb11-431"></a>            <span class="st">'ffmpeg'</span>, <span class="st">'-y'</span>,</span>
-<span id="cb11-432"><a href="#cb11-432"></a>            <span class="st">'-framerate'</span>, <span class="bu">str</span>(fps),</span>
-<span id="cb11-433"><a href="#cb11-433"></a>            <span class="st">'-i'</span>, <span class="bu">str</span>(Path(tmpdir) <span class="op">/</span> <span class="st">'frame_</span><span class="sc">%04d</span><span class="st">.png'</span>),</span>
-<span id="cb11-434"><a href="#cb11-434"></a>            <span class="st">'-vf'</span>, <span class="st">'scale=trunc(iw/2)*2:trunc(ih/2)*2'</span>,</span>
-<span id="cb11-435"><a href="#cb11-435"></a>            <span class="st">'-c:v'</span>, <span class="st">'libx264'</span>,</span>
-<span id="cb11-436"><a href="#cb11-436"></a>            <span class="st">'-pix_fmt'</span>, <span class="st">'yuv420p'</span>,</span>
-<span id="cb11-437"><a href="#cb11-437"></a>            <span class="st">'-crf'</span>, <span class="st">'23'</span>,</span>
-<span id="cb11-438"><a href="#cb11-438"></a>            <span class="bu">str</span>(output_path)</span>
-<span id="cb11-439"><a href="#cb11-439"></a>        ])</span>
-<span id="cb11-440"><a href="#cb11-440"></a><span class="in">```</span></span>
-<span id="cb11-441"><a href="#cb11-441"></a></span>
-<span id="cb11-442"><a href="#cb11-442"></a><span class="fu">## Performance Summary</span></span>
-<span id="cb11-443"><a href="#cb11-443"></a></span>
-<span id="cb11-444"><a href="#cb11-444"></a><span class="pp">|</span> Optimization <span class="pp">|</span> Impact <span class="pp">|</span></span>
-<span id="cb11-445"><a href="#cb11-445"></a><span class="pp">|--------------|--------|</span></span>
-<span id="cb11-446"><a href="#cb11-446"></a><span class="pp">|</span> <span class="in">`groupby()`</span> instead of filter loop <span class="pp">|</span> ~10-50x faster data iteration <span class="pp">|</span></span>
-<span id="cb11-447"><a href="#cb11-447"></a><span class="pp">|</span> <span class="in">`LineCollection`</span> instead of <span class="in">`ax.plot()`</span> <span class="pp">|</span> ~5-10x faster rendering <span class="pp">|</span></span>
-<span id="cb11-448"><a href="#cb11-448"></a><span class="pp">|</span> Pre-compute voyage segments <span class="pp">|</span> Amortized across all frames <span class="pp">|</span></span>
-<span id="cb11-449"><a href="#cb11-449"></a><span class="pp">|</span> Even dimensions for ffmpeg <span class="pp">|</span> Enables H.264 encoding <span class="pp">|</span></span>
-<span id="cb11-450"><a href="#cb11-450"></a></span>
-<span id="cb11-451"><a href="#cb11-451"></a>With these optimizations, rendering 100 frames of 800+ whaling voyages takes ~15 seconds.</span>
-<span id="cb11-452"><a href="#cb11-452"></a></span>
-<span id="cb11-453"><a href="#cb11-453"></a><span class="fu">## Gallery</span></span>
-<span id="cb11-454"><a href="#cb11-454"></a></span>
-<span id="cb11-455"><a href="#cb11-455"></a>Here are the key visualizations produced by the pipeline:</span>
-<span id="cb11-456"><a href="#cb11-456"></a></span>
-<span id="cb11-457"><a href="#cb11-457"></a><span class="fu">### Ghost Ships: All Voyages</span></span>
-<span id="cb11-458"><a href="#cb11-458"></a><span class="al">![All maritime voyages](../output/ghost_ships_all.png)</span></span>
-<span id="cb11-459"><a href="#cb11-459"></a></span>
-<span id="cb11-460"><a href="#cb11-460"></a><span class="fu">### Whaling Grounds Density</span></span>
-<span id="cb11-461"><a href="#cb11-461"></a><span class="al">![Whaling grounds density heatmap](../output/whaling_grounds_density.png)</span></span>
-<span id="cb11-462"><a href="#cb11-462"></a></span>
-<span id="cb11-463"><a href="#cb11-463"></a><span class="fu">### Traffic by Decade</span></span>
-<span id="cb11-464"><a href="#cb11-464"></a><span class="al">![Maritime traffic by decade](../output/traffic_by_decade.png)</span></span>
-<span id="cb11-465"><a href="#cb11-465"></a></span>
-<span id="cb11-466"><a href="#cb11-466"></a><span class="fu">### Animated Whaling Voyages</span></span>
-<span id="cb11-467"><a href="#cb11-467"></a>::: {.animation-container}</span>
-<span id="cb11-468"><a href="#cb11-468"></a><span class="dt">&lt;</span><span class="kw">video</span><span class="ot"> controls loop muted playsinline width</span><span class="op">=</span><span class="st">"100%"</span><span class="dt">&gt;</span></span>
-<span id="cb11-469"><a href="#cb11-469"></a>  <span class="dt">&lt;</span><span class="kw">source</span><span class="ot"> src</span><span class="op">=</span><span class="st">"../output/whaling_voyages.mp4"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"video/mp4"</span><span class="dt">&gt;</span></span>
-<span id="cb11-470"><a href="#cb11-470"></a>  <span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">"../output/whaling_voyages.gif"</span><span class="ot"> alt</span><span class="op">=</span><span class="st">"Animation of whaling voyages"</span><span class="dt">&gt;</span></span>
-<span id="cb11-471"><a href="#cb11-471"></a><span class="dt">&lt;/</span><span class="kw">video</span><span class="dt">&gt;</span></span>
-<span id="cb11-472"><a href="#cb11-472"></a>:::</span>
-<span id="cb11-473"><a href="#cb11-473"></a></span>
-<span id="cb11-474"><a href="#cb11-474"></a><span class="fu">## Next Steps</span></span>
-<span id="cb11-475"><a href="#cb11-475"></a></span>
-<span id="cb11-476"><a href="#cb11-476"></a>With these visualization tools, you can:</span>
-<span id="cb11-477"><a href="#cb11-477"></a></span>
-<span id="cb11-478"><a href="#cb11-478"></a><span class="ss">- </span>Compare whaling activity by decade</span>
-<span id="cb11-479"><a href="#cb11-479"></a><span class="ss">- </span>Identify specific whaling grounds</span>
-<span id="cb11-480"><a href="#cb11-480"></a><span class="ss">- </span>Track individual ship journeys</span>
-<span id="cb11-481"><a href="#cb11-481"></a><span class="ss">- </span>Create custom animations for specific time periods or regions</span>
-<span id="cb11-482"><a href="#cb11-482"></a></span>
-<span id="cb11-483"><a href="#cb11-483"></a>The classified data also enables deeper analysis: correlating whaling activity</span>
-<span id="cb11-484"><a href="#cb11-484"></a>with whale population data, studying seasonal patterns, or comparing American</span>
-<span id="cb11-485"><a href="#cb11-485"></a>vs. foreign whaling fleets.</span>
+<span id="cb11-410"><a href="#cb11-410"></a>The animation script handles the complete process of generating a multi-frame</span>
+<span id="cb11-411"><a href="#cb11-411"></a>animation from the classified voyage data. Here's what it does:</span>
+<span id="cb11-412"><a href="#cb11-412"></a></span>
+<span id="cb11-413"><a href="#cb11-413"></a><span class="ss">1. </span>**Pre-compute voyage data** — Parse all voyages once and store in an efficient format</span>
+<span id="cb11-414"><a href="#cb11-414"></a><span class="ss">2. </span>**Generate date range** — Create a sequence of dates from the data's time span</span>
+<span id="cb11-415"><a href="#cb11-415"></a><span class="ss">3. </span>**Render each frame** — Apply the layered rendering for each date</span>
+<span id="cb11-416"><a href="#cb11-416"></a><span class="ss">4. </span>**Save output** — Write as GIF and/or MP4</span>
+<span id="cb11-417"><a href="#cb11-417"></a></span>
+<span id="cb11-418"><a href="#cb11-418"></a><span class="fu">### Running the Animation Script</span></span>
+<span id="cb11-419"><a href="#cb11-419"></a></span>
+<span id="cb11-420"><a href="#cb11-420"></a><span class="in">```bash</span></span>
+<span id="cb11-421"><a href="#cb11-421"></a><span class="ex">uv</span> run python scripts/animate_voyages.py <span class="at">--classification</span> whaling <span class="at">--n-frames</span> 100 <span class="at">-o</span> output/whaling_voyages</span>
+<span id="cb11-422"><a href="#cb11-422"></a><span class="in">```</span></span>
+<span id="cb11-423"><a href="#cb11-423"></a></span>
+<span id="cb11-424"><a href="#cb11-424"></a>Options:</span>
+<span id="cb11-425"><a href="#cb11-425"></a></span>
+<span id="cb11-426"><a href="#cb11-426"></a><span class="ss">- </span><span class="in">`--classification whaling|merchant`</span>: Filter by ship type</span>
+<span id="cb11-427"><a href="#cb11-427"></a><span class="ss">- </span><span class="in">`--n-frames 100`</span>: Number of animation frames</span>
+<span id="cb11-428"><a href="#cb11-428"></a><span class="ss">- </span><span class="in">`--fps 10`</span>: Frames per second</span>
+<span id="cb11-429"><a href="#cb11-429"></a><span class="ss">- </span><span class="in">`--format gif|mp4|both`</span>: Output format(s)</span>
+<span id="cb11-430"><a href="#cb11-430"></a><span class="ss">- </span><span class="in">`--max-voyages 50`</span>: Limit voyages for quick preview</span>
+<span id="cb11-431"><a href="#cb11-431"></a></span>
+<span id="cb11-432"><a href="#cb11-432"></a><span class="fu">## Video Output with ffmpeg</span></span>
+<span id="cb11-433"><a href="#cb11-433"></a></span>
+<span id="cb11-434"><a href="#cb11-434"></a>GIFs have a significant limitation: they can't be paused or scrubbed. For longer</span>
+<span id="cb11-435"><a href="#cb11-435"></a>animations, MP4 video is a better format. The script can use ffmpeg to convert</span>
+<span id="cb11-436"><a href="#cb11-436"></a>rendered frames into a compressed video file:</span>
+<span id="cb11-437"><a href="#cb11-437"></a></span>
+<span id="cb11-440"><a href="#cb11-440"></a><span class="in">```{python}</span></span>
+<span id="cb11-441"><a href="#cb11-441"></a><span class="co">#| eval: false</span></span>
+<span id="cb11-442"><a href="#cb11-442"></a></span>
+<span id="cb11-443"><a href="#cb11-443"></a><span class="im">import</span> subprocess</span>
+<span id="cb11-444"><a href="#cb11-444"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb11-445"><a href="#cb11-445"></a><span class="im">import</span> tempfile</span>
+<span id="cb11-446"><a href="#cb11-446"></a></span>
+<span id="cb11-447"><a href="#cb11-447"></a><span class="kw">def</span> save_as_mp4(frames, output_path, fps<span class="op">=</span><span class="dv">10</span>):</span>
+<span id="cb11-448"><a href="#cb11-448"></a>    <span class="co">"""Convert PIL frames to MP4 using ffmpeg."""</span></span>
+<span id="cb11-449"><a href="#cb11-449"></a>    <span class="cf">with</span> tempfile.TemporaryDirectory() <span class="im">as</span> tmpdir:</span>
+<span id="cb11-450"><a href="#cb11-450"></a>        <span class="co"># Save frames as numbered PNGs</span></span>
+<span id="cb11-451"><a href="#cb11-451"></a>        <span class="cf">for</span> i, frame <span class="kw">in</span> <span class="bu">enumerate</span>(frames):</span>
+<span id="cb11-452"><a href="#cb11-452"></a>            frame.save(Path(tmpdir) <span class="op">/</span> <span class="ss">f"frame_</span><span class="sc">{</span>i<span class="sc">:04d}</span><span class="ss">.png"</span>)</span>
+<span id="cb11-453"><a href="#cb11-453"></a></span>
+<span id="cb11-454"><a href="#cb11-454"></a>        <span class="co"># Use ffmpeg to create MP4</span></span>
+<span id="cb11-455"><a href="#cb11-455"></a>        <span class="co"># -vf scale ensures even dimensions (required for H.264)</span></span>
+<span id="cb11-456"><a href="#cb11-456"></a>        subprocess.run([</span>
+<span id="cb11-457"><a href="#cb11-457"></a>            <span class="st">'ffmpeg'</span>, <span class="st">'-y'</span>,</span>
+<span id="cb11-458"><a href="#cb11-458"></a>            <span class="st">'-framerate'</span>, <span class="bu">str</span>(fps),</span>
+<span id="cb11-459"><a href="#cb11-459"></a>            <span class="st">'-i'</span>, <span class="bu">str</span>(Path(tmpdir) <span class="op">/</span> <span class="st">'frame_</span><span class="sc">%04d</span><span class="st">.png'</span>),</span>
+<span id="cb11-460"><a href="#cb11-460"></a>            <span class="st">'-vf'</span>, <span class="st">'scale=trunc(iw/2)*2:trunc(ih/2)*2'</span>,</span>
+<span id="cb11-461"><a href="#cb11-461"></a>            <span class="st">'-c:v'</span>, <span class="st">'libx264'</span>,</span>
+<span id="cb11-462"><a href="#cb11-462"></a>            <span class="st">'-pix_fmt'</span>, <span class="st">'yuv420p'</span>,</span>
+<span id="cb11-463"><a href="#cb11-463"></a>            <span class="st">'-crf'</span>, <span class="st">'23'</span>,</span>
+<span id="cb11-464"><a href="#cb11-464"></a>            <span class="bu">str</span>(output_path)</span>
+<span id="cb11-465"><a href="#cb11-465"></a>        ])</span>
+<span id="cb11-466"><a href="#cb11-466"></a><span class="in">```</span></span>
+<span id="cb11-467"><a href="#cb11-467"></a></span>
+<span id="cb11-468"><a href="#cb11-468"></a><span class="fu">## Performance Summary</span></span>
+<span id="cb11-469"><a href="#cb11-469"></a></span>
+<span id="cb11-470"><a href="#cb11-470"></a>The optimizations we've discussed combine to make large-scale visualization practical:</span>
+<span id="cb11-471"><a href="#cb11-471"></a></span>
+<span id="cb11-472"><a href="#cb11-472"></a><span class="pp">|</span> Optimization <span class="pp">|</span> Impact <span class="pp">|</span></span>
+<span id="cb11-473"><a href="#cb11-473"></a><span class="pp">|--------------|--------|</span></span>
+<span id="cb11-474"><a href="#cb11-474"></a><span class="pp">|</span> <span class="in">`groupby()`</span> instead of filter loop <span class="pp">|</span> ~10-50x faster data iteration <span class="pp">|</span></span>
+<span id="cb11-475"><a href="#cb11-475"></a><span class="pp">|</span> <span class="in">`LineCollection`</span> instead of <span class="in">`ax.plot()`</span> <span class="pp">|</span> ~5-10x faster rendering <span class="pp">|</span></span>
+<span id="cb11-476"><a href="#cb11-476"></a><span class="pp">|</span> Pre-compute voyage segments <span class="pp">|</span> Amortized across all frames <span class="pp">|</span></span>
+<span id="cb11-477"><a href="#cb11-477"></a><span class="pp">|</span> Even dimensions for ffmpeg <span class="pp">|</span> Enables H.264 encoding <span class="pp">|</span></span>
+<span id="cb11-478"><a href="#cb11-478"></a></span>
+<span id="cb11-479"><a href="#cb11-479"></a>With these optimizations, rendering 100 frames of 800+ whaling voyages takes approximately</span>
+<span id="cb11-480"><a href="#cb11-480"></a>15 seconds—fast enough for iterative experimentation.</span>
+<span id="cb11-481"><a href="#cb11-481"></a></span>
+<span id="cb11-482"><a href="#cb11-482"></a><span class="fu">## Gallery</span></span>
+<span id="cb11-483"><a href="#cb11-483"></a></span>
+<span id="cb11-484"><a href="#cb11-484"></a>Here are the key visualizations produced by the pipeline:</span>
+<span id="cb11-485"><a href="#cb11-485"></a></span>
+<span id="cb11-486"><a href="#cb11-486"></a><span class="fu">### Ghost Ships: All Voyages</span></span>
+<span id="cb11-487"><a href="#cb11-487"></a><span class="al">![All maritime voyages](../output/ghost_ships_all.png)</span></span>
+<span id="cb11-488"><a href="#cb11-488"></a></span>
+<span id="cb11-489"><a href="#cb11-489"></a><span class="fu">### Whaling Grounds Density</span></span>
+<span id="cb11-490"><a href="#cb11-490"></a><span class="al">![Whaling grounds density heatmap](../output/whaling_grounds_density.png)</span></span>
+<span id="cb11-491"><a href="#cb11-491"></a></span>
+<span id="cb11-492"><a href="#cb11-492"></a><span class="fu">### Traffic by Decade</span></span>
+<span id="cb11-493"><a href="#cb11-493"></a><span class="al">![Maritime traffic by decade](../output/traffic_by_decade.png)</span></span>
+<span id="cb11-494"><a href="#cb11-494"></a></span>
+<span id="cb11-495"><a href="#cb11-495"></a><span class="fu">### Animated Whaling Voyages</span></span>
+<span id="cb11-496"><a href="#cb11-496"></a>::: {.animation-container}</span>
+<span id="cb11-497"><a href="#cb11-497"></a><span class="dt">&lt;</span><span class="kw">video</span><span class="ot"> controls loop muted playsinline width</span><span class="op">=</span><span class="st">"100%"</span><span class="dt">&gt;</span></span>
+<span id="cb11-498"><a href="#cb11-498"></a>  <span class="dt">&lt;</span><span class="kw">source</span><span class="ot"> src</span><span class="op">=</span><span class="st">"../output/whaling_voyages.mp4"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"video/mp4"</span><span class="dt">&gt;</span></span>
+<span id="cb11-499"><a href="#cb11-499"></a>  <span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">"../output/whaling_voyages.gif"</span><span class="ot"> alt</span><span class="op">=</span><span class="st">"Animation of whaling voyages"</span><span class="dt">&gt;</span></span>
+<span id="cb11-500"><a href="#cb11-500"></a><span class="dt">&lt;/</span><span class="kw">video</span><span class="dt">&gt;</span></span>
+<span id="cb11-501"><a href="#cb11-501"></a>:::</span>
+<span id="cb11-502"><a href="#cb11-502"></a></span>
+<span id="cb11-503"><a href="#cb11-503"></a><span class="fu">## Next Steps</span></span>
+<span id="cb11-504"><a href="#cb11-504"></a></span>
+<span id="cb11-505"><a href="#cb11-505"></a>With these visualization tools, you can explore the data in many directions:</span>
+<span id="cb11-506"><a href="#cb11-506"></a></span>
+<span id="cb11-507"><a href="#cb11-507"></a><span class="ss">- </span>Compare whaling activity by decade to see how patterns shifted over time</span>
+<span id="cb11-508"><a href="#cb11-508"></a><span class="ss">- </span>Identify specific whaling grounds and trace their discovery and exploitation</span>
+<span id="cb11-509"><a href="#cb11-509"></a><span class="ss">- </span>Track individual ship journeys to understand the life of a whaling voyage</span>
+<span id="cb11-510"><a href="#cb11-510"></a><span class="ss">- </span>Create custom animations for specific time periods or geographic regions</span>
+<span id="cb11-511"><a href="#cb11-511"></a></span>
+<span id="cb11-512"><a href="#cb11-512"></a>The classified data also enables deeper historical analysis. You might correlate</span>
+<span id="cb11-513"><a href="#cb11-513"></a>whaling activity with what we know about whale population declines, study seasonal</span>
+<span id="cb11-514"><a href="#cb11-514"></a>patterns in different whaling grounds, or compare American whaling fleets with</span>
+<span id="cb11-515"><a href="#cb11-515"></a>those of other nations.</span>
+<span id="cb11-516"><a href="#cb11-516"></a></span>
+<span id="cb11-517"><a href="#cb11-517"></a>::: {.callout-caution}</span>
+<span id="cb11-518"><a href="#cb11-518"></a><span class="fu">## Questions to Consider</span></span>
+<span id="cb11-519"><a href="#cb11-519"></a></span>
+<span id="cb11-520"><a href="#cb11-520"></a><span class="ss">1. </span>The "ghost ship" visualization uses very low alpha values (0.02-0.05). How would</span>
+<span id="cb11-521"><a href="#cb11-521"></a>   you choose the right alpha for a dataset of a different size? What happens if</span>
+<span id="cb11-522"><a href="#cb11-522"></a>   you have 100 voyages vs. 100,000?</span>
+<span id="cb11-523"><a href="#cb11-523"></a></span>
+<span id="cb11-524"><a href="#cb11-524"></a><span class="ss">2. </span>The animation shows ships at discrete time steps. But observations aren't evenly</span>
+<span id="cb11-525"><a href="#cb11-525"></a>   spaced—a ship might have daily observations for a week, then nothing for a month.</span>
+<span id="cb11-526"><a href="#cb11-526"></a>   How might you handle this unevenness? Should ships "pause" or "jump"?</span>
+<span id="cb11-527"><a href="#cb11-527"></a></span>
+<span id="cb11-528"><a href="#cb11-528"></a><span class="ss">3. </span>These visualizations use a simple equirectangular projection (latitude/longitude</span>
+<span id="cb11-529"><a href="#cb11-529"></a>   as x/y). What distortions does this introduce? Would a different map projection</span>
+<span id="cb11-530"><a href="#cb11-530"></a>   better represent maritime routes?</span>
+<span id="cb11-531"><a href="#cb11-531"></a></span>
+<span id="cb11-532"><a href="#cb11-532"></a><span class="ss">4. </span>The color scheme distinguishes whaling from merchant voyages. But within whaling,</span>
+<span id="cb11-533"><a href="#cb11-533"></a>   there were different types: sperm whaling, right whaling, Arctic expeditions.</span>
+<span id="cb11-534"><a href="#cb11-534"></a>   How might you modify the visualization to show these distinctions?</span>
+<span id="cb11-535"><a href="#cb11-535"></a></span>
+<span id="cb11-536"><a href="#cb11-536"></a><span class="ss">5. </span>These maps show where ships went, but not *why*. What additional data sources</span>
+<span id="cb11-537"><a href="#cb11-537"></a>   might you overlay to tell a richer story? (Think: whale catch records, port</span>
+<span id="cb11-538"><a href="#cb11-538"></a>   locations, ocean currents, weather patterns.)</span>
+<span id="cb11-539"><a href="#cb11-539"></a>:::</span>
+<span id="cb11-540"><a href="#cb11-540"></a></span>
+<span id="cb11-541"><a href="#cb11-541"></a><span class="fu">## References</span></span>
+<span id="cb11-542"><a href="#cb11-542"></a></span>
+<span id="cb11-543"><a href="#cb11-543"></a><span class="ss">- </span>Schmidt, Ben. "Reading Digital Sources: A Case Study in Ship's Logs." Sapping Attention, 2012.</span>
+<span id="cb11-544"><a href="#cb11-544"></a><span class="ss">- </span>Matplotlib LineCollection: https://matplotlib.org/stable/api/collections_api.html</span>
+<span id="cb11-545"><a href="#cb11-545"></a><span class="ss">- </span>ffmpeg documentation: https://ffmpeg.org/documentation.html</span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
